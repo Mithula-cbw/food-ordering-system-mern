@@ -16,12 +16,11 @@ export default {
   			poppins: ['poppins', 'sans-serif']
   		},
   		colors: {
-  			'primary-yellow': '#F2C86B',
-			'primary-yellow-low': '#F2C86B66',
-  			'gray-full': '#131313',
-  			'gray-half': '#262626',
-  			'gray-green': '#8D8F89',
-  			'gray-light': '#A3A3A3',
+  			header: {
+  				strip: "#493b99",
+  				signin: "#233a95",
+				catbtn: "#7a1515"
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

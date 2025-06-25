@@ -1,11 +1,15 @@
 import React from 'react';
-import './MainLayout.css';
+import Header from '../components/Header/Header';
 
-const MainLayout = ({ children }) => {
+type MainLayoutProps = {
+  children: React.ReactNode;
+};
+
+const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <div className="main-layout">
+    <div className="min-h-screen w-full flex flex-col">
       <Header />
-      <main className="main-content">
+      <main className="flex-1 w-full flex justify-center items-start p-4">
         {children}
       </main>
       {/* <Footer /> */}

@@ -38,11 +38,11 @@ const RecentSearchList: React.FC<RecentSearchListProps> = ({
         {searches.map((item, index) => (
           <li
             key={`recent-${index}`}
-            className="flex items-center text-sm hover:underline cursor-pointer bg-gray-200 px-4 py-1 rounded-xl"
+            className="flex flex-row justify-start items-center text-sm hover:underline cursor-pointer bg-gray-200 pr-4 pl-2 py-1 rounded-xl"
             onClick={() => handleClick(item)}
           >
             <Clock className="w-4 h-4 mr-2 text-gray-400" />
-            <span>{item}</span>
+            <span className="text-gray-600 hover:text-gray-800">{item}</span>
           </li>
         ))}
       </ul>

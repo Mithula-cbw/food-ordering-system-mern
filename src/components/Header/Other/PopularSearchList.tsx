@@ -1,5 +1,4 @@
 import React from "react";
-import { Star } from "lucide-react";
 
 interface PopularSearchListProps {
   searches: string[];
@@ -15,17 +14,17 @@ const PopularSearchList: React.FC<PopularSearchListProps> = ({
   return (
     <div>
       <div className={`${styleTitle} flex items-center`}>
-        <Star className="w-4 h-4 mr-2 text-gray-400" />
         Popular Searches
       </div>
       <ul className="text-gray-700 space-y-1 pb-2 mt-2">
         {searches.map((item, index) => (
           <li
             key={`popular-${index}`}
-            className="hover:underline cursor-pointer text-sm"
+            className="flex flex-row justify-start items-center gap-x-2 hover:underline cursor-pointer text-sm"
             onClick={() => onSelect?.(item)}
           >
-            {item}
+            <span className="text-gray-500 font-semibold text-lg">#</span>
+            <span className="text-gray-600 hover:text-gray-800">{item}</span>
           </li>
         ))}
       </ul>

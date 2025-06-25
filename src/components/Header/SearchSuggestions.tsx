@@ -8,7 +8,7 @@ interface SearchSuggestionsProps {
 }
 
 // Sample data for recent and popular searches
-const recentSearches = ["Shoes", "Camera", "Wireless Mouse"];
+const recentSearches = ["Shoes", "Camera", "Wireless Mouse", "laptop", "burger bun 6#"];
 const popularSearches = ["iPhone 15", "Smart Watch", "Air Fryer"];
 const suggestions = [
   "iPhone Case",

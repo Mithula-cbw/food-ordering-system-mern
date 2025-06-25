@@ -2,16 +2,14 @@ import React from "react";
 import { Clock } from "lucide-react";
 
 interface RecentSearchListProps {
+  searches: string[];
   setQuery: (query: string) => void;
-  className?: string;
   styleTitle?: string;
 }
 
-const recentSearches = ["Shoes", "Camera", "Wireless Mouse"];
-
 const RecentSearchList: React.FC<RecentSearchListProps> = ({
+  searches,
   setQuery,
-  className = "",
   styleTitle = "",
 }) => {
   const handleClick = (item: string) => {
@@ -23,7 +21,7 @@ const RecentSearchList: React.FC<RecentSearchListProps> = ({
   };
 
   return (
-    <div className={className}>
+    <div>
       <div className={`${styleTitle} flex items-center justify-between`}>
         <div className="flex items-center text-sm font-semibold text-gray-400">
           Recent Searches
@@ -37,7 +35,7 @@ const RecentSearchList: React.FC<RecentSearchListProps> = ({
       </div>
 
       <ul className="flex flex-wrap gap-2 list-none p-0 m-0 pb-2">
-        {recentSearches.map((item, index) => (
+        {searches.map((item, index) => (
           <li
             key={`recent-${index}`}
             className="flex items-center text-sm hover:underline cursor-pointer bg-gray-200 px-4 py-1 rounded-xl"

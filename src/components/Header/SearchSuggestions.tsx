@@ -1,11 +1,14 @@
 import React from "react";
 import RecentSearchList from "./Other/RecentSearches";
+import PopularSearchList from "./Other/PopularSearchList";
 
 interface SearchSuggestionsProps {
   query: string;
   setQuery: (query: string) => void;
 }
 
+// Sample data for recent and popular searches
+const recentSearches = ["Shoes", "Camera", "Wireless Mouse"];
 const popularSearches = ["iPhone 15", "Smart Watch", "Air Fryer"];
 const suggestions = [
   "iPhone Case",
@@ -14,9 +17,11 @@ const suggestions = [
   "iPhone Screen Protector",
 ];
 
-const tabTitleStyles =
-  "text-sm font-semibold text-gray-400 mb-1 block border-b pb-2 mb-2 border-gray-400 flex items-center justify-between";
 
+const tabTitleStyles =
+  "text-sm font-semibold text-gray-400 mb-1 block border-b pb-2 mb-2 border-gray-400";
+
+//default export for SearchSuggestions component
 const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
   query,
   setQuery,
@@ -31,25 +36,15 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
     <div className="absolute z-10 w-full mt-1 mb-4 bg-white border border-gray-200 rounded-xl shadow-lg py-4 px-6 space-y-4">
       {trimmedQuery === "" ? (
         <>
-          <div>
-            <RecentSearchList setQuery={setQuery} styleTitle={tabTitleStyles} />
-          </div>
-
-          <div>
-            <div className={tabTitleStyles}>
-              <div className="flex items-center">Popular Searches</div>
-            </div>
-            <ul className="text-gray-700 space-y-1 pb-2">
-              {popularSearches.map((item, index) => (
-                <li
-                  key={`popular-${index}`}
-                  className="hover:underline cursor-pointer"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <RecentSearchList
+            searches={recentSearches}
+            setQuery={setQuery} 
+            styleTitle={tabTitleStyles} />
+          <PopularSearchList
+            searches={popularSearches}
+            onSelect={setQuery}
+            styleTitle={tabTitleStyles}
+          />
         </>
       ) : (
         <div>
@@ -62,6 +57,7 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
                 <li
                   key={`suggestion-${index}`}
                   className="hover:underline cursor-pointer text-sm"
+                  onClick={() => setQuery(item)}
                 >
                   {item}
                 </li>

@@ -9,7 +9,7 @@ const WishlistIndicator: React.FC = () => {
   const wishlistCount = 2;
 
   return (
-    <Link to="/cart" className="relative bg-red-50 rounded-full p-4 hover:bg-red-100 transition-colors">
+    <Link to="/mylist" className="relative bg-red-50 rounded-full p-4 hover:bg-red-100 transition-colors">
       <Heart className="text-red-500" />
       <span className={badgeStyle}>{wishlistCount}</span>
     </Link>

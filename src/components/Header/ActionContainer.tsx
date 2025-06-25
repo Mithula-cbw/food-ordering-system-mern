@@ -1,7 +1,7 @@
 import React from "react";
-import  WishlistIndicator  from "./WishlistIndicator";
-import  CartSummary  from "./CartSummary";
-import  CartLink  from "./CartLink";
+import  WishlistIndicator  from "./Other/WishlistIndicator";
+import  CartSummary  from "./Other/CartSummary";
+import  CartLink  from "./Other/CartLink";
 
 const ActionContainer: React.FC = () => {
   return (

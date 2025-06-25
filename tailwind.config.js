@@ -19,7 +19,8 @@ export default {
   			header: {
   				strip: "#493b99",
   				signin: "#233a95",
-				catbtn: "#7a1515"
+				catbtn: "#7a1515",
+				catbtnhover: "#9b1c1c"
   			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',

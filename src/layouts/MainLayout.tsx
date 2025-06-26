@@ -7,9 +7,9 @@ type MainLayoutProps = {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen w-full flex flex-col">
+    <div className="min-h-screen w-full flex flex-col overflow-x-hidden">
       <Header />
-      <main className="flex-1 w-full flex justify-center items-start p-4">
+      <main className="flex-1 w-full flex justify-center items-start">
         {children}
       </main>
       {/* <Footer /> */}

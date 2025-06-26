@@ -4,7 +4,7 @@ import UserDetailsButton from "./UserDetailsButton";
 import { Link } from "react-router-dom";
 
 const AuthContainer: React.FC = () => {
-  const isLoggedIn = false; // Simulated auth state
+  const isLoggedIn = true; // Simulated auth state
 
   return (
     <div className="flex items-center space-x-4">
@@ -15,7 +15,7 @@ const AuthContainer: React.FC = () => {
           </Button>
         </Link>
       ) : (
-        <UserDetailsButton />
+        <UserDetailsButton variant="full"/>
       )}
     </div>
   );

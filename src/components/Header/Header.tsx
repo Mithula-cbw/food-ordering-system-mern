@@ -6,6 +6,7 @@ import AuthContainer from "./AuthContainer";
 import ActionContainer from "./ActionContainer";
 import Navbar from "./Navbar";
 import AllCategoriesButton from "./AllCategoriesButton";
+import UserDetailsButton from "./UserDetailsButton";
 
 const Header: React.FC = () => {
   const navbarRef = useRef<HTMLDivElement | null>(null);
@@ -76,7 +77,7 @@ const Header: React.FC = () => {
       >
         <HeaderLogo />
         <SearchBox />
-        <div className="flex flex-row items-center justify-between space-x-12">
+        <div className="flex flex-row items-center justify-between space-x-6">
           <AuthContainer />
           <ActionContainer />
         </div>
@@ -98,10 +99,13 @@ const Header: React.FC = () => {
     }`}
         >
           {" "}
-          <div className="w-full h-auto px-10 pt-4 pb-2 flex flex-row justify-between items-center">
-            <AllCategoriesButton />
-            <SearchBox />
-            <ActionContainer />
+          <div className="w-full h-auto px-10 pt-4 pb-3 flex flex-row justify-between items-center">
+            <AllCategoriesButton />  
+            <SearchBox />          
+            <div className="flex flex-row items-center justify-between space-x-12">
+              <UserDetailsButton variant="mini" />
+              <ActionContainer />
+            </div>
           </div>
         </div>
       )}

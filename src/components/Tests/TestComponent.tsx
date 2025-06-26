@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import CategoryModule from "../../contexts/CategoryContext";
+import HomeBanner from "../Home/HomeBanner";
 
 const { CategoryContext, categoryTypes } = CategoryModule;
 
@@ -17,7 +18,11 @@ const TestComponent = () => {
     return <div>Loading categories...</div>;
   }
 
-  return <div className="h-[900px]">Check your console for category types</div>;
+  return(
+  <div className="w-full">
+    <HomeBanner />
+  </div>
+);
 };
 
 export default TestComponent;

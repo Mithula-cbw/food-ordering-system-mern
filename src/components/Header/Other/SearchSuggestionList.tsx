@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FiSearch } from "react-icons/fi";
+import NoResultsSuggestions from "./NoResultsSuggestions";
 
 interface SearchSuggestionListProps {
   trimmedQuery: string;
@@ -60,7 +61,7 @@ const SearchSuggestionList: React.FC<SearchSuggestionListProps> = ({
           ))}
         </ul>
       ) : (
-        <p className="text-gray-400 text-sm">No results found.</p>
+        <NoResultsSuggestions />
       )}
     </div>
   );

@@ -66,7 +66,7 @@ const UserDetailsButton: React.FC<UserDetailsButtonProps> = ({
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <Link to="/my-list">
+        <Link to="/favorites">
           <DropdownMenuItem className="flex items-center gap-3 cursor-pointer">
             <Heart className="w-5 h-5 text-gray-500" />
             <span className="text-lg">My List</span>

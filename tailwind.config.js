@@ -13,7 +13,8 @@ export default {
   			'my-lg': '1150px'
   		},
   		fontFamily: {
-  			poppins: ['poppins', 'sans-serif']
+  			poppins: ['poppins', 'sans-serif'],
+			lato : ['Lato', 'sans-serif'],
   		},
   		colors: {
   			header: {
@@ -22,6 +23,11 @@ export default {
 				catbtn: "#7a1515",
 				catbtnhover: "#9b1c1c"
   			},
+			app: {
+  				main: "#FFA708",  
+				bannerbtn : "#fbbf24",	
+				bannerbtnhover : "#facc15"			
+  			},			
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

@@ -49,7 +49,7 @@ const AllCategoriesButton: React.FC = () => {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="ml-4 w-72 pl-4 rounded-xl text-lg z-30 pt-10">
+      <DropdownMenuContent className="ml-4 w-72 pl-4 pr-2 rounded-xl text-lg z-30 pt-10 pb-2">
         {!loading
           ? formattedCategories.map(
               ({ label, href, subItems, color, image }, index) => (

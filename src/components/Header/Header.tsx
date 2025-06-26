@@ -7,6 +7,7 @@ import ActionContainer from "./ActionContainer";
 import Navbar from "./Navbar";
 import AllCategoriesButton from "./AllCategoriesButton";
 import UserDetailsButton from "./UserDetailsButton";
+import GoVeganSwitch from "./Other/GoVeganSwitch";
 
 const Header: React.FC = () => {
   const navbarRef = useRef<HTMLDivElement | null>(null);
@@ -76,6 +77,7 @@ const Header: React.FC = () => {
         className="w-full h-auto py-5 px-10 m-2 flex flex-row justify-between items-center"
       >
         <HeaderLogo />
+        <GoVeganSwitch variant="full"/>
         <SearchBox />
         <div className="flex flex-row items-center justify-between space-x-6">
           <AuthContainer />
@@ -100,8 +102,9 @@ const Header: React.FC = () => {
         >
           {" "}
           <div className="w-full h-auto px-10 pt-4 pb-3 flex flex-row justify-between items-center">
-            <AllCategoriesButton />  
-            <SearchBox />          
+            <AllCategoriesButton />
+            <GoVeganSwitch variant="mini" />
+            <SearchBox />
             <div className="flex flex-row items-center justify-between space-x-12">
               <UserDetailsButton variant="mini" />
               <ActionContainer />

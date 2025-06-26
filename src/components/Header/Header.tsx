@@ -8,7 +8,7 @@ import Navbar from './Navbar'
 
 const Header = () => {
   return (
-    <div id='header-wrapper' className='w-full bg-white shadow-md h-auto overflow-visible pb-2'>
+    <div id='header-wrapper' className='w-full bg-white shadow-md h-auto overflow-visible pb-1'>
         <HeaderStrip />
         <div id='header-main' className='w-full h-auto py-5 px-10 m-2 flex flex-row justify-between items-center'>
             <HeaderLogo />

@@ -1,5 +1,5 @@
 import React from "react";
-import { IoFastFood } from "react-icons/io5";
+import { RiDrinksFill } from "react-icons/ri";
 import { 
 NavigationMenu, 
   NavigationMenuContent,
@@ -12,14 +12,14 @@ NavigationMenu,
 import NavButton from "./NavButton";
 
 
-const NavMealBtn: React.FC = () => {
+const NavDrinksBtn: React.FC = () => {
   return (
     <NavigationMenu className="flex-1">
       <NavigationMenuList className="flex w-full flex-row justify-between items-center gap-6">
 
         <NavigationMenuItem>
           <NavigationMenuTrigger>
-            <NavButton name={"Meals"} icon={<IoFastFood size={19}/>} link={""} />
+            <NavButton name={"Drinks"} icon={<RiDrinksFill size={19}/>} link={""} />
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="p-4 w-64 space-y-2">
@@ -42,4 +42,4 @@ const NavMealBtn: React.FC = () => {
   );
 };
 
-export default NavMealBtn;
+export default NavDrinksBtn;

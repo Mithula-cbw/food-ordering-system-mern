@@ -4,7 +4,7 @@ import { FaHome } from "react-icons/fa"
 
 const NavHomeBtn =() => {
   return (
-    <NavButton name={'Home'} icon={<FaHome size={19} />} link={'./'} />
+    <NavButton name={'Home'} icon={<FaHome size={19} />} link={'/'} />
   )
 }
 

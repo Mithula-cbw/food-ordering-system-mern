@@ -1,14 +1,23 @@
 import React from "react";
 import NavHomeBtn from "./Other/NavHomeBtn";
-import NavMealBtn from "./Other/NavMealBtn";
-import NavDessertBtn from "./Other/NavDessertBtn";
+import NavMealsBtn from "./Other/NavMealsBtn";
+import NavDessertsBtn from "./Other/NavDessertsBtn";
+import NavDrinksBtn from "./Other/NavDrinksBtn";
+import NavCombosBtn from "./Other/NavCombosBtn";
+import NavBlogBtn from "./Other/NavBlogBtn";
+import NavContactBtn from "./Other/NavContactBtn";
 
 const MainNavigation: React.FC = () => {
   return (
-    <div className="w-full flex flex-row flex-nowrap justify-start items-center gap-4 mx-auto px-4 py-2">
+    <div className="w-full flex flex-row flex-nowrap justify-start items-center gap-x-3 mx-auto px-4 py-2">
       <NavHomeBtn />
-      <NavMealBtn />
-      <NavDessertBtn />
+      <NavMealsBtn />
+      <NavDessertsBtn />
+      <NavDrinksBtn />
+      <NavCombosBtn />
+      <NavBlogBtn />
+      <NavContactBtn />
+      {/* Add more navigation buttons as needed */}    
     </div>
   );
 };

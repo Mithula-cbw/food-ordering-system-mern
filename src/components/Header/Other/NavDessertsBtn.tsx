@@ -12,7 +12,7 @@ NavigationMenu,
 import NavButton from "./NavButton";
 
 
-const NavDessertBtn: React.FC = () => {
+const NavDessertsBtn: React.FC = () => {
   return (
     <NavigationMenu className="flex-1">
       <NavigationMenuList className="flex w-full flex-row justify-between items-center gap-6">
@@ -42,4 +42,4 @@ const NavDessertBtn: React.FC = () => {
   );
 };
 
-export default NavDessertBtn;
+export default NavDessertsBtn;

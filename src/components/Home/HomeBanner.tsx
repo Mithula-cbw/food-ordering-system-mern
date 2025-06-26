@@ -30,10 +30,10 @@ const HomeBanner: React.FC = () => {
               alt={banner.title}
               className="w-full h-full object-cover transition-transform duration-500 ease-in-out"
             />
-            <div className="absolute inset-0 flex flex-col justify-center items-center text-center z-20 p-5">
+            <div className="absolute inset-0 flex flex-col justify-center items-center text-center z-20 p-5 max-w-[300px] md:max-w-full mx-auto">
               <h2 className="text-2xl md:text-4xl font-bold mb-4">{banner.title.toUpperCase()}</h2>
-              <p className="mt-2 text-xl font-light">{banner.subtitle}</p>
-              <p className="text-md mt-1 max-w-xl font-light">{banner.description}</p>
+              <p className="mt-2 text-sm md:text-xl font-light">{banner.subtitle}</p>
+              <p className="text-sm md:text-base mt-1 max-w-xl font-light">{banner.description}</p>
               <button className="mt-8 px-5 py-2 bg-app-bannerbtn hover:bg-app-bannerbtnhover text-black font-semibold rounded-full transition">
                 {banner.buttonText}
               </button>

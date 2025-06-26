@@ -59,8 +59,12 @@ export const CategoryProvider: React.FC<{ children: ReactNode }> = ({ children }
 
 // --- Category Types Extractor ---
 export const categoryTypes = (categories: Category[]): { id: string; name: string }[] => {
-  return categories.map(({ id, name }) => ({ id, name }));
+  return categories.map(({ id, _id, name }) => ({
+    id: id || _id,
+    name,
+  }));
 };
+
 
 // --- Export All as Object ---
 export default {

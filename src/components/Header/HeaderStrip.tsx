@@ -6,7 +6,7 @@ const HeaderStrip: React.FC = () => {
 
   if (!visible)
     return (
-      <div className="w-full h-2 bg-orange-700">
+      <div className="w-full h-2 bg-app-main">
         <span className="sr-only">Header strip closed</span>
       </div>
     );

@@ -22,6 +22,9 @@ export default {
 				catbtn: "#7a1515",
 				catbtnhover: "#9b1c1c"
   			},
+			app: {
+  				main: "#FFA708",  				
+  			},			
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

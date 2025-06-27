@@ -13,7 +13,7 @@ export const AppRoutes = () => {
       <Route path="/" element={<MainLayout ><Home /></MainLayout>}/>
       <Route path="/blog" element={<MainLayout ><Blog /></MainLayout>}/>
       <Route path="/contact" element={<MainLayout ><div>Contact</div></MainLayout>}/>
-      <Route path="/favorites" element={<MainLayout ><div>favorites</div></MainLayout>}/>
+      <Route path="/favorites" element={<MainLayout ><div className='h-[800px]'>favorites</div></MainLayout>}/>
       <Route path="/cart" element={<MainLayout ><div>cart</div></MainLayout>}/>
     </Routes>
   );

@@ -17,6 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import CategoryModule from "@/contexts/CategoryContext";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import GlobalRefreshButton from "../Commons/GlobalRefreshButton";
 
 const { CategoryContext } = CategoryModule;
 
@@ -29,14 +30,14 @@ interface FormattedCategory {
 }
 
 const AllCategoriesButton: React.FC = () => {
-  const { categories, loading } = useContext(CategoryContext);
+  const { categories, loading, error } = useContext(CategoryContext);
 
   const formattedCategories: FormattedCategory[] = categories.map((cat) => ({
     label: cat.name,
     color: cat.color,
-    image: cat.images?.[0] || "", 
+    image: cat.images?.[0] || "",
     href: `/categories/${cat._id}`,
-    subItems: [], 
+    subItems: [],
   }));
 
   return (
@@ -50,68 +51,72 @@ const AllCategoriesButton: React.FC = () => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="ml-4 w-72 pl-4 pr-2 rounded-xl text-lg z-30 pt-10 pb-2">
-        {!loading
-          ? formattedCategories.map(
-              ({ label, href, subItems, color, image }, index) => (
-                <React.Fragment key={label}>
-                  <HoverCard openDelay={50} closeDelay={0}>
-                    <HoverCardTrigger asChild>
-                      <Link to={href}>
-                        <DropdownMenuItem
-                          className="text-lg cursor-pointer flex flex-row items-center justify-between gap-2 font-semibold transition-all duration-200 hover:shadow-md hover:scale-[1.01]"
-                          style={{ backgroundColor: color }}
-                        >
-                          <div className="flex items-center gap-3">
-                            <Avatar className="w-8 h-8">
-                              <AvatarImage src={image} alt={label} />
-                              <AvatarFallback>C</AvatarFallback>
-                            </Avatar>
-                            <span>{label}</span>
-                          </div>
-                          {/* {subItems && subItems.length > 0 && (
+        {error ? (
+          <div className="text min-h-28-sm px-4 pb-4">
+            <GlobalRefreshButton />
+          </div>
+        ) : !loading ? (
+          formattedCategories.map(
+            ({ label, href, subItems, color, image }, index) => (
+              <React.Fragment key={label}>
+                <HoverCard openDelay={50} closeDelay={0}>
+                  <HoverCardTrigger asChild>
+                    <Link to={href}>
+                      <DropdownMenuItem
+                        className="text-lg cursor-pointer flex flex-row items-center justify-between gap-2 font-semibold transition-all duration-200 hover:shadow-md hover:scale-[1.01]"
+                        style={{ backgroundColor: color }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <Avatar className="w-8 h-8">
+                            <AvatarImage src={image} alt={label} />
+                            <AvatarFallback>C</AvatarFallback>
+                          </Avatar>
+                          <span>{label}</span>
+                        </div>
+                        {/* {subItems && subItems.length > 0 && (
                             <ChevronRight className="w-6 h-6" />
                           )} */}
-                          <ChevronRight className="w-6 h-6 text-gray-400" />
-                        </DropdownMenuItem>
-                      </Link>
-                    </HoverCardTrigger>
+                        <ChevronRight className="w-6 h-6 text-gray-400" />
+                      </DropdownMenuItem>
+                    </Link>
+                  </HoverCardTrigger>
 
-                    {subItems && subItems.length > 0 && (
-                      <HoverCardContent
-                        side="right"
-                        align="start"
-                        className="w-56 pl-8 pt-2 pr-2 pb-4"
-                      >
-                        <ul className="space-y-2">
-                          {subItems.map((sub: string) => (
-                            <li
-                              key={sub}
-                              className="w-full hover:text-header-catbtnhover py-1 cursor-pointer"
-                            >
-                              <span className="text-lg font-semibold">
-                                {sub}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      </HoverCardContent>
-                    )}
-                  </HoverCard>
-
-                  {index < formattedCategories.length - 1 && (
-                    <DropdownMenuSeparator />
+                  {subItems && subItems.length > 0 && (
+                    <HoverCardContent
+                      side="right"
+                      align="start"
+                      className="w-56 pl-8 pt-2 pr-2 pb-4"
+                    >
+                      <ul className="space-y-2">
+                        {subItems.map((sub: string) => (
+                          <li
+                            key={sub}
+                            className="w-full hover:text-header-catbtnhover py-1 cursor-pointer"
+                          >
+                            <span className="text-lg font-semibold">{sub}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </HoverCardContent>
                   )}
-                </React.Fragment>
-              )
-            )
-          : Array.from({ length: 5 }).map((_, idx) => (
-              <React.Fragment key={idx}>
-                <DropdownMenuItem className="py-2">
-                  <Skeleton className="h-[20px] w-[150px] rounded-full" />
-                </DropdownMenuItem>
-                {idx < 4 && <DropdownMenuSeparator />}
+                </HoverCard>
+
+                {index < formattedCategories.length - 1 && (
+                  <DropdownMenuSeparator />
+                )}
               </React.Fragment>
-            ))}
+            )
+          )
+        ) : (
+          Array.from({ length: 5 }).map((_, idx) => (
+            <React.Fragment key={idx}>
+              <DropdownMenuItem className="py-2">
+                <Skeleton className="h-[20px] w-[150px] rounded-full" />
+              </DropdownMenuItem>
+              {idx < 4 && <DropdownMenuSeparator />}
+            </React.Fragment>
+          ))
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

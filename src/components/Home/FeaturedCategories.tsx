@@ -7,7 +7,7 @@ import CategoryModule from "@/contexts/CategoryContext";
 const { CategoryContext } = CategoryModule;
 
 const FeaturedCategories = () => {
-  const { categories, loading } = useContext(CategoryContext);
+  const { categories, loading, error } = useContext(CategoryContext);
 
   // Featured category names
   const featuredCategoryNames = ["Pizza", "Meal", "Drinks", "Dessert", "Combo"];
@@ -32,7 +32,7 @@ const FeaturedCategories = () => {
 
       {/* Category Grid */}
       <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-9 gap-4 w-full p-4">
-        {loading
+        {loading || error
           ? Array.from({ length: 6 }).map((_, idx) => (
               <div
                 className="h-40 flex flex-col justify-start items-start gap-y-2 bg-white rounded-xl shadow-md"

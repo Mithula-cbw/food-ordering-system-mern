@@ -9,8 +9,8 @@ export default {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
-  		breakpoints: {
-  			'my-lg': '1150px'
+  		screens: {
+  			'app-xs': '400px'
   		},
   		fontFamily: {
   			poppins: ['poppins', 'sans-serif'],

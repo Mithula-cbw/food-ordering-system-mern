@@ -25,6 +25,7 @@ const NavMealsBtn: React.FC = () => {
       icon={<IoFastFood size={19} />}
       link="/meals"
       content={mealsContent}
+      
     />
   );
 };

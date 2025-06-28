@@ -21,7 +21,7 @@ const FeaturedCategories = () => {
   );
 
   return (
-    <div className="w-full flex flex-col items-start justify-start gap-6 min-h-[600px]">
+    <div className="w-full flex flex-col items-start justify-start gap-6">
       {/* Header */}
       <div className="flex flex-col items-center sm:items-start justify-start gap-2 w-full">
         <h3 className="text-base md:text-2xl font-bold text-gray-700">

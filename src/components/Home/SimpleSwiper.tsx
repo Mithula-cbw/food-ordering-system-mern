@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface SimpleSwiperProps {
   children: React.ReactNode;
@@ -45,9 +46,9 @@ const SimpleSwiper: React.FC<SimpleSwiperProps> = ({
         {totalSlides > slidesPerView && (
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 hover:bg-gray-50"
+            className="absolute  aspect-square left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 shadow-lg rounded-full p-2 hover:bg-gray-50"
           >
-            ←
+            <ChevronLeft size={20}/>
           </button>
         )}
 
@@ -81,9 +82,9 @@ const SimpleSwiper: React.FC<SimpleSwiperProps> = ({
         {totalSlides > slidesPerView && (
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-2 hover:bg-gray-50"
+            className="absolute aspect-square right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 shadow-lg rounded-full p-2 hover:bg-gray-50"
           >
-            →
+            <ChevronRight size={20}/>
           </button>
         )}
       </div>

@@ -9,10 +9,10 @@ interface TabProps {
 const Tab: React.FC<TabProps> = ({ label, isActive, onClick }) => (
   <button
     onClick={onClick}
-    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+    className={`px-4 py-2  font-normal text-xl transition-colors ${
       isActive
-        ? "bg-blue-500 text-white"
-        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+        ? "border-b-2 bg-blue-50/20 border-blue-500 text-blue-600"
+        : "bg-white text-gray-500 hover:bg-gray-50/20 hover:border-b-2 hover:border-gray-300"
     }`}
   >
     {label}

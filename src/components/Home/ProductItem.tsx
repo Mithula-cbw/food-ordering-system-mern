@@ -34,7 +34,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, className = "" }) =>
     <div className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ${className}`}>
       {/* Image Section */}
       <div className="relative">
-        <div className="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
+        <div className="square bg-gray-100 flex items-center justify-center overflow-hidden">
           {product.images && product.images.length > 0 ? (
             <img
               src={product.images[0]}

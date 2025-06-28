@@ -14,7 +14,7 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   showTabs = false,
   categories = [],
   products = [],
-  slidesPerView = 4,
+  slidesPerView = 8,
   spaceBetween = 12,
   autoplay = false,
   autoplayDelay = 3000,
@@ -173,13 +173,13 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
     if (!showTabs || categories.length === 0) return null;
 
     return (
-      <div className="bg-white p-2 rounded-lg shadow-sm max-w-md relative">
+      <div className="bg-white p-2 rounded-lg shadow-sm max-w-lg relative">
         <div className="flex items-center">
           {/* Previous Button */}
           <button
             onClick={scrollTabsLeft}
             disabled={!canScrollLeft}
-            className={`flex-shrink-0 p-1 rounded-md mr-2 transition-colors ${
+            className={`aspect-square flex-shrink-0 p-2 rounded-full mr-3 transition-colors ${
               canScrollLeft
                 ? "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
                 : "text-gray-300"
@@ -211,7 +211,7 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
           <button
             onClick={scrollTabsRight}
             disabled={!canScrollRight}
-            className={`flex-shrink-0 p-1 rounded-md ml-2 transition-colors ${
+            className={`aspect-square flex-shrink-0 p-2 rounded-full ml-3 transition-colors ${
               canScrollRight
                 ? "text-gray-600 hover:bg-gray-100 hover:text-gray-800"
                 : "text-gray-300"
@@ -227,8 +227,8 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
 
   return (
     <div className={`w-full ${className}`}>
-      <div className={`flex items-center mt-3 ${headerClassName}`}>
-        <div className="flex-grow">
+      <div className={`flex flex-row justify-start items-center mt-3 ${headerClassName}`}>
+        <div className="flex-grow flex flex-col items-start">
           {title && (
             <h3 className="mb-0 text-2xl font-bold text-gray-800">{title}</h3>
           )}

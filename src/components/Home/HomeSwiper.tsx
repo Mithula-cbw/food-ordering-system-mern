@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { HomeSwiperProps } from "./types";
+import { HomeSwiperProps } from "../../types";
 import Tab from "./Tab";
 import ProductItem from "./ProductItem";
 import NoProductsFound from "./NoProductsFound";

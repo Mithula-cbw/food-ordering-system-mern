@@ -49,3 +49,9 @@ export interface HomeSwiperProps {
   headerClassName?: string;
   swiperClassName?: string;
 }
+
+export interface ProductsContextType {
+  products: Product[];
+  loading: boolean;
+  error: string | null;
+}

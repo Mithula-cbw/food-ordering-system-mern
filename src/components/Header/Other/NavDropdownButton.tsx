@@ -29,12 +29,12 @@ const NavDropdownButton: React.FC<NavDropdownButtonProps> = ({
           <NavigationMenuTrigger>
             <NavButton name={name} icon={icon} link={link} />
           </NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <div className="p-4 w-64">{content}</div>
+          <NavigationMenuContent className="hidden lg:block ">
+            <div className="p-4 w-64 min-h-40">{content}</div>
           </NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>
-      <NavigationMenuViewport className="bg-white shadow-lg p-6 rounded-xl mt-2" />
+      <NavigationMenuViewport className="hidden lg:block bg-white shadow-lg p-6 rounded-2xl mt-2" />
     </NavigationMenu>
   );
 };

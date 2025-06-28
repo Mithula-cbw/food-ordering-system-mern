@@ -31,7 +31,7 @@ const FeaturedCategories = () => {
       </div>
 
       {/* Category Grid */}
-      <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-9 gap-4 w-full p-4">
+      <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-9 gap-2 md:gap-4 w-full p-2 md:p-4">
         {loading || error
           ? Array.from({ length: 6 }).map((_, idx) => (
               <div
@@ -51,7 +51,7 @@ const FeaturedCategories = () => {
                 key={cat._id}
                 className="block"
               >
-                <Card className="hover:shadow-lg transition-transform hover:scale-[1.02]">
+                <Card className="hover:shadow-lg min-w-12 transition-transform hover:scale-[1.02]">
                   <CardContent
                     className="p-3 flex flex-col items-center justify-center gap-4"
                     style={{ backgroundColor: cat.color || "#f4f4f4" }}
@@ -59,7 +59,7 @@ const FeaturedCategories = () => {
                     <img
                       src={cat.images?.[0]}
                       alt={cat.name}
-                      className="w-full h-[60%] object-cover rounded-md"
+                      className="hidden app-xs:inline-block w-full h-[60%] object-cover rounded-md"
                     />
                     <h4 className="text-sm font-semibold text-gray-700 text-center">
                       {cat.name}

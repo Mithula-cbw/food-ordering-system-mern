@@ -48,7 +48,7 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children 
   };
 
   useEffect(() => {
-    console.log("Fetching favorites...");
+    // console.log("Fetching favorites...");
     fetchFavorites();
   }, []);
 

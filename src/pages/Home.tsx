@@ -1,4 +1,4 @@
-import HomeSwiperDemo from "@/components/Home/HomeSwiperDemo";
+import HomeSwiperDemo from "@/components/Home/HomeProductsModule";
 import FeaturedCategories from "../components/Home/FeaturedCategories";
 import HomeBanner from "../components/Home/HomeBanner";
 

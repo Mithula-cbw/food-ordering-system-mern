@@ -54,4 +54,6 @@ export interface ProductsContextType {
   products: Product[];
   loading: boolean;
   error: string | null;
+  isVegan: boolean;
+  setIsVegan: React.Dispatch<React.SetStateAction<boolean>>;
 }

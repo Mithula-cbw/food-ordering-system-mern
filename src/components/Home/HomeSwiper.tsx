@@ -5,6 +5,7 @@ import Tab from "./Tab";
 import ProductItem from "./ProductItem";
 import NoProductsFound from "./NoProductsFound";
 import SimpleSwiper from "./SimpleSwiper";
+import { Skeleton } from "../ui/skeleton";
 
 const HomeSwiper: React.FC<HomeSwiperProps> = ({
   title,
@@ -14,7 +15,7 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   showTabs = false,
   categories = [],
   products = [],
-  slidesPerView = 8,
+  slidesPerView = 5,
   spaceBetween = 12,
   autoplay = false,
   autoplayDelay = 3000,
@@ -23,6 +24,8 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   className = "",
   headerClassName = "",
   swiperClassName = "",
+  loading = false,
+  error = "",
 }) => {
   console.log("Received products in HomeSwiper:", products);
   const [activeTab, setActiveTab] = useState(0);
@@ -41,7 +44,6 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
       setCanScrollRight(newCanScrollRight);
     }
   };
-
   // Initialize and set up scroll listeners
   useEffect(() => {
     const container = tabsScrollRef.current;
@@ -122,10 +124,29 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   };
 
   const filteredProducts = getFilteredProducts();
-//   console.log("Filtered products:", filteredProducts);
+  //   console.log("Filtered products:", filteredProducts);
 
   const renderProducts = () => {
-    if (filteredProducts.length === 0) return <NoProductsFound />;
+    if (loading || error) {
+      return (
+        <div className="flex gap-4">
+          {Array.from({ length: slidesPerView }).map((_, i) => (
+            <div
+              key={i}
+              className="flex flex-col justify-start items-start gap-y-2 w-full rounded-lg shadow-md"
+            >
+              <Skeleton className="h-48 w-full rounded-xl" />
+              <div className="py-4 px-2 w-full space-y-2 pb-12">
+                <Skeleton className="h-4 w-[80%] rounded-xl" />
+                <Skeleton className="h-4 w-[30%] rounded-xl" />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (!loading && filteredProducts.length === 0) return <NoProductsFound />;
 
     if (showDoubleRow) {
       const rows = Math.ceil(filteredProducts.length / itemsPerRow);
@@ -136,6 +157,8 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
       return chunks.map((chunk, rowIdx) => (
         <div className={`w-full mt-4 ${swiperClassName}`} key={rowIdx}>
           <SimpleSwiper
+            loading={loading}
+            error={error}
             slidesPerView={slidesPerView}
             spaceBetween={spaceBetween}
             autoplay={autoplay}
@@ -158,6 +181,8 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
           spaceBetween={spaceBetween}
           autoplay={autoplay}
           autoplayDelay={autoplayDelay}
+          loading={loading}
+          error={error}
         >
           {filteredProducts.map((item, index) => (
             <div key={index}>
@@ -227,7 +252,9 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
 
   return (
     <div className={`w-full ${className}`}>
-      <div className={`flex flex-row justify-start items-center mt-3 ${headerClassName}`}>
+      <div
+        className={`flex flex-row justify-start items-center mt-3 ${headerClassName}`}
+      >
         <div className="flex-grow flex flex-col items-start">
           {title && (
             <h3 className="mb-0 text-2xl font-bold text-gray-800">{title}</h3>

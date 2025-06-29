@@ -7,15 +7,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "../../ui/dropdown-menu";
-import { useProducts } from "../../../contexts/ProductsContext";
-
+import { useState } from "react";
 
 type GoVeganSwitchProps = {
   variant?: "full" | "mini";
 };
 
 const GoVeganSwitch: React.FC<GoVeganSwitchProps> = ({ variant = "full" }) => {
-  const { isVegan, setIsVegan } = useProducts();
+  const [isVegan, setIsVegan] = useState(false);
 
   const handleToggle = (checked: boolean) => {
     setIsVegan(checked);

@@ -48,6 +48,8 @@ export interface HomeSwiperProps {
   className?: string;
   headerClassName?: string;
   swiperClassName?: string;
+  loading?: boolean;
+  error?: string | null; 
 }
 
 export interface ProductsContextType {
@@ -57,3 +59,15 @@ export interface ProductsContextType {
   isVegan: boolean;
   setIsVegan: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+export interface SimpleSwiperProps {
+  children: React.ReactNode;
+  slidesPerView: number;
+  spaceBetween: number;
+  autoplay: boolean;
+  autoplayDelay?: number;
+  loading: boolean;
+  error?: string | null;
+  seeAllCard?: React.ReactNode;
+}
+

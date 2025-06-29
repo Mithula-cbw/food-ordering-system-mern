@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { CategoryContext } from "@/contexts/CategoryContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import CategoryModule from "../../../contexts/CategoryContext";
+
+const { CategoryContext } = CategoryModule;
 
 const NoResultsSuggestions: React.FC = () => {
   const { categories } = useContext(CategoryContext);
@@ -16,7 +18,9 @@ const NoResultsSuggestions: React.FC = () => {
       />
       <div className="text-center text-gray-400 space-y-1">
         <p className="text-sm font-medium">Oops! No results found.</p>
-        <p className="text-sm text-gray-500">But maybe you'd like one of these?</p>
+        <p className="text-sm text-gray-500">
+          But maybe you'd like one of these?
+        </p>
       </div>
 
       <div className="w-full flex flex-row justify-center flex-wrap gap-3 w-full max-w-sm">

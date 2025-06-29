@@ -10,7 +10,7 @@ import { registerRefetcher } from "../utils/GlobalRefetchManager";
 import { Category, CategoryContextType } from "../types";
 
 // --- Context ---
-export const CategoryContext = createContext<CategoryContextType>({
+const CategoryContext = createContext<CategoryContextType>({
   categories: [],
   loading: false,
   error: null,

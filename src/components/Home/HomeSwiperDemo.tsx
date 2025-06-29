@@ -35,7 +35,7 @@ const HomeSwiperDemo: React.FC = () => {
           autoplayDelay={5000}
           className="mb-8"
           headerClassName="bg-white rounded-lg p-4 shadow-sm"
-          slidesPerView={5}
+          slidesPerView={6}
           spaceBetween={8}
         />
       </div>

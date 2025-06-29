@@ -66,7 +66,7 @@ const SimpleSwiper: React.FC<SimpleSwiperProps> = ({
               <div
                 key={index}
                 style={{
-                  minWidth: `calc(${100 / slidesPerView}% - ${
+                  width: `calc(${100 / slidesPerView}% - ${
                     (spaceBetween * (slidesPerView - 1)) / slidesPerView
                   }px)`,
                   marginRight:

@@ -111,7 +111,7 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
     if (!showTabs || categories.length === 0) return products;
 
     const activeCategory = categories[activeTab];
-    console.log("Active tab index:", activeCategory.name.toLowerCase());
+    // console.log("Active tab index:", activeCategory.name.toLowerCase());
     if (activeCategory.name.toLowerCase() === "all") return products;
 
     return products.filter(
@@ -122,7 +122,7 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   };
 
   const filteredProducts = getFilteredProducts();
-  console.log("Filtered products:", filteredProducts);
+//   console.log("Filtered products:", filteredProducts);
 
   const renderProducts = () => {
     if (filteredProducts.length === 0) return <NoProductsFound />;

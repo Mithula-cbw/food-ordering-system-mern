@@ -71,3 +71,21 @@ export interface SimpleSwiperProps {
   seeAllCard?: React.ReactNode;
 }
 
+//contexts
+// category context
+export interface Category {
+  _id: string;
+  name: string;
+  images: string[];
+  color: string;
+  description: string;
+  __v: number;
+  id: string;
+}
+
+export interface CategoryContextType {
+  categories: Category[];
+  loading: boolean;
+  error: string | null;
+  refetch: () => void;
+}

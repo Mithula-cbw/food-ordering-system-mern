@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import CategoryModule, { Category } from "@/contexts/CategoryContext";
+import CategoryModule from "@/contexts/CategoryContext";
 import HomeSwiper from "./HomeSwiper";
-import { Product } from "../../types";
+import { Category, Product } from "../../types";
 
 const { CategoryContext } = CategoryModule;
 

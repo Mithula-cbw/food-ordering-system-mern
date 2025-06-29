@@ -48,4 +48,44 @@ export interface HomeSwiperProps {
   className?: string;
   headerClassName?: string;
   swiperClassName?: string;
+  loading?: boolean;
+  error?: string | null; 
+}
+
+export interface ProductsContextType {
+  products: Product[];
+  loading: boolean;
+  error: string | null;
+  isVegan: boolean;
+  setIsVegan: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface SimpleSwiperProps {
+  children: React.ReactNode;
+  slidesPerView: number;
+  spaceBetween: number;
+  autoplay: boolean;
+  autoplayDelay?: number;
+  loading: boolean;
+  error?: string | null;
+  seeAllCard?: React.ReactNode;
+}
+
+//contexts
+// category context
+export interface Category {
+  _id: string;
+  name: string;
+  images: string[];
+  color: string;
+  description: string;
+  __v: number;
+  id: string;
+}
+
+export interface CategoryContextType {
+  categories: Category[];
+  loading: boolean;
+  error: string | null;
+  refetch: () => void;
 }

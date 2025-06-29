@@ -1,6 +1,6 @@
 import FeaturedCategories from "../components/Home/FeaturedCategories";
 import HomeBanner from "../components/Home/HomeBanner";
-import HomeSwiperDemo from "../components/Home/HomeSwiperDemo";
+import HomeSwiperDemo from "../components/Home/SpecialOffersSection";
 
 export default function Home() {
   return (

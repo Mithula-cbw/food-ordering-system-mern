@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Switch } from "../../ui/switch";
 import { Label } from "../../ui/label";
 import { toast } from "sonner";
@@ -8,7 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "../../ui/dropdown-menu";
-
+import { useState } from "react";
 
 type GoVeganSwitchProps = {
   variant?: "full" | "mini";

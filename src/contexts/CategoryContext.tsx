@@ -7,24 +7,7 @@ import React, {
 } from "react";
 import { fetchDataFromApi } from "../utils/Api";
 import { registerRefetcher } from "../utils/GlobalRefetchManager";
-
-// --- Types ---
-export interface Category {
-  _id: string;
-  name: string;
-  images: string[];
-  color: string;
-  description: string;
-  __v: number;
-  id: string;
-}
-
-interface CategoryContextType {
-  categories: Category[];
-  loading: boolean;
-  error: string | null;
-  refetch: () => void;
-}
+import { Category, CategoryContextType } from "../types";
 
 // --- Context ---
 export const CategoryContext = createContext<CategoryContextType>({

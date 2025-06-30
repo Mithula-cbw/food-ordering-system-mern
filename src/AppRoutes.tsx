@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import AuthLayout from './layouts/AuthLayout';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import WishList from './pages/WishList';
 
 
 export const AppRoutes = () => {
@@ -16,7 +17,7 @@ export const AppRoutes = () => {
       <Route path="/" element={<MainLayout ><Home /></MainLayout>}/>
       <Route path="/blog" element={<MainLayout ><Blog /></MainLayout>}/>
       <Route path="/contact" element={<MainLayout ><div>Contact</div></MainLayout>}/>
-      <Route path="/favorites" element={<MainLayout ><div className='h-[800px]'>favorites</div></MainLayout>}/>
+      <Route path="/favorites" element={<MainLayout ><WishList /></MainLayout>}/>
       <Route path="/cart" element={<MainLayout ><div>cart</div></MainLayout>}/>
       <Route path="/sign-in" element={<AuthLayout ><SignIn /></AuthLayout>}/>
       <Route path="/sign-up" element={<AuthLayout ><SignUp /></AuthLayout>}/>

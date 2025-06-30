@@ -5,9 +5,10 @@ import PasswordInput from "../components/Auth/PassWordField";
 import EmailField from "../components/Auth/EmailField";
 import AuthActionButton from "../components/Auth/AuthActionButton";
 import { Link } from "react-router-dom";
+import NameField from "../components/Auth/NameField";
 
 const SignUp = () => {
-//   const [name, setName] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -18,12 +19,6 @@ const SignUp = () => {
     console.log("✉️ Email:", email);
     console.log("🔐 Password:", password);
   }, [email, password]);
-
-  const handleForgotPassword = () => {
-    console.log("Forgot password clicked");
-    // Add your forgot password logic here
-    alert("Forgot password functionality would be implemented here");
-  };
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,9 +39,10 @@ const SignUp = () => {
   };
 
   return (
-    <Auth title="Sign In">
-      <div className="space-y-4">
-        <div>
+    <Auth title="Sign Up" classname={"w-[90%] md:w-[60%] lg:w-[40%]"}>
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row justify-between md:items-center gap-y-6 md:gap-x-4">
+          <NameField value={name} setName={setName} />
           <EmailField value={email} setEmail={setEmail} />
         </div>
 
@@ -57,17 +53,6 @@ const SignUp = () => {
           isPasswordVisible={isPasswordVisible}
           handleToggleVisibility={() => setIsPasswordVisible((prev) => !prev)}
         />
-
-        {/* Forgot Password Link */}
-        <div className="text-right">
-          <button
-            type="button"
-            onClick={handleForgotPassword}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium transition duration-200 focus:outline-none focus:underline"
-          >
-            Forget Password?
-          </button>
-        </div>
 
         {/* Error Message */}
         {error && (
@@ -82,7 +67,7 @@ const SignUp = () => {
             text="Sign Up"
             loadingText="Signing Up..."
             loading={loading}
-            disabled={!email || !password}
+            disabled={!email || !password || !name}
             onClick={handleSignIn}
           />
 

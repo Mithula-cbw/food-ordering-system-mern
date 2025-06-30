@@ -4,9 +4,10 @@ import React, { ReactNode } from "react";
 interface AuthProps {
   children?: ReactNode;
   title: string;
+  classname :string;
 }
 
-const Auth: React.FC<AuthProps> = ({ children, title }) => {
+const Auth: React.FC<AuthProps> = ({ children, title, classname }) => {
   return (
     <div className="relative w-full min-h-screen bg-auth-background flex justify-center items-center overflow-hidden">
       {/* background shape */}
@@ -26,8 +27,8 @@ const Auth: React.FC<AuthProps> = ({ children, title }) => {
       </div>
 
       {/* content */}
-      <div className="flex flex-col justify-start my-[5%] items-center relative z-10 w-[90%] md:w-[60%] lg:w-[30%] min-h-[60%] bg-white rounded-xl shadow-xl p-6">
-        <div className="w-[80%] mx-auto h-auto flex justify-center items-center">
+      <div className={`flex flex-col justify-start my-[5%] items-center relative z-10 min-h-[60%] bg-white rounded-xl shadow-xl p-6 ${classname}`}>
+        <div className="w-[80%] max-w-[300px] mx-auto h-auto flex justify-center items-center">
             <AspectRatio ratio={16 / 9}>
             <img
               src="/logo.png"
@@ -39,7 +40,7 @@ const Auth: React.FC<AuthProps> = ({ children, title }) => {
         <div className="w-full px-8">
             <span className="text-2xl text-gray-700 font-semibold">{title}</span>
         </div>
-        <div className="w-full p-8">{children}</div>
+        <div className="w-full py-8 px-2 md:px-6 md:py-8">{children}</div>
       </div>
     </div>
   );

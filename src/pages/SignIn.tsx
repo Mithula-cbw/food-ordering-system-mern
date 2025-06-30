@@ -67,8 +67,8 @@ const SignIn = () => {
   };
 
   return (
-    <Auth title="Sign In">
-      <div className="space-y-4">
+    <Auth title="Sign In" classname={"w-[90%] md:w-[60%] lg:w-[30%] "}>
+      <div className="space-y-4 ">
         {/* Google Sign In */}
         <GoogleSignInButton
           onClick={() => console.log("Google sign in clicked")}

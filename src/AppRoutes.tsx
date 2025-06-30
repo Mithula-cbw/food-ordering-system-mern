@@ -19,6 +19,7 @@ export const AppRoutes = () => {
       <Route path="/favorites" element={<MainLayout ><div className='h-[800px]'>favorites</div></MainLayout>}/>
       <Route path="/cart" element={<MainLayout ><div>cart</div></MainLayout>}/>
       <Route path="/sign-in" element={<AuthLayout ><SignIn /></AuthLayout>}/>
+      <Route path="/sign-up" element={<AuthLayout ><SignUp /></AuthLayout>}/>
     </Routes>
   );
 };

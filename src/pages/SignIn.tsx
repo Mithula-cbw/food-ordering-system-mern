@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState, useRef } from "react";
 import Auth from "../components/Auth/Auth";
-import PasswordInput from "../components/Auth/PassWordField";
+import PasswordInput from "../components/Auth/PasswordField";
 import EmailField from "../components/Auth/EmailField";
 import GoogleSignInButton from "../components/Auth/GoogleSignInButton";
 import AuthActionButton from "../components/Auth/AuthActionButton";

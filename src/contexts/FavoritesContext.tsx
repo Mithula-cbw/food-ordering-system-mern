@@ -10,15 +10,14 @@ import { fetchDataFromApi } from "../utils/Api";
 import { useUser } from "./UserContext";
 import { FavoriteItem, FavoritesContextType } from "../types";
 
+// Initial empty context value
 const FavoritesContext = createContext<FavoritesContextType>({
   favorites: [],
   loading: false,
   refreshFavorites: () => {},
 });
 
-export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { user } = useUser();
@@ -31,23 +30,22 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({
       const data = await fetchDataFromApi<FavoriteItem[]>(
         `/api/myList?userId=${user.id}`
       );
-      if (Array.isArray(data)) {
-        setFavorites(data);
-      } else {
-        setFavorites([]);
-      }
+
+      setFavorites(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error("Failed to fetch favorites:", error);
+      console.error("❌ Failed to fetch favorites:", error);
       setFavorites([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Refresh when user ID changes
+  // Refetch favorites when user logs in or out
   useEffect(() => {
     if (user?.id) {
       fetchFavorites();
+    } else {
+      setFavorites([]);
     }
   }, [user?.id]);
 
@@ -67,4 +65,7 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-export const useFavorites = () => useContext(FavoritesContext);
+// Hook to use context safely
+export const useFavorites = (): FavoritesContextType => {
+  return useContext(FavoritesContext);
+};

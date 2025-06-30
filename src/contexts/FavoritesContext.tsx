@@ -47,7 +47,7 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children 
     } else {
       setFavorites([]);
     }
-  }, [user?.id]);
+  }, [user]);
 
   const contextValue = useMemo(
     () => ({

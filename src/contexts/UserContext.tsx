@@ -7,11 +7,13 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isVeg, setIsVeg] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const isLoggedIn = !!user;
 
   // Load from localStorage on mount
   useEffect(() => {
+    setLoading(true)
     const storedUser = localStorage.getItem("user");
     const storedIsVeg = localStorage.getItem("isVeg");
 
@@ -19,12 +21,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const parsedUser: User = JSON.parse(storedUser);
         setUser(parsedUser);
-        setIsVeg(parsedUser.isVegan ?? false); // fallback to false if missing
       } catch (error) {
         console.error("Failed to parse user from localStorage:", error);
+      } finally {
+         setLoading(false);
       }
     }
-
+    setLoading(false);
     if (storedIsVeg !== null) {
       setIsVeg(storedIsVeg === "true");
     }
@@ -47,7 +50,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [isVeg]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, isLoggedIn, isVeg, setIsVeg }}>
+    <UserContext.Provider value={{ user, setUser, isLoggedIn, isVeg, setIsVeg, loading }}>
       {children}
     </UserContext.Provider>
   );

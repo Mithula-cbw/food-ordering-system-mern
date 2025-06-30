@@ -6,7 +6,6 @@ import AuthContainer from "./AuthContainer";
 import ActionContainer from "./ActionContainer";
 import Navbar from "./Navbar";
 import AllCategoriesButton from "./AllCategoriesButton";
-import UserDetailsButton from "./UserDetailsButton";
 import GoVeganSwitch from "./Other/GoVeganSwitch";
 
 const Header: React.FC = () => {
@@ -80,7 +79,7 @@ const Header: React.FC = () => {
         <GoVeganSwitch variant="full"/>
         <SearchBox />
         <div className="flex flex-row items-center justify-between space-x-6">
-          <AuthContainer />
+          <AuthContainer variant="full"/>
           <ActionContainer />
         </div>
       </div>
@@ -106,7 +105,7 @@ const Header: React.FC = () => {
             <GoVeganSwitch variant="mini" />
             <SearchBox />
             <div className="flex flex-row items-center justify-between space-x-12">
-              <UserDetailsButton variant="mini" />
+              <AuthContainer variant="mini"/>
               <ActionContainer />
             </div>
           </div>

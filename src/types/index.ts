@@ -107,6 +107,7 @@ export interface UserContextType {
   isLoggedIn: boolean;
   isVeg: boolean;
   setIsVeg: (value: boolean) => void;
+  loading : boolean;
 }
 
 //favorites context

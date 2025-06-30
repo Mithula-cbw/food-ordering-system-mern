@@ -49,8 +49,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem("isVeg", String(isVeg));
   }, [isVeg]);
 
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+    // Optional: remove token, clear other app states, redirect
+  };
+
   return (
-    <UserContext.Provider value={{ user, setUser, isLoggedIn, isVeg, setIsVeg, loading }}>
+    <UserContext.Provider value={{ user, setUser, isLoggedIn, isVeg, setIsVeg, loading, logout }}>
       {children}
     </UserContext.Provider>
   );

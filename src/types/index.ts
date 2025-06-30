@@ -108,6 +108,7 @@ export interface UserContextType {
   isVeg: boolean;
   setIsVeg: (value: boolean) => void;
   loading : boolean;
+  logout: () => void;
 }
 
 //favorites context

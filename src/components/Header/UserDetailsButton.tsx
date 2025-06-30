@@ -19,11 +19,11 @@ type UserDetailsButtonProps = {
 const UserDetailsButton: React.FC<UserDetailsButtonProps> = ({
   variant = "full",
 }) => {
-  const { user } = useUser();
+  const { user, logout } = useUser();
   console.log("user:",user?.name);
 
   const handleLogout = () => {
-    console.log("Logging out...");
+    logout()
   };
 
   const getAvatarFallback = (name: string) => {

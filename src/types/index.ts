@@ -89,3 +89,49 @@ export interface CategoryContextType {
   error: string | null;
   refetch: () => void;
 }
+
+//user context
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  isAdmin: boolean;
+  token: string;
+}
+
+export interface UserContextType {
+  user: User | null;
+  setUser: (user: User | null) => void;
+  logout: () => void;
+}
+
+//favorites context
+
+export interface FavoriteItem {
+  _id: string;
+  productTitle: string;
+  images: string;
+  rating: number;
+  price: number;
+  productId: string;
+  userId: string;
+}
+
+export interface FavoritesContextType {
+  favorites: FavoriteItem[];
+  loading: boolean;
+  refreshFavorites: () => void;
+}
+
+//auth
+export interface SignInContainerProps {
+  email: string;
+  setEmail: (email: string) => void;
+  password: string;
+  setPassword: (password: string) => void;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+  error: string | null;
+  setError: (error: string | null) => void;
+}

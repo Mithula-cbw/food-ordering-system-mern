@@ -4,12 +4,12 @@ import UserDetailsButton from "./UserDetailsButton";
 import { Link } from "react-router-dom";
 
 const AuthContainer: React.FC = () => {
-  const isLoggedIn = true; // Simulated auth state
+  const isLoggedIn = false; // Simulated auth state
 
   return (
     <div className="flex items-center space-x-4">
       {!isLoggedIn ? (
-        <Link to="/signin">
+        <Link to="/sign-in">
           <Button className="bg-header-signin hover:bg-header-strip transition-colors px-8 py-6 rounded-full">
             <span className="text-white font-semibold text-base">Sign In</span>
           </Button>

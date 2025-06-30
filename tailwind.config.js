@@ -23,6 +23,11 @@ export default {
 				catbtn: "#7a1515",
 				catbtnhover: "#9b1c1c"
   			},
+			auth: {
+  				background: "#7557AE",
+				button: "#fbbf24",
+				buttonhover: "#FFDF27",
+  			},
 			app: {
   				main: "#FFA708",  
 				bannerbtn : "#fbbf24",	

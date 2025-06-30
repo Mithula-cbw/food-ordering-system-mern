@@ -2,9 +2,11 @@ import React from "react";
 import { Button } from "../ui/button";
 import UserDetailsButton from "./UserDetailsButton";
 import { Link } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
 
 const AuthContainer: React.FC = () => {
-  const isLoggedIn = false; // Simulated auth state
+  const { isLoggedIn } = useUser();
+  console.log("header auth container", isLoggedIn);
 
   return (
     <div className="flex items-center space-x-4">

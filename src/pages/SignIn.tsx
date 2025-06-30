@@ -64,10 +64,15 @@ const SignIn = () => {
         localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
         setSuccessMsg("You logged in successfully!");
+        
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }, 500);
+        
 
         setTimeout(() => {
           navigate("/");
-        }, 800);
+        }, 1200);
       } else {
         setError("Invalid credentials or server error.");
       }

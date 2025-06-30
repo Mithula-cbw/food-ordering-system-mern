@@ -33,7 +33,7 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children 
 
       setFavorites(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error("❌ Failed to fetch favorites:", error);
+      console.error("Failed to fetch favorites:", error);
       setFavorites([]);
     } finally {
       setLoading(false);

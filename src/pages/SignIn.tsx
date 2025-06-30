@@ -6,6 +6,7 @@ import EmailField from "../components/Auth/EmailField";
 import GoogleSignInButton from "../components/Auth/GoogleSignInButton";
 import AuthActionButton from "../components/Auth/AuthActionButton";
 import { Link } from "react-router-dom";
+import AuthDivider from "../components/Auth/AuthDivider";
 
 const SignIn = () => {
   const [email, setEmail] = useState<string>("");
@@ -75,16 +76,7 @@ const SignIn = () => {
         />
 
         {/* Divider */}
-        <div className="relative py-4">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">
-              Or sign in with email
-            </span>
-          </div>
-        </div>
+        <AuthDivider text="Or sign in with email" />
 
         {/* Email/Password Form Section */}
         <div ref={emailFormRef} className="space-y-4">
@@ -145,7 +137,7 @@ const SignIn = () => {
               <Link to={"/sign-up"}>
                 <button
                   type="button"
-                  className="text-blue-600 hover:text-blue-800 font-medium focus:outline-none focus:underline"
+                  className="ml-2 text-blue-600 hover:text-blue-800 font-medium focus:outline-none focus:underline"
                 >
                   Sign Up
                 </button>

@@ -7,6 +7,7 @@ import AuthActionButton from "../components/Auth/AuthActionButton";
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
+//   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -45,70 +46,72 @@ const SignUp = () => {
   return (
     <Auth title="Sign In">
       <div className="space-y-4">
-          <div>
-            <EmailField value={email} setEmail={setEmail} />
-          </div>
+        <div>
+          <EmailField value={email} setEmail={setEmail} />
+        </div>
 
-          <PasswordInput
-            title="Password"
-            password={password}
-            setPassword={setPassword}
-            isPasswordVisible={isPasswordVisible}
-            handleToggleVisibility={() => setIsPasswordVisible((prev) => !prev)}
+        <PasswordInput
+          title="Password"
+          password={password}
+          setPassword={setPassword}
+          isPasswordVisible={isPasswordVisible}
+          handleToggleVisibility={() => setIsPasswordVisible((prev) => !prev)}
+        />
+
+        {/* Forgot Password Link */}
+        <div className="text-right">
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium transition duration-200 focus:outline-none focus:underline"
+          >
+            Forget Password?
+          </button>
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-md p-3">
+            <p className="text-red-600 text-sm">{error}</p>
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="flex flex-2 space-x-3 pt-4">
+          <AuthActionButton
+            text="Sign Up"
+            loadingText="Signing Up..."
+            loading={loading}
+            disabled={!email || !password}
+            onClick={handleSignIn}
           />
 
-          {/* Forgot Password Link */}
-          <div className="text-right">
+          <Link to={"/"}>
             <button
               type="button"
-              onClick={handleForgotPassword}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium transition duration-200 focus:outline-none focus:underline"
+              className="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200"
             >
-              Forget Password?
+              Cancel
             </button>
-          </div>
+          </Link>
+        </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-md p-3">
-              <p className="text-red-600 text-sm">{error}</p>
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex flex-2 space-x-3 pt-4">
-            <AuthActionButton
-    text="Sign In"
-    loadingText="Signing in..."
-    loading={loading}
-    disabled={!email || !password}
-    onClick={handleSignIn}
-  />
-
-            <Link to={"/"}>
+        {/* Sign Up Link */}
+        <div className="text-center pt-4">
+          <span className="text-gray-600 text-sm">
+            Already Registered?{" "}
+            <Link to={"/sign-in"}>
               <button
                 type="button"
-                className="px-6 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200"
-              >
-                Cancel
-              </button>
-            </Link>
-          </div>
-
-          {/* Sign Up Link */}
-          <div className="text-center pt-4">
-            <span className="text-gray-600 text-sm">
-              Not Registered?{" "}
-              <button
-                type="button"
-                className="text-blue-600 hover:text-blue-800 font-medium focus:outline-none focus:underline"
+                className="ml-2 text-blue-600 hover:text-blue-800 font-medium focus:outline-none focus:underline"
                 onClick={() => console.log("Navigate to sign up")}
               >
-                Sign Up
+                Sign In
               </button>
-            </span>
-          </div>
+            </Link>
+          </span>
         </div>
+      </div>
     </Auth>
   );
 };

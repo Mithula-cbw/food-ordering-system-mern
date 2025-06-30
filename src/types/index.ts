@@ -90,7 +90,7 @@ export interface CategoryContextType {
   refetch: () => void;
 }
 
-//user context
+// user context
 export interface User {
   id: string;
   name: string;
@@ -98,12 +98,13 @@ export interface User {
   phone: string;
   isAdmin: boolean;
   token: string;
+  isVegan: boolean;
 }
 
 export interface UserContextType {
   user: User | null;
   setUser: (user: User | null) => void;
-  logout: () => void;
+  isLoggedIn: boolean;
 }
 
 //favorites context

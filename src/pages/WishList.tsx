@@ -1,12 +1,11 @@
 import React from "react";
 import { useFavorites } from "../contexts/FavoritesContext";
 import { useUser } from "../contexts/UserContext";
-import WishListItem from "../components/Wishlist/WishListItem";
-import { Product } from "../types";
 import { Link } from "react-router-dom";
+import WishlistGrid from "../components/Wishlist/WishlistGrid";
 
 export default function WishList() {
-  const { favorites, loading } = useFavorites();
+  const { loading } = useFavorites();
   const { user } = useUser();
 
   // If user is not logged in, show login prompt
@@ -37,33 +36,6 @@ export default function WishList() {
     );
   }
 
-  const formattedFavorites: Product[] = favorites.map((fav) => ({
-    _id: fav._id,
-    name: fav.productTitle,
-    description: "No description available", // placeholder
-    category: {
-      _id: "",
-      name: "",
-      description: "",
-      images: [],
-      color: "",
-      __v: 0,
-      id: "",
-    },
-    type: "",
-    price: fav.price,
-    oldPrice: undefined,
-    isFeatured: false,
-    countInStock: "In stock", // optional placeholder
-    discount: undefined,
-    size: [],
-    productSize: [],
-    rating: fav.rating,
-    images: [fav.images],
-    dateCreated: "",
-    __v: 0,
-    catName: "",
-  }));
 
   return (
     <div className="w-full h-full p-8 flex flex-col md:flex-row gap-6">
@@ -82,32 +54,7 @@ export default function WishList() {
       </div>
 
       {/* Right Column - Product Grid */}
-      <div className="md:w-2/3 lg:w-3/4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {loading ? (
-            <div className="text-gray-500 col-span-full flex items-center justify-center py-12">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-300 mx-auto mb-4"></div>
-                Loading...
-              </div>
-            </div>
-          ) : favorites.length === 0 ? (
-            <div className="text-gray-500 col-span-full flex items-center justify-center py-12">
-              <div className="text-center">
-                <div className="text-4xl mb-4">🍽️</div>
-                <p className="text-lg">No items in wishlist.</p>
-                <p className="text-sm text-gray-400 mt-2">
-                  Start adding your favorite meals!
-                </p>
-              </div>
-            </div>
-          ) : (
-            formattedFavorites.map((product) => (
-              <WishListItem key={product._id} product={product} />
-            ))
-          )}
-        </div>
-      </div>
+      <WishlistGrid loading={loading} />
     </div>
   );
 }

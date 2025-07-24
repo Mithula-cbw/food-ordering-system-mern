@@ -1,9 +1,11 @@
 import React from "react";
 import { Product } from "../../types";
 import { Link } from "react-router-dom";
-// import { useFavorites } from "../../contexts/FavoritesContext";
-import { Star } from "lucide-react";
+import { useFavorites } from "../../contexts/FavoritesContext";
+import { Heart, Star, Trash } from "lucide-react";
 import { Button } from "../ui/button";
+import { deleteData } from "@/utils/Api";
+import { toast } from "sonner";
 // import { useUser } from "../../contexts/UserContext";
 
 interface ProductCardProps {
@@ -15,8 +17,8 @@ const WishListItem: React.FC<ProductCardProps> = ({
   product,
   className = "",
 }) => {
-//   const { favorites } = useFavorites();
-//   const { user } = useUser();
+    const { refreshFavorites } = useFavorites();
+  //   const { user } = useUser();
 
   const renderStars = (rating: number) => {
     const stars = [];
@@ -47,6 +49,16 @@ const WishListItem: React.FC<ProductCardProps> = ({
     return text.substring(0, maxLength) + "...";
   };
 
+  const removeItem = async (id: string) => {
+    try {
+      await deleteData(`/api/myList/${id}`);
+      toast.success("Item removed from wishlist!");
+      refreshFavorites()
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      toast.error("Failed to remove item. Please try again!");
+    }
+  };
 
   const isInStock = product.countInStock.toLowerCase() === "in stock";
 
@@ -71,9 +83,17 @@ const WishListItem: React.FC<ProductCardProps> = ({
               </div>
             )}
 
+            <div className="absolute top-3 right-3 z-20 flex flex-col gap-2 ">
+              <div
+                className={`w-10 h-10 bg-white backdrop-blur-sm cursor-default rounded-full flex items-center justify-center shadow-lg transition-all duration-200`}
+              >
+                <Heart className={`w-5 h-5 text-white fill-red-500`} />
+              </div>
+            </div>
+
             {/* Discount Badge */}
             {product.discount && (
-              <div className="absolute top-3 left-3 z-10">
+              <div className="absolute top-3 left-3 z-20">
                 <div className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-sm">
                   {product.discount}%
                 </div>
@@ -119,19 +139,29 @@ const WishListItem: React.FC<ProductCardProps> = ({
             </div>
 
             {/* Price Section */}
-            <div className="flex items-center gap-2">
-              {product.oldPrice && (
-                <span className="text-gray-400 text-lg line-through">
-                  ${product.oldPrice}
+            <div className="flex flex-row justify-between items-center">
+              <div className="flex items-center gap-2">
+                {product.oldPrice && (
+                  <span className="text-gray-400 text-lg line-through">
+                    ${product.oldPrice}
+                  </span>
+                )}
+                <span className="text-red-500 text-xl font-bold">
+                  ${product.price}
                 </span>
-              )}
-              <span className="text-red-500 text-xl font-bold">
-                ${product.price}
-              </span>
+              </div>
+              <Button
+                className="bg-gray-400 flex items-center gap-2"
+                onClick={(e) => {
+                  e.stopPropagation(); 
+                  e.preventDefault(); 
+                  removeItem(product._id);
+                }}
+              >
+                <Trash className="w-4 h-4" />
+                <span>Remove</span>
+              </Button>
             </div>
-            <Button>
-                
-            </Button>
           </div>
         </div>
       </Link>

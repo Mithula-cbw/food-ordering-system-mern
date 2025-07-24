@@ -1,8 +1,11 @@
-import React, { useState } from "react";
-import { Star, Heart, Maximize2, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Star, Heart, Maximize2, X, CheckCircle } from "lucide-react";
 import { Product } from "../../types";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../../contexts/FavoritesContext";
+import { toast } from "sonner";
+import { useUser } from "../../contexts/UserContext";
+import { postData } from "@/utils/Api";
 
 interface ProductCardProps {
   product: Product;
@@ -15,7 +18,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [isZoomed, setIsZoomed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const { favorites } = useFavorites();
+  const { favorites, refreshFavorites } = useFavorites();
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const { user } = useUser();
 
   const renderStars = (rating: number) => {
     const stars = [];
@@ -46,14 +51,49 @@ const ProductCard: React.FC<ProductCardProps> = ({
     return text.substring(0, maxLength) + "...";
   };
 
-  const handleWishlistClick = (e: React.MouseEvent) => {
+  const handleWishlistClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (isInWishlist) {
-      console.log("Already in wishlist");
-    } else {      
-      console.log("add to wishlist");
+      toast.success(
+        <div className="flex items-center gap-3">
+          <CheckCircle className="text-green-600 w-5 h-5" />
+          <span className="text-black font-semibold">
+            Item removed from wishlist!
+          </span>
+        </div>
+      );
+    } else {
+      const data = {
+        productTitle: product.name,
+        images: product.images[0],
+        rating: Number(product.rating),
+        price: product.price,
+        productId: product._id,
+        userId: user?.id,
+      };
+
+      try {
+        const response = await postData("/api/myList/add/", data);
+
+        if (response) {
+          toast.success(
+            <div className="flex items-center gap-3">
+              <CheckCircle className="text-green-600 w-5 h-5" />
+              <span className="text-black font-semibold">
+                Item added to wishlist!
+              </span>
+            </div>
+          );
+          refreshFavorites();
+        } else {
+          toast.error("Failed to add to wishlist.");
+        }
+      } catch (err) {
+        console.error("Wishlist error:", err);
+        toast.error("An error occurred.");
+      }
     }
   };
 
@@ -68,7 +108,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   const isInStock = product.countInStock.toLowerCase() === "in stock";
-  const isInWishlist = favorites.some(fav => fav._id === product._id);
+  useEffect(() => {
+  const found = favorites.some((fav) => fav.productId === product._id);
+  setIsInWishlist(found);
+}, [favorites, product._id]);
 
   return (
     <>
@@ -115,18 +158,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 <button
                   onClick={handleWishlistClick}
                   className={`w-10 h-10 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 ${
-                    isInWishlist 
-                      ? 'bg-red-500 hover:bg-red-600' 
-                      : 'bg-white/90 hover:bg-white'
+                    isInWishlist
+                      ? "bg-white hover:bg-red-50"
+                      : "bg-white/90 hover:bg-white"
                   }`}
-                  title={isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
+                  title={
+                    isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"
+                  }
                 >
-                  <Heart 
+                  <Heart
                     className={`w-5 h-5 ${
-                      isInWishlist 
-                        ? 'text-white fill-white' 
-                        : 'text-gray-700 hover:text-red-500'
-                    }`} 
+                      isInWishlist
+                        ? "text-white fill-red-500"
+                        : "text-gray-700 hover:text-red-500"
+                    }`}
                   />
                 </button>
               </div>

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { toast } from "sonner";
 import { useUser } from "../../contexts/UserContext";
-import { postData } from "@/utils/Api";
+import { deleteData, postData } from "../../utils/Api";
 
 interface ProductCardProps {
   product: Product;
@@ -51,19 +51,23 @@ const ProductCard: React.FC<ProductCardProps> = ({
     return text.substring(0, maxLength) + "...";
   };
 
+  const removeItem = async (id: string) => {
+      try {
+        await deleteData(`/api/myList/${id}`);
+        toast.success("Item removed from wishlist!");
+        refreshFavorites()
+      } catch (error) {
+        console.error("Error deleting item:", error);
+        toast.error("Failed to remove item. Please try again!");
+      }
+    };
+
   const handleWishlistClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (isInWishlist) {
-      toast.success(
-        <div className="flex items-center gap-3">
-          <CheckCircle className="text-green-600 w-5 h-5" />
-          <span className="text-black font-semibold">
-            Item removed from wishlist!
-          </span>
-        </div>
-      );
+       removeItem(product._id);
     } else {
       const data = {
         productTitle: product.name,

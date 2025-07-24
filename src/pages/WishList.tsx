@@ -1,7 +1,7 @@
 import React from "react";
 import { useFavorites } from "../contexts/FavoritesContext";
 import { useUser } from "../contexts/UserContext";
-import ProductCard from "../components/Home/ProductItem";
+import WishListItem from "../components/Wishlist/WishListItem";
 import { Product } from "../types";
 import { Link } from "react-router-dom";
 
@@ -83,7 +83,7 @@ export default function WishList() {
 
       {/* Right Column - Product Grid */}
       <div className="md:w-2/3 lg:w-3/4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {loading ? (
             <div className="text-gray-500 col-span-full flex items-center justify-center py-12">
               <div className="text-center">
@@ -103,7 +103,7 @@ export default function WishList() {
             </div>
           ) : (
             formattedFavorites.map((product) => (
-              <ProductCard key={product._id} product={product} />
+              <WishListItem key={product._id} product={product} />
             ))
           )}
         </div>

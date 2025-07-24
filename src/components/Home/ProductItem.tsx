@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Star, Heart, Maximize2, X, CheckCircle } from "lucide-react";
+import { Star, Heart, Maximize2,  CheckCircle } from "lucide-react";
 import { Product } from "../../types";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../../contexts/FavoritesContext";
@@ -16,7 +16,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   product,
   className = "",
 }) => {
-  const [isZoomed, setIsZoomed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const { favorites, refreshFavorites } = useFavorites();
   const [isInWishlist, setIsInWishlist] = useState(false);
@@ -101,16 +100,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
   };
 
-  const handleZoomClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsZoomed(true);
-  };
-
-  const closeZoom = () => {
-    setIsZoomed(false);
-  };
-
   const isInStock = product.countInStock.toLowerCase() === "in stock";
   useEffect(() => {
   const found = favorites.some((fav) => fav.productId === product._id);
@@ -153,7 +142,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {isHovered && (
               <div className="absolute top-3 right-3 z-20 flex flex-col gap-2">
                 <button
-                  onClick={handleZoomClick}
                   className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all duration-200 hover:scale-110"
                   title="View Product"
                 >
@@ -233,66 +221,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         </div>
       </Link>
-
-      {/* Product Zoom Modal */}
-      {isZoomed && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="relative bg-white rounded-lg max-w-2xl max-h-[90vh] overflow-hidden">
-            {/* Close Button */}
-            <button
-              onClick={closeZoom}
-              className="absolute top-4 right-4 z-10 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all duration-200"
-            >
-              <X className="w-5 h-5 text-gray-700" />
-            </button>
-
-            {/* Zoomed Image */}
-            <div className="aspect-square bg-gray-100">
-              {product.images && product.images.length > 0 ? (
-                <img
-                  src={product.images[0]}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                  <span className="text-6xl text-gray-400">🍽️</span>
-                </div>
-              )}
-            </div>
-
-            {/* Product Info in Modal */}
-            <div className="p-6">
-              <h3 className="text-2xl font-bold text-blue-600 mb-2">
-                {product.name}
-              </h3>
-              <p className="text-gray-800 mb-4 leading-relaxed">
-                {product.description}
-              </p>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1">
-                    {renderStars(product.rating)}
-                  </div>
-                  <span className="text-green-600 text-sm font-semibold ml-4">
-                    {product.countInStock}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  {product.oldPrice && (
-                    <span className="text-gray-400 text-lg line-through">
-                      ${product.oldPrice}
-                    </span>
-                  )}
-                  <span className="text-red-500 text-2xl font-bold">
-                    ${product.price}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

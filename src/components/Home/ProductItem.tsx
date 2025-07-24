@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Star, Heart, Maximize2,  CheckCircle } from "lucide-react";
+import { Star, Heart, Maximize2, CheckCircle } from "lucide-react";
 import { Product } from "../../types";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { toast } from "sonner";
 import { useUser } from "../../contexts/UserContext";
 import { deleteData, postData } from "../../utils/Api";
+import ProductZoom from "./ProductZoom";
 
 interface ProductCardProps {
   product: Product;
@@ -20,6 +21,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const { favorites, refreshFavorites } = useFavorites();
   const [isInWishlist, setIsInWishlist] = useState(false);
   const { user } = useUser();
+  const [isOpen, setIsOpen] = useState(false);
 
   const renderStars = (rating: number) => {
     const stars = [];
@@ -51,22 +53,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   const removeItem = async (id: string) => {
-      try {
-        await deleteData(`/api/myList/${id}`);
-        toast.success("Item removed from wishlist!");
-        refreshFavorites()
-      } catch (error) {
-        console.error("Error deleting item:", error);
-        toast.error("Failed to remove item. Please try again!");
-      }
-    };
+    try {
+      await deleteData(`/api/myList/${id}`);
+      toast.success("Item removed from wishlist!");
+      refreshFavorites();
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      toast.error("Failed to remove item. Please try again!");
+    }
+  };
 
   const handleWishlistClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (isInWishlist) {
-       removeItem(product._id);
+      removeItem(product._id);
     } else {
       const data = {
         productTitle: product.name,
@@ -102,9 +104,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const isInStock = product.countInStock.toLowerCase() === "in stock";
   useEffect(() => {
-  const found = favorites.some((fav) => fav.productId === product._id);
-  setIsInWishlist(found);
-}, [favorites, product._id]);
+    const found = favorites.some((fav) => fav.productId === product._id);
+    setIsInWishlist(found);
+  }, [favorites, product._id]);
 
   return (
     <>
@@ -142,6 +144,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {isHovered && (
               <div className="absolute top-3 right-3 z-20 flex flex-col gap-2">
                 <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsOpen(true);
+                  }}
                   className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all duration-200 hover:scale-110"
                   title="View Product"
                 >
@@ -167,6 +174,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   />
                 </button>
               </div>
+            )}
+
+            {isOpen && (
+              <ProductZoom onClose={() => setIsOpen(false)}>
+                <h2 className="text-lg font-bold mb-2">
+                  Hello from the popup!
+                </h2>
+                <p className="text-gray-700">This is a simple modal overlay.</p>
+              </ProductZoom>
             )}
 
             {/* Overlay for out of stock */}

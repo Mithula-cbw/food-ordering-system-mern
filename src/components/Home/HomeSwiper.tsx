@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { HomeSwiperProps } from "../../types";
+import { HomeSwiperProps, Product } from "../../types";
 import Tab from "./Tab";
 import ProductItem from "./ProductItem";
 import NoProductsFound from "./NoProductsFound";
 import SimpleSwiper from "./SimpleSwiper";
 import { Skeleton } from "../ui/skeleton";
+import { useUser } from "../../contexts/UserContext"; // or wherever your user context is
+
 
 const HomeSwiper: React.FC<HomeSwiperProps> = ({
   title,
@@ -32,6 +34,7 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const tabsScrollRef = useRef<HTMLDivElement>(null);
+  const { isVeg } = useUser();
 
   // Unified scroll check function
   const checkScrollButtons = () => {
@@ -107,24 +110,30 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
     }
   };
 
-  const getFilteredProducts = () => {
-    console.log("Filtering products for active tab:", products);
+const getFilteredProducts = () => {
+  console.log("Filtering products for active tab:", products);
 
-    if (!showTabs || categories.length === 0) return products;
+  if (!showTabs || categories.length === 0) return filterByVegan(products);
 
-    const activeCategory = categories[activeTab];
-    // console.log("Active tab index:", activeCategory.name.toLowerCase());
-    if (activeCategory.name.toLowerCase() === "all") return products;
+  const activeCategory = categories[activeTab];
+  if (activeCategory.name.toLowerCase() === "all") return filterByVegan(products);
 
-    return products.filter(
-      (item) =>
-        item.category?.name?.toLowerCase() ===
-        activeCategory.name?.toLowerCase()
-    );
-  };
+  const categoryFiltered = products.filter(
+    (item) =>
+      item.category?.name?.toLowerCase() ===
+      activeCategory.name?.toLowerCase()
+  );
 
-  const filteredProducts = getFilteredProducts();
-  //   console.log("Filtered products:", filteredProducts);
+  return filterByVegan(categoryFiltered);
+};
+
+// helper to filter by isVegan if toggle is on
+const filterByVegan = (items: Product[]) => {
+  if (!isVeg) return items;
+  return items.filter((item) => item.type == "Vegetarian"); // assumes product has isVegan field
+};
+
+const filteredProducts = getFilteredProducts();
 
   const renderProducts = () => {
     if (loading || error) {

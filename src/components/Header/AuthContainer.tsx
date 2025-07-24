@@ -2,20 +2,35 @@ import React from "react";
 import { Button } from "../ui/button";
 import UserDetailsButton from "./UserDetailsButton";
 import { Link } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
+import { Skeleton } from "../ui/skeleton";
 
-const AuthContainer: React.FC = () => {
-  const isLoggedIn = true; // Simulated auth state
+interface AuthContainerProps {
+  variant: "full" | "mini";
+}
+
+const AuthContainer: React.FC<AuthContainerProps> = ({ variant }) => {
+  const { isLoggedIn, loading } = useUser();
+  console.log("header auth container", isLoggedIn);
 
   return (
-    <div className="flex items-center space-x-4">
-      {!isLoggedIn ? (
-        <Link to="/signin">
-          <Button className="bg-header-signin hover:bg-header-strip transition-colors px-8 py-6 rounded-full">
-            <span className="text-white font-semibold text-base">Sign In</span>
-          </Button>
-        </Link>
+    <div>
+      {!loading ? (
+        <div className="flex items-center space-x-4">
+          {!isLoggedIn ? (
+            <Link to="/sign-in">
+              <Button className="bg-header-signin hover:bg-header-strip transition-colors px-8 py-6 rounded-full">
+                <span className="text-white font-semibold text-base">
+                  Sign In
+                </span>
+              </Button>
+            </Link>
+          ) : (
+            <UserDetailsButton variant={variant} />
+          )}
+        </div>
       ) : (
-        <UserDetailsButton variant="full"/>
+        <Skeleton className="w-20 h-12 rounded-full"/>
       )}
     </div>
   );

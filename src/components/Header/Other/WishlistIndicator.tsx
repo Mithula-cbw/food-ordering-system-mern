@@ -5,6 +5,7 @@ import { useFavorites } from "../../../contexts/FavoritesContext";
 
 const WishlistIndicator: React.FC = () => {
   const { favorites, loading } = useFavorites();
+  
   // console.log("WishlistIndicator - Favorites:", favorites);
 
   const wishlistCount = loading ? 0 : favorites.length;

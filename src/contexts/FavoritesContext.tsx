@@ -7,25 +7,10 @@ import React, {
   ReactNode,
 } from "react";
 import { fetchDataFromApi } from "../utils/Api";
+import { useUser } from "./UserContext";
+import { FavoriteItem, FavoritesContextType } from "../types";
 
-const USER_ID = "6859515c7e9a38910b5b3200";
-
-export interface FavoriteItem {
-  _id: string;
-  productTitle: string;
-  images: string;
-  rating: number;
-  price: number;
-  productId: string;
-  userId: string;
-}
-
-interface FavoritesContextType {
-  favorites: FavoriteItem[];
-  loading: boolean;
-  refreshFavorites: () => void;
-}
-
+// Initial empty context value
 const FavoritesContext = createContext<FavoritesContextType>({
   favorites: [],
   loading: false,
@@ -34,30 +19,44 @@ const FavoritesContext = createContext<FavoritesContextType>({
 
 export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { user } = useUser();
 
   const fetchFavorites = async () => {
+    if (!user?.id) return;
+
     setLoading(true);
-    const data = await fetchDataFromApi<FavoriteItem[]>(`/api/myList?userId=${USER_ID}`);
-    if (Array.isArray(data)) {
-      setFavorites(data);
+    try {
+      const data = await fetchDataFromApi<FavoriteItem[]>(
+        `/api/myList?userId=${user.id}`
+      );
+
+      setFavorites(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Failed to fetch favorites:", error);
+      setFavorites([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Refetch favorites when user logs in or out
+  useEffect(() => {
+    if (user?.id) {
+      fetchFavorites();
     } else {
       setFavorites([]);
     }
-    setLoading(false);
-  };
+  }, [user]);
 
-  useEffect(() => {
-    // console.log("Fetching favorites...");
-    fetchFavorites();
-  }, []);
-
-  
-  const contextValue = useMemo(() => ({
-    favorites,
-    loading,
-    refreshFavorites: fetchFavorites,
-  }), [favorites, loading]);
+  const contextValue = useMemo(
+    () => ({
+      favorites,
+      loading,
+      refreshFavorites: fetchFavorites,
+    }),
+    [favorites, loading]
+  );
 
   return (
     <FavoritesContext.Provider value={contextValue}>
@@ -66,5 +65,7 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children 
   );
 };
 
-export const useFavorites = () => useContext(FavoritesContext);
-
+// Hook to use context safely
+export const useFavorites = (): FavoritesContextType => {
+  return useContext(FavoritesContext);
+};

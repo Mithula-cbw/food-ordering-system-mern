@@ -7,17 +7,17 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "../../ui/dropdown-menu";
-import { useState } from "react";
+import { useUser } from "../../../contexts/UserContext";
 
 type GoVeganSwitchProps = {
   variant?: "full" | "mini";
 };
 
 const GoVeganSwitch: React.FC<GoVeganSwitchProps> = ({ variant = "full" }) => {
-  const [isVegan, setIsVegan] = useState(false);
+  const { isVeg, setIsVeg } = useUser(); // <-- use global state
 
   const handleToggle = (checked: boolean) => {
-    setIsVegan(checked);
+    setIsVeg(checked);
 
     if (checked) {
       toast.success(
@@ -45,9 +45,9 @@ const GoVeganSwitch: React.FC<GoVeganSwitchProps> = ({ variant = "full" }) => {
       </Label>
       <Switch
         id="go-vegan"
-        checked={isVegan}
+        checked={isVeg}
         onCheckedChange={handleToggle}
-        className={`data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-gray-300 transition duration-300`}
+        className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-gray-300 transition duration-300"
       />
     </div>
   );
@@ -55,11 +55,11 @@ const GoVeganSwitch: React.FC<GoVeganSwitchProps> = ({ variant = "full" }) => {
   const MiniTrigger = (
     <div
       className={`w-6 h-6 rounded-sm border-2 flex items-center justify-center cursor-pointer
-      ${isVegan ? "border-green-600 bg-white" : "border-gray-400 bg-gray-100"}`}
+      ${isVeg ? "border-green-600 bg-white" : "border-gray-400 bg-gray-100"}`}
     >
       <div
         className={`w-3 h-3 rounded-full
-        ${isVegan ? "bg-green-600" : "bg-gray-400"}`}
+        ${isVeg ? "bg-green-600" : "bg-gray-400"}`}
       />
     </div>
   );

@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { Heart, ArrowLeftRight, Minus, Plus, Star, X, CheckCircle } from "lucide-react";
+import {
+  Heart,
+  ArrowLeftRight,
+  Minus,
+  Plus,
+  Star,
+  X,
+  CheckCircle,
+} from "lucide-react";
 import { Product } from "../../types";
 import { deleteData, postData } from "@/utils/Api";
 import { toast } from "sonner";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { useUser } from "../../contexts/UserContext";
+import ShinyButton from "../Commons/ShinyButton";
 
 type ProductZoomProps = {
   isInWishlist?: boolean;
@@ -13,11 +22,17 @@ type ProductZoomProps = {
   onClose: (e: React.MouseEvent) => void;
 };
 
-const ProductZoom: React.FC<ProductZoomProps> = ({ isInWishlist,product, onClose }) => {
+const ProductZoom: React.FC<ProductZoomProps> = ({
+  isInWishlist,
+  product,
+  onClose,
+}) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [shine, setShine] = useState(false);
+  const [discountCal, setDiscountCal] = useState(0);
   const [selectedSize, setSelectedSize] = useState(product.size[0] || "");
-  const isInStock = product.countInStock.toLowerCase() === "in stock";  
+  const isInStock = product.countInStock.toLowerCase() === "in stock";
   const { refreshFavorites } = useFavorites();
   const { user } = useUser();
 
@@ -37,55 +52,60 @@ const ProductZoom: React.FC<ProductZoomProps> = ({ isInWishlist,product, onClose
     ));
   };
 
-   const removeItem = async (id: string) => {
+  const removeItem = async (id: string) => {
+    try {
+      await deleteData(`/api/myList/${id}`);
+      toast.success("Item removed from wishlist!");
+      refreshFavorites();
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      toast.error("Failed to remove item. Please try again!");
+    }
+  };
+
+  const handleWishlistClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isInWishlist) {
+      removeItem(product._id);
+    } else {
+      const data = {
+        productTitle: product.name,
+        images: product.images[0],
+        rating: Number(product.rating),
+        price: product.price,
+        productId: product._id,
+        userId: user?.id,
+      };
+
       try {
-        await deleteData(`/api/myList/${id}`);
-        toast.success("Item removed from wishlist!");
-        refreshFavorites();
-      } catch (error) {
-        console.error("Error deleting item:", error);
-        toast.error("Failed to remove item. Please try again!");
-      }
-    };
-  
-    const handleWishlistClick = async (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-  
-      if (isInWishlist) {
-        removeItem(product._id);
-      } else {
-        const data = {
-          productTitle: product.name,
-          images: product.images[0],
-          rating: Number(product.rating),
-          price: product.price,
-          productId: product._id,
-          userId: user?.id,
-        };
-  
-        try {
-          const response = await postData("/api/myList/add/", data);
-  
-          if (response) {
-            toast.success(
-              <div className="flex items-center gap-3">
-                <CheckCircle className="text-green-600 w-5 h-5" />
-                <span className="text-black font-semibold">
-                  Item added to wishlist!
-                </span>
-              </div>
-            );
-            refreshFavorites();
-          } else {
-            toast.error("Failed to add to wishlist.");
-          }
-        } catch (err) {
-          console.error("Wishlist error:", err);
-          toast.error("An error occurred.");
+        const response = await postData("/api/myList/add/", data);
+
+        if (response) {
+          toast.success(
+            <div className="flex items-center gap-3">
+              <CheckCircle className="text-green-600 w-5 h-5" />
+              <span className="text-black font-semibold">
+                Item added to wishlist!
+              </span>
+            </div>
+          );
+          refreshFavorites();
+        } else {
+          toast.error("Failed to add to wishlist.");
         }
+      } catch (err) {
+        console.error("Wishlist error:", err);
+        toast.error("An error occurred.");
       }
-    };
+    }
+  };
+
+  const triggerFromOtherComponent = () => {
+    setShine(true);
+    setTimeout(() => setShine(false), 1200); // prevent permanent true
+  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -97,6 +117,25 @@ const ProductZoom: React.FC<ProductZoomProps> = ({ isInWishlist,product, onClose
   const discountPercentage = product.oldPrice
     ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
     : product.discount || 0;
+  const hasDiscount = discountPercentage > 0;
+  const discount =
+    hasDiscount && product.oldPrice
+      ? ` ${formatPrice(product.oldPrice - product.price)}`
+      : "";
+
+  const updateDiscountCalculationUP = () => {
+    if (product.oldPrice && product.price) {
+      const discountAmount = product.oldPrice - product.price;
+      setDiscountCal((discountAmount * (quantity +1)));
+    }
+  }
+
+    const updateDiscountCalculationDOWN = () => {
+    if (product.oldPrice && product.price) {
+      const discountAmount = product.oldPrice - product.price;
+      setDiscountCal((discountAmount * (quantity - 1)));
+    }
+  }
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
@@ -233,13 +272,15 @@ const ProductZoom: React.FC<ProductZoomProps> = ({ isInWishlist,product, onClose
               )}
 
               {/* Quantity and Stock */}
-              <div className="space-y-2">                
+              <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
+                        triggerFromOtherComponent();
+                        updateDiscountCalculationDOWN();
                         setQuantity(Math.max(1, quantity - 1));
                       }}
                       className="p-3 bg-gray-100 cursor-pointer hover:bg-blue-50 transition-colors rounded-full"
@@ -252,6 +293,8 @@ const ProductZoom: React.FC<ProductZoomProps> = ({ isInWishlist,product, onClose
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
+                        triggerFromOtherComponent();
+                        updateDiscountCalculationUP()
                         setQuantity(quantity + 1);
                       }}
                       className="p-3 bg-gray-100 cursor-pointer hover:bg-blue-50 transition-colors rounded-full"
@@ -271,38 +314,59 @@ const ProductZoom: React.FC<ProductZoomProps> = ({ isInWishlist,product, onClose
                 </div>
               </div>
 
-              
-                {/* Action Buttons */}
-                <div className="flex space-x-3">
-                  <button className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
-                    Add To Cart
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleWishlistClick(e);
-                    }}
-                    className={`p-3 rounded-lg border transition-all ${
-                      isInWishlist
-                        ? "border-red-500 bg-red-50 text-red-500"
-                        : "border-gray-300 hover:border-gray-400"
-                    }`}
-                  >
-                    <Heart
-                      className={`w-5 h-5 ${
-                        isInWishlist ? "fill-current" : ""
-                      }`}
-                    />
-                  </button>
-                  <button className="p-3 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}>
-                    <ArrowLeftRight className="w-5 h-5" />
-                  </button>
-                </div>
+              {/* Action Buttons */}
+              <div className="flex space-x-3">
+                <ShinyButton triggerGlow={shine} className="flex-1">
+                  <div className="w-full flex flex-col items-center justify-center gap-1">
+                    <span className="text-base font-semibold tracking-wide">
+                      Add To Cart
+                    </span>
+                    {hasDiscount && (
+                    <span className="text-sm text-white/80 font-normal">
+                      Save{" "}
+                      {discountCal == 0 && (
+                        <span className="text-green-400 font-bold">
+                          {" "}
+                          {discount}
+                        </span>
+                      )}
+                      {discountCal > 0 && (
+                        <span className="text-green-400 font-bold">
+                          {" "}
+                          {formatPrice(discountCal)}
+                        </span>
+                      )}
+                      {" !!"}
+                    </span>
+                    )}
+                  </div>
+                </ShinyButton>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleWishlistClick(e);
+                  }}
+                  className={`p-3 rounded-lg border transition-all ${
+                    isInWishlist
+                      ? "border-red-500 bg-red-50 text-red-500"
+                      : "border-gray-300 hover:border-gray-400"
+                  }`}
+                >
+                  <Heart
+                    className={`w-5 h-5 ${isInWishlist ? "fill-current" : ""}`}
+                  />
+                </button>
+                <button
+                  className="p-3 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  <ArrowLeftRight className="w-5 h-5" />
+                </button>
+              </div>
 
               {/* Product Details Grid */}
               {/* <div className="border-t pt-6 space-y-4">

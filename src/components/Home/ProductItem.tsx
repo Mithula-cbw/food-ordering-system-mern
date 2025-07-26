@@ -177,12 +177,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
             )}
 
             {isOpen && (
-              <ProductZoom onClose={() => setIsOpen(false)}>
-                <h2 className="text-lg font-bold mb-2">
-                  Hello from the popup!
-                </h2>
-                <p className="text-gray-700">This is a simple modal overlay.</p>
-              </ProductZoom>
+              <ProductZoom product={product} onClose={() => setIsOpen(false)} />
+                
             )}
 
             {/* Overlay for out of stock */}

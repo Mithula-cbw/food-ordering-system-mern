@@ -336,7 +336,7 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
                           {formatPrice(discountCal)}
                         </span>
                       )}
-                      {" !!"}
+                      {" now!!"}
                     </span>
                     )}
                   </div>

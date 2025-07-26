@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import ReactDOM from "react-dom";
-import { Heart, ArrowLeftRight, Minus, Plus, Star, X, ZoomIn } from 'lucide-react';
+import { Heart, ArrowLeftRight, Minus, Plus, Star, X } from 'lucide-react';
 import { Product } from '../../types';
 
 type ProductZoomProps = {
@@ -13,22 +13,9 @@ const ProductZoom: React.FC<ProductZoomProps> = ({ product, onClose }) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(product.size[0] || '');
   const [isWishlisted, setIsWishlisted] = useState(false);
-  const [isZoomed, setIsZoomed] = useState(false);
-  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
-  const imageRef = useRef<HTMLDivElement>(null);
 
   const modalRoot = document.getElementById("ProductZoom-root");
   if (!modalRoot) return null;
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!imageRef.current || !isZoomed) return;
-
-    const rect = imageRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    
-    setZoomPosition({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) });
-  };
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -77,32 +64,12 @@ const ProductZoom: React.FC<ProductZoomProps> = ({ product, onClose }) => {
             {/* Image Section */}
             <div className="space-y-4">
               {/* Main Image */}
-              <div 
-                ref={imageRef}
-                className="relative bg-gray-100 rounded-lg overflow-hidden aspect-square cursor-zoom-in"
-                onMouseEnter={() => setIsZoomed(true)}
-                onMouseLeave={() => setIsZoomed(false)}
-                onMouseMove={handleMouseMove}
-              >
+              <div className="relative bg-gray-100 rounded-lg overflow-hidden aspect-square">
                 <img
                   src={product.images[selectedImage] || 'https://via.placeholder.com/600x600?text=No+Image'}
                   alt={product.name}
-                  className={`w-full h-full object-cover transition-transform duration-300 ${
-                    isZoomed ? 'scale-150' : 'scale-100'
-                  }`}
-                  style={
-                    isZoomed
-                      ? {
-                          transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                        }
-                      : {}
-                  }
+                  className="w-full h-full object-cover"
                 />
-                {isZoomed && (
-                  <div className="absolute top-4 left-4 bg-black bg-opacity-50 text-white p-2 rounded-full">
-                    <ZoomIn className="w-4 h-4" />
-                  </div>
-                )}
                 {discountPercentage > 0 && (
                   <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
                     -{discountPercentage}%

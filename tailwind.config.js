@@ -1,3 +1,5 @@
+import test from 'node:test';
+
 /** @type {import('tailwindcss').Config} */
 export default {
     darkMode: ["class"],
@@ -17,6 +19,7 @@ export default {
 			lato : ['Lato', 'sans-serif'],
   		},
   		colors: {
+			test: '#f00',
   			header: {
   				strip: "#493b99",
   				signin: "#233a95",

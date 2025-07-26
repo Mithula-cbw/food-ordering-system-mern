@@ -177,7 +177,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             )}
 
             {isOpen && (
-              <ProductZoom product={product} onClose={() => setIsOpen(false)} />
+              <ProductZoom isInWishlist={isInWishlist} product={product} onClose={() => setIsOpen(false)} />
                 
             )}
 
@@ -207,7 +207,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
             {/* Stock Status */}
             <div className="mb-3">
-              <span className="text-green-600 text-sm font-semibold">
+              <span className={`${isInStock ? "text-green-600" : "text-orange-600"} text-sm font-semibold`}>
                 {product.countInStock}
               </span>
             </div>

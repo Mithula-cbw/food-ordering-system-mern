@@ -27,7 +27,7 @@ const CategorySidebar: React.FC<Props> = ({
             <div
               key={category.id}
               className={`flex items-center space-x-3 cursor-pointer ${
-                isSelected ? "font-bold text-blue-600" : "text-gray-700"
+                isSelected ? "font-normal text-header-catbtn/75" : "text-gray-500"
               }`}
               onClick={() => toggleCategory(category.id)}
             >
@@ -35,7 +35,7 @@ const CategorySidebar: React.FC<Props> = ({
                 type="checkbox"
                 checked={isSelected}
                 readOnly
-                className="accent-blue-600"
+                className="accent-header-catbtn"
               />
               <span className="capitalize">{category.name}</span>
             </div>

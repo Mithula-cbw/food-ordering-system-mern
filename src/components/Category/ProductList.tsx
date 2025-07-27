@@ -2,6 +2,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProductCard from "../Home/ProductItem";
 import { Product } from "../../types"; // Adjust this import if you have types defined
+import ProductCardRow from "../Home/ProductItemRow";
 
 interface ProductListProps {
   products: Product[];
@@ -36,10 +37,11 @@ const ProductList: React.FC<ProductListProps> = ({ products, viewMode }) => {
               exit={{ opacity: 0.8, scale: 0.9 }}
               transition={{ duration: 0.3 }}
             >
-              <ProductCard
-                product={product}
-                className={viewMode === "list" ? "flex flex-row" : ""}
-              />
+              {viewMode === "list" ? (
+                <ProductCardRow product={product} />
+              ) : (
+                <ProductCard product={product} />
+              )}
             </motion.div>
           ))
         ) : (

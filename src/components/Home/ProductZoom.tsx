@@ -16,6 +16,7 @@ import { useFavorites } from "../../contexts/FavoritesContext";
 import { useUser } from "../../contexts/UserContext";
 import ShinyButton from "../Commons/ShinyButton";
 import { Link } from "react-router-dom";
+import { formatPrice } from "../../utils/helpers";
 
 type ProductZoomProps = {
   isInWishlist?: boolean;
@@ -106,13 +107,6 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
   const triggerFromOtherComponent = () => {
     setShine(true);
     setTimeout(() => setShine(false), 1200); // prevent permanent true
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(price);
   };
 
   const discountPercentage = product.oldPrice

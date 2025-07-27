@@ -9,6 +9,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import WishList from './pages/WishList';
 import CategoryView from './layouts/CategoryView';
+import Product from './pages/Product';
 
 
 export const AppRoutes = () => {
@@ -17,6 +18,7 @@ export const AppRoutes = () => {
       {/* Define routes */}
       <Route path="/" element={<MainLayout ><Home /></MainLayout>}/>
       <Route path="/categories/:id" element={<CategoryView />} />
+      <Route path="/product/:id" element={<MainLayout ><Product /></MainLayout>} />
       <Route path="/blog" element={<MainLayout ><Blog /></MainLayout>}/>
       <Route path="/contact" element={<MainLayout ><div>Contact</div></MainLayout>}/>
       <Route path="/favorites" element={<MainLayout ><WishList /></MainLayout>}/>

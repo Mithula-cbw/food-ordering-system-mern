@@ -9,12 +9,13 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useFavorites } from "@/contexts/FavoritesContext";
-import { useUser } from "@/contexts/UserContext";
+import { useFavorites } from "../contexts/FavoritesContext";
+import { useUser } from "../contexts/UserContext";
 import { deleteData, fetchDataFromApi, postData } from "@/utils/Api";
-import ShinyButton from "@/components/Commons/ShinyButton";
+import ShinyButton from "../components/Commons/ShinyButton";
 import { Product as ProductType } from "../types";
 import { formatPrice } from "../utils/helpers";
+import ProductSkeleton from "../components/Product/ProductSkeleton";
 
 const Product = () => {
   const { id } = useParams<{ id: string }>();
@@ -133,7 +134,7 @@ const Product = () => {
       />
     ));
 
-  if (loading) return <div className="p-10 text-center">Loading...</div>;
+  if (loading) return <ProductSkeleton />;
   if (error || !product)
     return (
       <div className="p-10 text-red-500">{error || "Product not found"}</div>

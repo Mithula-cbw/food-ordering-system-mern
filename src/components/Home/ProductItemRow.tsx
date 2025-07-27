@@ -8,16 +8,15 @@ import { useUser } from "../../contexts/UserContext";
 import { deleteData, postData } from "../../utils/Api";
 import ProductZoom from "./ProductZoom";
 
-interface ProductCardProps {
+interface ProductCardRowProps {
   product: Product;
   className?: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
+const ProductCardRow: React.FC<ProductCardRowProps> = ({
   product,
   className = "",
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
   const { favorites, refreshFavorites } = useFavorites();
   const [isInWishlist, setIsInWishlist] = useState(false);
   const { user } = useUser();
@@ -110,14 +109,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <>
-      <Link to={`/product/${product._id}`} className="block group">
-        <div
-          className={`bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 ${className}`}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+      <Link
+        to={`/product/${product._id}`}
+        className={`block group ${className}`}
+      >
+        <div className="flex flex-row bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 h-[120px] relative">
           {/* Image Section */}
-          <div className="relative aspect-square bg-gray-100 overflow-hidden">
+          <div className="relative w-[120px] h-full bg-gray-100 overflow-hidden flex-shrink-0">
             {product.images && product.images.length > 0 ? (
               <img
                 src={product.images[0]}
@@ -140,45 +138,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </div>
             )}
 
-            {/* Hover Action Buttons */}
-            {isHovered && (
-              <div className="absolute top-3 right-3 z-20 flex flex-col gap-2">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setIsOpen(true);
-                  }}
-                  className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all duration-200 hover:scale-110"
-                  title="View Product"
-                >
-                  <Maximize2 className="w-5 h-5 text-gray-700" />
-                </button>
-                <button
-                  onClick={handleWishlistClick}
-                  className={`w-10 h-10 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 ${
-                    isInWishlist
-                      ? "bg-white hover:bg-red-50"
-                      : "bg-white/90 hover:bg-white"
-                  }`}
-                  title={
-                    isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"
-                  }
-                >
-                  <Heart
-                    className={`w-5 h-5 ${
-                      isInWishlist
-                        ? "text-white fill-red-500"
-                        : "text-gray-700 hover:text-red-500"
-                    }`}
-                  />
-                </button>
-              </div>
-            )}
-
             {isOpen && (
-              <ProductZoom isInWishlist={isInWishlist} product={product} onClose={() => setIsOpen(false)} />
-                
+              <ProductZoom
+                isInWishlist={isInWishlist}
+                product={product}
+                onClose={() => setIsOpen(false)}
+              />
             )}
 
             {/* Overlay for out of stock */}
@@ -194,41 +159,82 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </div>
 
           {/* Content Section */}
-          <div className="p-4">
-            {/* Title */}
-            <h3 className="text-lg font-bold text-blue-600 mb-2 line-clamp-1 group-hover:text-blue-500 transition-colors">
-              {product.name}
-            </h3>
-
-            {/* Description */}
-            <p className="text-gray-800 text-sm mb-3 leading-relaxed line-clamp-2 font-medium">
-              {truncateDescription(product.description)}
-            </p>
-
-            {/* Stock Status */}
-            <div className="mb-3">
-              <span className={`${isInStock ? "text-green-600" : "text-orange-600"} text-sm font-semibold`}>
+          <div className="flex flex-row justify-between flex-1 p-4">
+            <div className="flex flex-col justify-between h-full">
+              {/* Title */}
+              <div className="flex flex-col h-full justify-start">
+                <h3 className="text-lg font-bold text-blue-600 mb-1 line-clamp-1 group-hover:text-blue-500 transition-colors">
+                  {product.name}
+                </h3>
+                {/* Description */}
+                <p className="text-gray-800 text-sm mb-1 leading-relaxed line-clamp-3 font-medium">
+                  {truncateDescription(product.description)}
+                </p>
+              </div>
+              {/* Rating and Stock */}
+              <div className="flex items-center justify-start space-x-6 mb-2">
+                <div className="flex items-center gap-1">
+                  {renderStars(product.rating)}
+                </div>
+                <span
+                className={`text-sm font-semibold ${
+                  isInStock ? "text-green-600" : "text-orange-600"
+                }`}
+              >
                 {product.countInStock}
               </span>
-            </div>
-
-            {/* Rating */}
-            <div className="flex items-center mb-4">
-              <div className="flex items-center gap-1">
-                {renderStars(product.rating)}
               </div>
             </div>
 
-            {/* Price Section */}
-            <div className="flex items-center gap-2">
-              {product.oldPrice && (
-                <span className="text-gray-400 text-lg line-through">
-                  ${product.oldPrice}
-                </span>
-              )}
-              <span className="text-red-500 text-xl font-bold">
-                ${product.price}
-              </span>
+            {/* Action Buttons */}
+            <div className="flex flex-col items-center gap-2">
+              {/* Price and Wishlist */}
+              <div className="flex flex-col h-full items-end justify-between pr-6">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsOpen(true);
+                    }}
+                    className="w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow hover:bg-white transition-transform duration-200 hover:scale-110"
+                    title="View Product"
+                  >
+                    <Maximize2 className="w-5 h-5 text-gray-700" />
+                  </button>
+                  <button
+                    onClick={handleWishlistClick}
+                    className={`w-9 h-9 backdrop-blur-sm rounded-full flex items-center justify-center shadow transition-transform duration-200 hover:scale-110 ${
+                      isInWishlist
+                        ? "bg-white hover:bg-red-50"
+                        : "bg-white/90 hover:bg-white"
+                    }`}
+                    title={
+                      isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"
+                    }
+                  >
+                    <Heart
+                      className={`w-5 h-5 ${
+                        isInWishlist
+                          ? "text-white fill-red-500"
+                          : "text-gray-700 hover:text-red-500"
+                      }`}
+                    />
+                  </button>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    {product.oldPrice && (
+                      <span className="text-gray-400 text-lg line-through">
+                        ${product.oldPrice}
+                      </span>
+                    )}
+                    <span className="text-green-700 text-xl font-bold">
+                      ${product.price}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -237,4 +243,4 @@ const ProductCard: React.FC<ProductCardProps> = ({
   );
 };
 
-export default ProductCard;
+export default ProductCardRow;

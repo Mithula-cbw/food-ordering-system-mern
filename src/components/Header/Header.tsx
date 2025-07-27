@@ -8,7 +8,11 @@ import Navbar from "./Navbar";
 import AllCategoriesButton from "./AllCategoriesButton";
 import GoVeganSwitch from "./Other/GoVeganSwitch";
 
-const Header: React.FC = () => {
+type HeaderProps = {
+  showNavbar?: boolean;
+};
+
+const Header: React.FC<HeaderProps> = ({ showNavbar = true }) => {
   const navbarRef = useRef<HTMLDivElement | null>(null);
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
   const [isIdle, setIsIdle] = useState(false);
@@ -84,32 +88,35 @@ const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Main navbar that scrolls with the page */}
-      <div ref={navbarRef}>
-        <Navbar />
-      </div>
-
-      {/* Fixed navbar appears only when original is out of view AND user is active */}
-      {showFixedNavbar && !isIdle && (
-        <div
-          className={`fixed top-0 left-0 w-full z-50 shadow-md bg-white transition-all duration-1000 ease-in-out
-    ${
-      showFixedNavbar && !isIdle
-        ? "opacity-100 translate-y-0"
-        : "opacity-0 -translate-y-full pointer-events-none"
-    }`}
-        >
-          {" "}
-          <div className="w-full h-auto px-10 pt-4 pb-3 flex flex-row justify-between items-center">
-            <AllCategoriesButton />
-            <GoVeganSwitch variant="mini" />
-            <SearchBox />
-            <div className="flex flex-row items-center justify-between space-x-12">
-              <AuthContainer variant="mini"/>
-              <ActionContainer />
-            </div>
+      {showNavbar && (
+        <>
+          {/* Main navbar that scrolls with the page */}
+          <div ref={navbarRef}>
+            <Navbar />
           </div>
-        </div>
+
+          {/* Fixed navbar appears only when original is out of view AND user is active */}
+          {showFixedNavbar && !isIdle && (
+            <div
+              className={`fixed top-0 left-0 w-full z-50 shadow-md bg-white transition-all duration-1000 ease-in-out
+        ${
+          showFixedNavbar && !isIdle
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-full pointer-events-none"
+        }`}
+            >
+              <div className="w-full h-auto px-10 pt-4 pb-3 flex flex-row justify-between items-center">
+                <AllCategoriesButton />
+                <GoVeganSwitch variant="mini" />
+                <SearchBox />
+                <div className="flex flex-row items-center justify-between space-x-12">
+                  <AuthContainer variant="mini" />
+                  <ActionContainer />
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

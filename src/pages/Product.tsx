@@ -11,7 +11,7 @@ import {
 import { toast } from "sonner";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useUser } from "@/contexts/UserContext";
-import { deleteData, postData } from "@/utils/Api";
+import { deleteData, fetchDataFromApi, postData } from "@/utils/Api";
 import ShinyButton from "@/components/Commons/ShinyButton";
 import { Product as ProductType } from "../types";
 import { formatPrice } from "../utils/helpers";
@@ -33,11 +33,11 @@ const Product = () => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:4000/api/products/${id}`);
-        if (!res.ok) throw new Error("Failed to fetch product");
-        const data = await res.json();
-        setProduct(data);
-        setSelectedSize(data.size?.[0] || "");
+        const data = await fetchDataFromApi<ProductType>(`/api/products/${id}`);
+        if (data) {
+          setProduct(data);
+          setSelectedSize(data.size?.[0] || "");
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unexpected error");
       } finally {
@@ -134,33 +134,40 @@ const Product = () => {
     ));
 
   if (loading) return <div className="p-10 text-center">Loading...</div>;
-  if (error || !product) return <div className="p-10 text-red-500">{error || "Product not found"}</div>;
+  if (error || !product)
+    return (
+      <div className="p-10 text-red-500">{error || "Product not found"}</div>
+    );
 
-  const discount = hasDiscount && product.oldPrice
-    ? ` ${formatPrice(product.oldPrice - product.price)}`
-    : "";
+  const discount =
+    hasDiscount && product.oldPrice
+      ? ` ${formatPrice(product.oldPrice - product.price)}`
+      : "";
 
   const catLink = `/categories/${product.category._id}`;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 flex justify-center">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="min-h-screen w-full bg-gray-50 p-4 flex justify-center">
+      <div className="bg-white w-full lg:w-[90%] mx-auto p-2 lg:p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Images */}
-          <div className="space-y-4">
-            <div className="relative bg-gray-100 rounded-lg overflow-hidden aspect-square">
+          <div className="space-y-4 lg:col-span-1">
+            <div className="relative bg-gray-100 rounded-lg overflow-hidden aspect-square group">
               <img
-                src={product.images[selectedImage] || "https://via.placeholder.com/600"}
+                src={
+                  product.images[selectedImage] ||
+                  "https://via.placeholder.com/600"
+                }
                 alt={product.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-400 ease-in-out group-hover:scale-125"
               />
               {hasDiscount && (
-                <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                <div className="absolute top-4 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
                   -{discountPercentage}%
                 </div>
               )}
             </div>
-            {product.images.length > 1 && (
+            {product.images.length > 0 && (
               <div className="flex space-x-2 overflow-x-auto">
                 {product.images.map((img, i) => (
                   <button
@@ -172,7 +179,11 @@ const Product = () => {
                         : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
-                    <img src={img} alt={`thumb-${i}`} className="w-full h-full object-cover" />
+                    <img
+                      src={img}
+                      alt={`thumb-${i}`}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -180,30 +191,44 @@ const Product = () => {
           </div>
 
           {/* Details */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-4">
-              <Link to={catLink} className="px-3 py-1 rounded-full text-sm font-semibold text-white" style={{ backgroundColor: product.category.color || "#6B7280" }}>
-                {product.category.name}
-              </Link>
-              {product.rating > 0 && (
-                <div className="flex items-center">
-                  {renderStars(product.rating)}
-                  <span className="ml-2 text-gray-600 text-sm">({product.rating})</span>
-                </div>
-              )}
+          <div className="space-y-6 lg:col-span-3 lg:pl-12 lg:pt-4">
+            <div className="space-y-2 flex flex-col">
+              <h1 className="text-3xl font-bold text-gray-900">
+                {product.name}
+              </h1>
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-normal text-gray-500">
+                  Category:
+                </span>
+                <Link
+                  to={catLink}
+                  className="px-3 py-1 rounded-full text-sm font-semibold text-gray-700"
+                  style={{
+                    backgroundColor: product.category.color || "#6B7280",
+                  }}
+                >
+                  {product.category.name}
+                </Link>
+                {product.rating > 0 && (
+                  <div className="flex items-center">
+                    {renderStars(product.rating)}
+                    <span className="ml-2 text-gray-600 text-sm">
+                      ({product.rating})
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
 
-            <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
-
             <div className="flex items-center space-x-3">
-              <span className="text-2xl text-red-500 font-bold">
-                {formatPrice(product.price)}
-              </span>
               {product.oldPrice && (
                 <span className="text-lg text-gray-500 line-through">
                   {formatPrice(product.oldPrice)}
                 </span>
               )}
+              <span className="text-2xl text-red-500 font-bold">
+                {formatPrice(product.price)}
+              </span>
             </div>
 
             {/* Size */}
@@ -255,7 +280,11 @@ const Product = () => {
                   <Plus className="w-4 h-4" />
                 </button>
               </div>
-              <span className={`text-sm font-semibold ${isInStock ? "text-green-600" : "text-orange-600"}`}>
+              <span
+                className={`text-sm font-semibold ${
+                  isInStock ? "text-green-600" : "text-orange-600"
+                }`}
+              >
                 {product.countInStock}
               </span>
             </div>
@@ -269,7 +298,9 @@ const Product = () => {
                     <span className="text-sm text-white/80">
                       Save{" "}
                       {discountCal === 0 ? (
-                        <span className="text-green-400 font-bold">{discount}</span>
+                        <span className="text-green-400 font-bold">
+                          {discount}
+                        </span>
                       ) : (
                         <span className="text-green-400 font-bold">
                           {formatPrice(discountCal)}
@@ -289,7 +320,9 @@ const Product = () => {
                     : "border-gray-300 hover:border-gray-400"
                 }`}
               >
-                <Heart className={`w-5 h-5 ${isInWishlist ? "fill-current" : ""}`} />
+                <Heart
+                  className={`w-5 h-5 ${isInWishlist ? "fill-current" : ""}`}
+                />
               </button>
 
               <button className="p-3 rounded-lg border border-gray-300 hover:border-gray-400">

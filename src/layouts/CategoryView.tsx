@@ -1,10 +1,10 @@
 import React, { useContext, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Grid3X3, List, LayoutGrid } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProductCard from "../components/Home/ProductItem";
 import CategoryModule from "../contexts/CategoryContext";
 import { useProductContext } from "../contexts/ProductContext";
+import  GridControl  from "../components/Category/GridControl";
 
 const { CategoryContext } = CategoryModule;
 
@@ -49,46 +49,7 @@ const CategoryView = () => {
         {/* Main Content */}
         <div className="flex-1">
           <div className="p-6">
-            <div className="flex justify-between items-center mb-6">
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`p-2 rounded ${
-                    viewMode === "list"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200"
-                  }`}
-                >
-                  <List className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => setViewMode("grid2")}
-                  className={`p-2 rounded ${
-                    viewMode === "grid2"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200"
-                  }`}
-                >
-                  <LayoutGrid className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded ${
-                    viewMode === "grid"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200"
-                  }`}
-                >
-                  <Grid3X3 className="w-5 h-5" />
-                </button>
-              </div>
-
-              <select className="px-4 py-2 border border-gray-300 rounded-lg bg-white">
-                <option>Filter By Rating</option>
-                <option>Highest Rated</option>
-                <option>Lowest Rated</option>
-              </select>
-            </div>
+            <GridControl viewMode={viewMode} setViewMode={setViewMode} />
 
             {/* Animated Product Grid/List */}
             <motion.div

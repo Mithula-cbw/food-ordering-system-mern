@@ -8,7 +8,7 @@ import AuthLayout from './layouts/AuthLayout';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import WishList from './pages/WishList';
-import CategoryView from './layouts/categoryView';
+import CategoryView from './layouts/CategoryView';
 
 
 export const AppRoutes = () => {

@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { useUser } from "../../contexts/UserContext";
 import ShinyButton from "../Commons/ShinyButton";
+import { Link } from "react-router-dom";
 
 type ProductZoomProps = {
   isInWishlist?: boolean;
@@ -136,6 +137,7 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
       setDiscountCal((discountAmount * (quantity - 1)));
     }
   }
+  const catLink = `/categories/${product.category._id}`;
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
@@ -205,18 +207,18 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
             <div className="space-y-6">
               {/* Category and Rating */}
               <div className="flex items-center justify-start gap-5">
-                <span
+                <Link to={catLink}
                   className="px-3 py-1 rounded-full text-sm font-semibold text-gray-700"
                   style={{
                     backgroundColor: product.category.color || "#6B7280",
                   }}
                 >
                   {product.category.name || "Unknown Category"}
-                </span>
+                </Link>
                 {product.rating > 0 && (
                   <div className="flex items-center space-x-1">
                     {renderStars(product.rating)}
-                    <span className="text-sm text-gray-600 ml-2">
+                    <span className="text-sm text-gray-600 ml-2 user-select-none">
                       ({product.rating})
                     </span>
                   </div>

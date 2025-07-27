@@ -7,17 +7,20 @@ import { Toaster } from "./components/ui/sonner";
 import { CategoryProvider } from "./contexts/CategoryContext";
 import { FavoritesProvider } from "./contexts/FavoritesContext";
 import { UserProvider } from "./contexts/UserContext";
+import { ProductProvider } from "./contexts/ProductContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-    <UserProvider>
-      <CategoryProvider>
-        <FavoritesProvider>
-          <AppRoutes />
-          <Toaster />
-        </FavoritesProvider>
-      </CategoryProvider>
+      <UserProvider>
+        <ProductProvider>
+          <CategoryProvider>
+            <FavoritesProvider>
+              <AppRoutes />
+              <Toaster />
+            </FavoritesProvider>
+          </CategoryProvider>
+        </ProductProvider>
       </UserProvider>
     </BrowserRouter>
   </StrictMode>

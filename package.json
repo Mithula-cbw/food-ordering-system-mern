@@ -33,6 +33,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "framer-motion": "^12.23.9",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.456.0",
     "next-themes": "^0.4.6",

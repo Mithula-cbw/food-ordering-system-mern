@@ -1,12 +1,12 @@
+import { formatPrice } from "@/utils/helpers";
 import React from "react";
 
 const CartSummary: React.FC = () => {
-  const cartTotal = 59.99;
 
   return (
     <div className="">
       <span className="text-lg font-semibold text-gray-800 select-none">
-        ${cartTotal.toFixed(2)}    
+        {formatPrice(59.99)}
       </span>
     </div>
   );

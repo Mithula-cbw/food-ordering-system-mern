@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useUser } from "../../contexts/UserContext";
 import { deleteData, postData } from "../../utils/Api";
 import ProductZoom from "./ProductZoom";
+import { formatPrice } from "../../utils/helpers";
 
 interface ProductCardRowProps {
   product: Product;
@@ -226,11 +227,11 @@ const ProductCardRow: React.FC<ProductCardRowProps> = ({
                   <div className="flex items-center gap-2">
                     {product.oldPrice && (
                       <span className="text-gray-400 text-lg line-through">
-                        ${product.oldPrice}
+                        {formatPrice(product.oldPrice)}
                       </span>
                     )}
                     <span className="text-green-700 text-xl font-bold">
-                      ${product.price}
+                      {formatPrice(product.price)}
                     </span>
                   </div>
                 </div>

@@ -7,6 +7,7 @@ import {
   Plus,
   Star,
   CheckCircle,
+  ShoppingCart,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useFavorites } from "../contexts/FavoritesContext";
@@ -29,6 +30,10 @@ const Product = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const { favorites, refreshFavorites } = useFavorites();
   const { user } = useUser();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -128,7 +133,7 @@ const Product = () => {
         key={i}
         className={`w-4 h-4 ${
           i < Math.floor(rating)
-            ? "fill-yellow-400 text-yellow-400"
+            ? "fill-app-main text-app-main"
             : "text-gray-300"
         }`}
       />
@@ -192,143 +197,152 @@ const Product = () => {
           </div>
 
           {/* Details */}
-          <div className="space-y-6 lg:col-span-3 lg:pl-12 lg:pt-4">
-            <div className="space-y-2 flex flex-col">
-              <h1 className="text-3xl font-bold text-gray-900">
-                {product.name}
-              </h1>
-              <div className="flex items-center gap-4">
-                <span className="text-sm font-normal text-gray-500">
-                  Category:
-                </span>
-                <Link
-                  to={catLink}
-                  className="px-3 py-1 rounded-full text-sm font-semibold text-gray-700"
-                  style={{
-                    backgroundColor: product.category.color || "#6B7280",
-                  }}
-                >
-                  {product.category.name}
-                </Link>
-                {product.rating > 0 && (
-                  <div className="flex items-center">
-                    {renderStars(product.rating)}
-                    <span className="ml-2 text-gray-600 text-sm">
-                      ({product.rating})
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              {product.oldPrice && (
-                <span className="text-lg text-gray-500 line-through">
-                  {formatPrice(product.oldPrice)}
-                </span>
-              )}
-              <span className="text-2xl text-red-500 font-bold">
-                {formatPrice(product.price)}
-              </span>
-            </div>
-
-            {/* Size */}
-            {product.size.length > 0 && (
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Size</h3>
-                <div className="flex flex-wrap gap-2">
-                  {product.size.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => setSelectedSize(s)}
-                      className={`px-4 py-2 rounded-lg border ${
-                        selectedSize === s
-                          ? "border-blue-500 bg-blue-50 text-blue-600"
-                          : "border-gray-300 hover:border-gray-400"
-                      }`}
-                    >
-                      {s}
-                    </button>
-                  ))}
+          <div className="space-y-12 lg:col-span-3 lg:pl-12 lg:pt-2">
+            <div className="space-y-4 flex flex-col">
+              <div className="space-y-1 flex flex-col">
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {product.name}
+                </h1>
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-normal text-gray-500">
+                    Category :
+                  </span>
+                  <Link
+                    to={catLink}
+                    className="py-1 rounded-full text-sm font-semibold text-gray-700 hover:text-blue-700"
+                  >
+                    {product.category.name}
+                  </Link>
+                  {product.rating > 0 && (
+                    <div className="flex items-center">
+                      {renderStars(product.rating)}
+                      <span className="ml-4 text-gray-600 text-sm">
+                        ({product.rating})
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
-
-            {/* Quantity & Stock */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <button
-                  onClick={() => {
-                    if (quantity > 1) {
-                      triggerFromOtherComponent();
-                      updateDiscountCalculationDOWN();
-                      setQuantity(quantity - 1);
-                    }
-                  }}
-                  className="p-3 bg-gray-100 rounded-full hover:bg-blue-50"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-                <span className="px-4">{quantity}</span>
-                <button
-                  onClick={() => {
-                    triggerFromOtherComponent();
-                    updateDiscountCalculationUP();
-                    setQuantity(quantity + 1);
-                  }}
-                  className="p-3 bg-gray-100 rounded-full hover:bg-blue-50"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
+              <div className="flex items-center space-x-3">
+                {product.oldPrice && (
+                  <span className="text-base text-gray-500 line-through">
+                    {formatPrice(product.oldPrice)}
+                  </span>
+                )}
+                <span className="text-xl text-red-500 font-bold">
+                  {formatPrice(product.price)}
+                </span>
               </div>
               <span
-                className={`text-sm font-semibold ${
-                  isInStock ? "text-green-600" : "text-orange-600"
+                className={`text-sm lg:w-fit rounded-full px-3 py-2 font-normal ${
+                  isInStock
+                    ? "text-green-600 bg-green-100"
+                    : "text-orange-600 bg-red-100"
                 }`}
               >
                 {product.countInStock}
               </span>
             </div>
+            <div className="flex flex-col space-y-9">
+                {/* Size */}
+                {product.size.length > 0 && (
+                  <div className="flex items-center space-x-8 w-full">
+                    <h3 className="text-sm font-normal text-gray-600">Size</h3>
+                    <div className="flex gap-3">
+                      {product.size.map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => setSelectedSize(s)}
+                          className={`px-6 py-2 rounded-lg text-sm font-medium border transition-colors ${
+                            selectedSize === s
+                              ? "bg-header-catbtn text-white border-header-catbtn"
+                              : "border-gray-500 text-gray-700 hover:border-gray-400 bg-white"
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-            {/* Buttons */}
-            <div className="flex gap-3">
-              <ShinyButton triggerGlow={shine} className="flex-1">
-                <div className="flex flex-col items-center">
-                  <span className="text-base font-semibold">Add To Cart</span>
-                  {hasDiscount && (
-                    <span className="text-sm text-white/80">
-                      Save{" "}
-                      {discountCal === 0 ? (
-                        <span className="text-green-400 font-bold">
-                          {discount}
-                        </span>
-                      ) : (
-                        <span className="text-green-400 font-bold">
-                          {formatPrice(discountCal)}
-                        </span>
-                      )}
-                      {" now!!"}
+
+                {/* Quantity & Add to Cart Section */}
+                <div className="flex flex-row justify-start items-center gap-6 w-full">
+                  {/* Quantity Controls */}
+                  <div className="flex items-center gap-0">
+                    <button
+                      onClick={() => {
+                        if (quantity > 1) {
+                          triggerFromOtherComponent();
+                          updateDiscountCalculationDOWN();
+                          setQuantity(quantity - 1);
+                        }
+                      }}
+                      className="p-3 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
+                    >
+                      <Minus className="w-5 h-5 text-gray-700" />
+                    </button>
+                    <span className="w-12 text-center text-base font-medium text-gray-800">
+                      {quantity}
                     </span>
-                  )}
+                    <button
+                      onClick={() => {
+                        triggerFromOtherComponent();
+                        updateDiscountCalculationUP();
+                        setQuantity(quantity + 1);
+                      }}
+                      className="p-3 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
+                    >
+                      <Plus className="w-5 h-5 text-gray-700" />
+                    </button>
+                  </div>
+
+
+                  {/* Add to Cart Button */}
+                  <ShinyButton
+                    triggerGlow={shine}
+                    className="rounded-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
+                  >
+                    <div className="flex flex-col items-center justify-center">
+                        <div className="flex flex-row items-center gap-2">
+                            <ShoppingCart className="w-5 h-5" />
+                            <span className="text-sm font-semibold">Add To Cart</span>
+                        </div>
+                        {hasDiscount && (
+                          <span className="text-sm text-white/80">
+                            Save{" "}
+                            {discountCal === 0 ? (
+                              <span className="text-green-300 font-bold">
+                                {discount}
+                              </span>
+                            ) : (
+                              <span className="text-green-300 font-bold">
+                                {formatPrice(discountCal)}
+                              </span>
+                            )}
+                            {" now!!"}
+                          </span>
+                        )}
+                    </div>
+                  </ShinyButton>
+                  {/* Action Buttons */}
+                  <button
+                    onClick={handleWishlistClick}
+                    className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-colors ${
+                      isInWishlist
+                        ? "border-red-500 bg-red-50 text-red-500"
+                        : "border-gray-300 bg-gray-100 text-gray-600 hover:border-gray-400 hover:bg-gray-200"
+                    }`}
+                  >
+                    <Heart
+                      className={`w-5 h-5 ${isInWishlist ? "fill-current" : ""}`}
+                    />
+                  </button>
+                  <button className="w-12 h-12 rounded-full border-2 border-gray-300 bg-gray-100 text-gray-600 hover:border-gray-400 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                    <ArrowLeftRight className="w-5 h-5" />
+                  </button>
                 </div>
-              </ShinyButton>
-
-              <button
-                onClick={handleWishlistClick}
-                className={`p-3 rounded-lg border ${
-                  isInWishlist
-                    ? "border-red-500 bg-red-50 text-red-500"
-                    : "border-gray-300 hover:border-gray-400"
-                }`}
-              >
-                <Heart
-                  className={`w-5 h-5 ${isInWishlist ? "fill-current" : ""}`}
-                />
-              </button>
-
-              <button className="p-3 rounded-lg border border-gray-300 hover:border-gray-400">
-                <ArrowLeftRight className="w-5 h-5" />
-              </button>
             </div>
           </div>
         </div>

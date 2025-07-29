@@ -312,7 +312,7 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
 
               {/* Action Buttons */}
               <div className="flex space-x-3">
-                <ShinyButton triggerGlow={shine} className="flex-1">
+                <ShinyButton triggerGlow={shine} className="flex-1 rounded-md">
                   <div className="w-full flex flex-col items-center justify-center gap-1">
                     <span className="text-base font-semibold tracking-wide">
                       Add To Cart

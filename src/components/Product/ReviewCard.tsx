@@ -16,9 +16,9 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
       <div className="flex flex-col items-start justify-start mb-4">
         <div className="flex flex-row justify-start items-center gap-2">
           <RenderStars rating={review.customerRating} />
-          <span className="text-gray-600/80">({review.customerRating})</span>
+          <span className="text-white/80 font-semibold">({review.customerRating})</span>
         </div>
-        <p className="text-white text-base leading-relaxed mb-6 font-normal pl-4 pt-2 max-w-[80%]">
+        <p className="text-white text-base leading-relaxed mb-6 font-normal pt-4 max-w-[90%]">
           {review.review}
         </p>
       </div>

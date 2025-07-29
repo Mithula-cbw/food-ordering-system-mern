@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const ProductSkeleton = () => {
   return (
-    <div className="min-h-screen w-full bg-gray-50 p-4 flex justify-center">
+    <div className="min-h-screen w-full bg-gray-50 p-4 flex justify-center flex-col items-center">
       <div className="bg-white w-full lg:w-[90%] mx-auto p-2 lg:p-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Image Section */}
@@ -27,6 +27,18 @@ const ProductSkeleton = () => {
               <Skeleton className="h-12 w-12 rounded-md" />
               <Skeleton className="h-12 w-12 rounded-md" />
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full mx-auto p-6 bg-gray-50 min-h-screen">
+        <div className="bg-white rounded-lg shadow-lg p-8 bg-app-bannerbtnhover/15">
+          <h2 className="text-2xl font-bold text-gray-500 mb-6">
+            Product Details
+          </h2>
+          <div className="flex flex-wrap gap-3 mb-6">
+            <Skeleton className="h-12 w-32 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"></Skeleton>
+            <Skeleton className="h-12 w-32 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"></Skeleton>
+            <Skeleton className="h-12 w-32 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"></Skeleton>
           </div>
         </div>
       </div>

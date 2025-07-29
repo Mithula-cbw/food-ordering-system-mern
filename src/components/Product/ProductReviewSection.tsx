@@ -1,25 +1,43 @@
-import React from "react";
-import { Product } from "../../types";
+import React, { useEffect, useState } from "react";
+import { Product, Review } from "../../types";
 import DescriptionTab from "./DescriptionTab";
 import IngredientsAllergensTab from "./IngredientsAllergensTab";
 import ReviewsTab from "./ReviewsTab";
+import { fetchDataFromApi } from "../../utils/Api";
 
 interface ProductReviewSectionProps {
   product: Product;
   ingredients?: string[];
   allergens?: string[];
-  reviewCount?: number;
 }
 
 const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({
   product,
   ingredients = [],
   allergens = [],
-  reviewCount = 0,
 }) => {
   const [activeTab, setActiveTab] = React.useState<
     "description" | "ingredients" | "reviews"
   >("description");
+    const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const res = await fetchDataFromApi<Review[]>(`/api/productReviews?productId=${product._id}`);
+        if (res) {
+          setReviews(res);
+        }
+      } catch (err) {
+        console.error("Failed to fetch reviews:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReviews();
+  }, [product._id]);
 
   const TabButton: React.FC<{
     tabKey: "description" | "ingredients" | "reviews";
@@ -42,26 +60,39 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({
     <div className="w-full mx-auto p-6 bg-gray-50 min-h-screen">
       <div className="bg-white rounded-lg shadow-lg p-8 bg-app-bannerbtnhover/15">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
-          Product Details {product.name}
+          Product Details
+          <span className="text-green-500/80 font-semibold ml-2"
+          >{product.name}</span>
         </h2>
 
         <div className="flex flex-wrap gap-3 mb-6">
-          <TabButton tabKey="description" isActive={activeTab === "description"}>
+          <TabButton
+            tabKey="description"
+            isActive={activeTab === "description"}
+          >
             Description
           </TabButton>
-          <TabButton tabKey="ingredients" isActive={activeTab === "ingredients"}>
+          <TabButton
+            tabKey="ingredients"
+            isActive={activeTab === "ingredients"}
+          >
             Ingredients & Allergens
           </TabButton>
           <TabButton tabKey="reviews" isActive={activeTab === "reviews"}>
-            Reviews ({reviewCount})
+            Reviews ({reviews.length})
           </TabButton>
         </div>
 
-        {activeTab === "description" && <DescriptionTab description={product.description} />}
-        {activeTab === "ingredients" && (
-          <IngredientsAllergensTab ingredients={ingredients} allergens={allergens} />
+        {activeTab === "description" && (
+          <DescriptionTab product={product} />
         )}
-        {activeTab === "reviews" && <ReviewsTab />}
+        {activeTab === "ingredients" && (
+          <IngredientsAllergensTab
+            ingredients={ingredients}
+            allergens={allergens}
+          />
+        )}
+        {activeTab === "reviews" && <ReviewsTab reviews={reviews} loading={loading}  />}
       </div>
     </div>
   );

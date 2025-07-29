@@ -52,6 +52,14 @@ export interface HomeSwiperProps {
   error?: string | null; 
 }
 
+export interface Review {
+  _id: string;
+  productId: string;
+  customerName: string;
+  customerRating: number;
+  review: string;
+}
+
 export interface ProductsContextType {
   products: Product[];
   loading: boolean;

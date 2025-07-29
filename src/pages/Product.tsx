@@ -32,9 +32,11 @@ const Product = () => {
   const { favorites, refreshFavorites } = useFavorites();
   const { user } = useUser();
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+useEffect(() => {
+  console.log("Scrolling to top because product id changed:", id);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, [id]);
+
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -188,49 +190,49 @@ const Product = () => {
           {/* Details */}
           <div className="space-y-14 lg:col-span-3 lg:pl-12 lg:pt-2 ">
             <div className="flex flex-col space-y-4">
-                <div className="space-y-1 flex flex-col">
-                  <h1 className="text-2xl font-bold text-gray-900">
-                    {product.name}
-                  </h1>
-                  <div className="flex items-center gap-4">
-                    <span className="text-sm font-normal text-gray-500">
-                      Category :
-                    </span>
-                    <Link
-                      to={catLink}
-                      className="py-1 rounded-full text-sm font-semibold text-gray-700 hover:text-blue-700"
-                    >
-                      {product.category.name}
-                    </Link>
-                    {product.rating > 0 && (
-                      <div className="flex items-center">
-                        <RenderStars rating={product.rating} />
-                        <span className="ml-4 text-gray-600 text-sm">
-                          ({product.rating})
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  {product.oldPrice && (
-                    <span className="text-base text-gray-500 line-through">
-                      {formatPrice(product.oldPrice)}
-                    </span>
-                  )}
-                  <span className="text-xl text-red-500 font-bold">
-                    {formatPrice(product.price)}
+              <div className="space-y-1 flex flex-col">
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {product.name}
+                </h1>
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-normal text-gray-500">
+                    Category :
                   </span>
+                  <Link
+                    to={catLink}
+                    className="py-1 rounded-full text-sm font-semibold text-gray-700 hover:text-blue-700"
+                  >
+                    {product.category.name}
+                  </Link>
+                  {product.rating > 0 && (
+                    <div className="flex items-center">
+                      <RenderStars rating={product.rating} />
+                      <span className="ml-4 text-gray-600 text-sm">
+                        ({product.rating})
+                      </span>
+                    </div>
+                  )}
                 </div>
-                <span
-                  className={`text-sm lg:w-fit rounded-full px-3 py-2 font-normal ${
-                    isInStock
-                      ? "text-green-600 bg-green-100"
-                      : "text-orange-600 bg-red-100"
-                  }`}
-                >
-                  {product.countInStock}
+              </div>
+              <div className="flex items-center space-x-3">
+                {product.oldPrice && (
+                  <span className="text-base text-gray-500 line-through">
+                    {formatPrice(product.oldPrice)}
+                  </span>
+                )}
+                <span className="text-xl text-red-500 font-bold">
+                  {formatPrice(product.price)}
                 </span>
+              </div>
+              <span
+                className={`text-sm lg:w-fit rounded-full px-3 py-2 font-normal ${
+                  isInStock
+                    ? "text-green-600 bg-green-100"
+                    : "text-orange-600 bg-red-100"
+                }`}
+              >
+                {product.countInStock}
+              </span>
               <div className="mb-10">
                 <p className="text-gray-700 text-lg leading-relaxed">
                   {truncateText(product.description, 150)}
@@ -340,9 +342,8 @@ const Product = () => {
           </div>
         </div>
       </div>
-      
-      <ProductReviewSection
-        product={product} />
+
+      <ProductReviewSection product={product} />
     </div>
   );
 };

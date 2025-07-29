@@ -14,9 +14,10 @@ import { useUser } from "../contexts/UserContext";
 import { deleteData, fetchDataFromApi, postData } from "@/utils/Api";
 import ShinyButton from "../components/Commons/ShinyButton";
 import { Product as ProductType } from "../types";
-import { formatPrice } from "../utils/helpers";
+import { formatPrice, truncateText } from "../utils/helpers";
 import ProductSkeleton from "../components/Product/ProductSkeleton";
-import RenderStars from "@/components/Commons/RenderStars";
+import RenderStars from "../components/Commons/RenderStars";
+import ProductReviewSection from "../components/Product/ProductReviewSection";
 
 const Product = () => {
   const { id } = useParams<{ id: string }>();
@@ -141,7 +142,7 @@ const Product = () => {
   const catLink = `/categories/${product.category._id}`;
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 p-4 flex justify-center">
+    <div className="min-h-screen w-full bg-gray-50 p-4 flex flex-col justify-center">
       <div className="bg-white w-full lg:w-[90%] mx-auto p-2 lg:p-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Images */}
@@ -185,51 +186,56 @@ const Product = () => {
           </div>
 
           {/* Details */}
-          <div className="space-y-12 lg:col-span-3 lg:pl-12 lg:pt-2">
-            <div className="space-y-4 flex flex-col">
-              <div className="space-y-1 flex flex-col">
-                <h1 className="text-2xl font-bold text-gray-900">
-                  {product.name}
-                </h1>
-                <div className="flex items-center gap-4">
-                  <span className="text-sm font-normal text-gray-500">
-                    Category :
-                  </span>
-                  <Link
-                    to={catLink}
-                    className="py-1 rounded-full text-sm font-semibold text-gray-700 hover:text-blue-700"
-                  >
-                    {product.category.name}
-                  </Link>
-                  {product.rating > 0 && (
-                    <div className="flex items-center">
-                     <RenderStars rating={product.rating}  />
-                      <span className="ml-4 text-gray-600 text-sm">
-                        ({product.rating})
-                      </span>
-                    </div>
-                  )}
+          <div className="space-y-14 lg:col-span-3 lg:pl-12 lg:pt-2 ">
+            <div className="flex flex-col space-y-4">
+                <div className="space-y-1 flex flex-col">
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    {product.name}
+                  </h1>
+                  <div className="flex items-center gap-4">
+                    <span className="text-sm font-normal text-gray-500">
+                      Category :
+                    </span>
+                    <Link
+                      to={catLink}
+                      className="py-1 rounded-full text-sm font-semibold text-gray-700 hover:text-blue-700"
+                    >
+                      {product.category.name}
+                    </Link>
+                    {product.rating > 0 && (
+                      <div className="flex items-center">
+                        <RenderStars rating={product.rating} />
+                        <span className="ml-4 text-gray-600 text-sm">
+                          ({product.rating})
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                {product.oldPrice && (
-                  <span className="text-base text-gray-500 line-through">
-                    {formatPrice(product.oldPrice)}
+                <div className="flex items-center space-x-3">
+                  {product.oldPrice && (
+                    <span className="text-base text-gray-500 line-through">
+                      {formatPrice(product.oldPrice)}
+                    </span>
+                  )}
+                  <span className="text-xl text-red-500 font-bold">
+                    {formatPrice(product.price)}
                   </span>
-                )}
-                <span className="text-xl text-red-500 font-bold">
-                  {formatPrice(product.price)}
+                </div>
+                <span
+                  className={`text-sm lg:w-fit rounded-full px-3 py-2 font-normal ${
+                    isInStock
+                      ? "text-green-600 bg-green-100"
+                      : "text-orange-600 bg-red-100"
+                  }`}
+                >
+                  {product.countInStock}
                 </span>
+              <div className="mb-10">
+                <p className="text-gray-700 text-lg leading-relaxed">
+                  {truncateText(product.description, 150)}
+                </p>
               </div>
-              <span
-                className={`text-sm lg:w-fit rounded-full px-3 py-2 font-normal ${
-                  isInStock
-                    ? "text-green-600 bg-green-100"
-                    : "text-orange-600 bg-red-100"
-                }`}
-              >
-                {product.countInStock}
-              </span>
             </div>
             <div className="flex flex-col space-y-9">
               {/* Size */}
@@ -256,7 +262,6 @@ const Product = () => {
                   </div>
                 </div>
               )}
-
               {/* Quantity & Add to Cart Section */}
               <div className="flex flex-row justify-start items-center gap-6 w-full">
                 {/* Quantity Controls */}
@@ -287,7 +292,6 @@ const Product = () => {
                     <Plus className="w-5 h-5 text-gray-700" />
                   </button>
                 </div>
-
                 {/* Add to Cart Button */}
                 <ShinyButton
                   triggerGlow={shine}
@@ -320,7 +324,7 @@ const Product = () => {
                   onClick={handleWishlistClick}
                   className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-colors ${
                     isInWishlist
-                      ? "border-red-500 bg-red-50 text-red-500"
+                      ? "border-red-200 bg-red-50 text-red-500"
                       : "border-gray-300 bg-gray-100 text-gray-600 hover:border-gray-400 hover:bg-gray-200"
                   }`}
                 >
@@ -336,6 +340,9 @@ const Product = () => {
           </div>
         </div>
       </div>
+      
+      <ProductReviewSection
+        product={product} />
     </div>
   );
 };

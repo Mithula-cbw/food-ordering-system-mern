@@ -21,11 +21,6 @@ const WishListItem: React.FC<ProductCardProps> = ({
     const { refreshFavorites } = useFavorites();
   //   const { user } = useUser();
 
-  const truncateDescription = (text: string, maxLength: number = 80) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + "...";
-  };
-
   const removeItem = async (id: string) => {
     try {
       await deleteData(`/api/myList/${id}`);
@@ -95,11 +90,6 @@ const WishListItem: React.FC<ProductCardProps> = ({
             <h3 className="text-lg font-bold text-blue-600 mb-2 line-clamp-1 group-hover:text-blue-500 transition-colors">
               {product.name}
             </h3>
-
-            {/* Description */}
-            <p className="text-gray-800 text-sm mb-3 leading-relaxed line-clamp-2 font-medium">
-              {truncateDescription(product.description)}
-            </p>
 
             {/* Stock Status */}
             <div className="mb-3">

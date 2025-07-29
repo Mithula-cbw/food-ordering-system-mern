@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { useUser } from "../../contexts/UserContext";
 import { deleteData } from "../../utils/Api";
 import ProductZoom from "./ProductZoom";
-import { formatPrice } from "../../utils/helpers";
+import { formatPrice, truncateText } from "../../utils/helpers";
 import RenderStars from "../Commons/RenderStars";
 import { handleWishlistClick } from "../Commons/AddToWishlist";
 
@@ -25,11 +25,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [isInWishlist, setIsInWishlist] = useState(false);
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
-
-  const truncateDescription = (text: string, maxLength: number = 80) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + "...";
-  };
 
   const removeItem = async (id: string) => {
     try {
@@ -151,7 +146,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
             {/* Description */}
             <p className="text-gray-800 text-sm mb-3 leading-relaxed line-clamp-2 font-medium">
-              {truncateDescription(product.description)}
+              {truncateText(product.description)}
             </p>
 
             {/* Stock Status */}

@@ -12,18 +12,19 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
   const userInitial = review.customerName.split("")[0].toUpperCase();
 
   return (
-    <div className="bg-white rounded-2xl drop-shadow-lg border-4 border-gray-200 p-6 mb-6 w-[70%]">
-      <div className="flex flex-row justify-start items-center gap-2">
-        <RenderStars rating={review.customerRating} />
-        <span className="text-gray-600/80">({review.customerRating})</span>
+    <div className="bg-black/30 rounded-2xl drop-shadow-lg border-2 flex flex-col justify-between border-gray-200 p-6 w-full">
+      <div className="flex flex-col items-start justify-start mb-4">
+        <div className="flex flex-row justify-start items-center gap-2">
+          <RenderStars rating={review.customerRating} />
+          <span className="text-gray-600/80">({review.customerRating})</span>
+        </div>
+        <p className="text-white text-base leading-relaxed mb-6 font-normal pl-4 pt-2 max-w-[80%]">
+          {review.review}
+        </p>
       </div>
 
-      <p className="text-gray-800 text-base leading-relaxed mb-6 font-normal pl-4 pt-2 max-w-[80%]">
-        {review.review}
-      </p>
-
       {(review._id || review.customerName) && (
-        <div className="bg-gradient-to-r from-app-main to-orange-500 rounded-xl p-4">
+        <div className="bg-gradient-to-r from-app-main/80 to-orange-500/80 rounded-xl p-4">
           <div className="flex items-center justify-between">
             <div className="flex flex-row justify-start items-center gap-3">
               <Avatar className="w-8 h-8">

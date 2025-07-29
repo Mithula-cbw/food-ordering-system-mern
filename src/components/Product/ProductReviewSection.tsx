@@ -19,23 +19,25 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({
   const [activeTab, setActiveTab] = React.useState<
     "description" | "ingredients" | "reviews"
   >("description");
-    const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-    useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const res = await fetchDataFromApi<Review[]>(`/api/productReviews?productId=${product._id}`);
-        if (res) {
-          setReviews(res);
-        }
-      } catch (err) {
-        console.error("Failed to fetch reviews:", err);
-      } finally {
-        setLoading(false);
+  const fetchReviews = async () => {
+    try {
+      const res = await fetchDataFromApi<Review[]>(
+        `/api/productReviews?productId=${product._id}`
+      );
+      if (res) {
+        setReviews(res);
       }
-    };
+    } catch (err) {
+      console.error("Failed to fetch reviews:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchReviews();
   }, [product._id]);
 
@@ -61,8 +63,9 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({
       <div className="bg-white rounded-lg shadow-lg p-8 bg-app-bannerbtnhover/15">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Product Details
-          <span className="text-green-500/80 font-semibold ml-2"
-          >{product.name}</span>
+          <span className="text-green-500/80 font-semibold ml-2">
+            {product.name}
+          </span>
         </h2>
 
         <div className="flex flex-wrap gap-3 mb-6">
@@ -83,16 +86,21 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({
           </TabButton>
         </div>
 
-        {activeTab === "description" && (
-          <DescriptionTab product={product} />
-        )}
+        {activeTab === "description" && <DescriptionTab product={product} />}
         {activeTab === "ingredients" && (
           <IngredientsAllergensTab
             ingredients={ingredients}
             allergens={allergens}
           />
         )}
-        {activeTab === "reviews" && <ReviewsTab reviews={reviews} loading={loading}  />}
+        {activeTab === "reviews" && (
+          <ReviewsTab
+            productID={product._id}
+            reviews={reviews}
+            loading={loading}
+            onReviewSubmitted={() => fetchReviews()}
+          />
+        )}
       </div>
     </div>
   );

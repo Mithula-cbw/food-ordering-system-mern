@@ -2,10 +2,11 @@ import React from "react";
 import { Product } from "../../types";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../../contexts/FavoritesContext";
-import { Heart, Star, Trash } from "lucide-react";
+import { Heart, Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import { deleteData } from "@/utils/Api";
 import { toast } from "sonner";
+import RenderStars from "../Commons/RenderStars";
 // import { useUser } from "../../contexts/UserContext";
 
 interface ProductCardProps {
@@ -19,30 +20,6 @@ const WishListItem: React.FC<ProductCardProps> = ({
 }) => {
     const { refreshFavorites } = useFavorites();
   //   const { user } = useUser();
-
-  const renderStars = (rating: number) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-
-    for (let i = 1; i <= 5; i++) {
-      if (i <= fullStars) {
-        stars.push(
-          <Star key={i} className="w-5 h-5 text-app-main fill-app-main" />
-        );
-      } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(
-          <div key={i} className="relative w-5 h-5">
-            <Star className="w-5 h-5 text-gray-300 absolute" />
-            <Star className="w-5 h-5 text-orange-400 fill-orange-400 absolute clip-half" />
-          </div>
-        );
-      } else {
-        stars.push(<Star key={i} className="w-5 h-5 text-gray-300" />);
-      }
-    }
-    return stars;
-  };
 
   const truncateDescription = (text: string, maxLength: number = 80) => {
     if (text.length <= maxLength) return text;
@@ -134,7 +111,7 @@ const WishListItem: React.FC<ProductCardProps> = ({
             {/* Rating */}
             <div className="flex items-center mb-4">
               <div className="flex items-center gap-1">
-                {renderStars(product.rating)}
+                <RenderStars rating={product.rating}  />
               </div>
             </div>
 

@@ -5,7 +5,6 @@ import {
   ArrowLeftRight,
   Minus,
   Plus,
-  Star,
   CheckCircle,
   ShoppingCart,
 } from "lucide-react";
@@ -17,6 +16,7 @@ import ShinyButton from "../components/Commons/ShinyButton";
 import { Product as ProductType } from "../types";
 import { formatPrice } from "../utils/helpers";
 import ProductSkeleton from "../components/Product/ProductSkeleton";
+import RenderStars from "@/components/Commons/RenderStars";
 
 const Product = () => {
   const { id } = useParams<{ id: string }>();
@@ -127,18 +127,6 @@ const Product = () => {
     }
   };
 
-  const renderStars = (rating: number) =>
-    Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`w-4 h-4 ${
-          i < Math.floor(rating)
-            ? "fill-app-main text-app-main"
-            : "text-gray-300"
-        }`}
-      />
-    ));
-
   if (loading) return <ProductSkeleton />;
   if (error || !product)
     return (
@@ -215,7 +203,7 @@ const Product = () => {
                   </Link>
                   {product.rating > 0 && (
                     <div className="flex items-center">
-                      {renderStars(product.rating)}
+                     <RenderStars rating={product.rating}  />
                       <span className="ml-4 text-gray-600 text-sm">
                         ({product.rating})
                       </span>
@@ -244,105 +232,106 @@ const Product = () => {
               </span>
             </div>
             <div className="flex flex-col space-y-9">
-                {/* Size */}
-                {product.size.length > 0 && (
-                  <div className="flex items-center space-x-8 w-full">
-                    <h3 className="text-sm font-normal text-gray-600">Size</h3>
-                    <div className="flex gap-3">
-                      {product.size.map((s) => (
-                        <button
-                          key={s}
-                          onClick={() => setSelectedSize(s)}
-                          className={`px-6 py-2 rounded-lg text-sm font-medium border transition-colors ${
-                            selectedSize === s
-                              ? "bg-header-catbtn text-white border-header-catbtn"
-                              : "border-gray-500 text-gray-700 hover:border-gray-400 bg-white"
-                          }`}
-                        >
-                          {s}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-
-                {/* Quantity & Add to Cart Section */}
-                <div className="flex flex-row justify-start items-center gap-6 w-full">
-                  {/* Quantity Controls */}
-                  <div className="flex items-center gap-0">
-                    <button
-                      onClick={() => {
-                        if (quantity > 1) {
+              {/* Size */}
+              {product.size.length > 0 && (
+                <div className="flex items-center space-x-8 w-full">
+                  <h3 className="text-sm font-normal text-gray-600">Size</h3>
+                  <div className="flex gap-3">
+                    {product.size.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => {
+                          setSelectedSize(s);
                           triggerFromOtherComponent();
-                          updateDiscountCalculationDOWN();
-                          setQuantity(quantity - 1);
-                        }
-                      }}
-                      className="p-3 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
-                    >
-                      <Minus className="w-5 h-5 text-gray-700" />
-                    </button>
-                    <span className="w-12 text-center text-base font-medium text-gray-800">
-                      {quantity}
-                    </span>
-                    <button
-                      onClick={() => {
-                        triggerFromOtherComponent();
-                        updateDiscountCalculationUP();
-                        setQuantity(quantity + 1);
-                      }}
-                      className="p-3 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
-                    >
-                      <Plus className="w-5 h-5 text-gray-700" />
-                    </button>
+                        }}
+                        className={`px-6 py-2 rounded-lg text-sm font-medium border transition-colors ${
+                          selectedSize === s
+                            ? "bg-header-catbtn text-white border-header-catbtn"
+                            : "border-gray-500 text-gray-700 hover:border-gray-400 bg-white"
+                        }`}
+                      >
+                        {s}
+                      </button>
+                    ))}
                   </div>
+                </div>
+              )}
 
-
-                  {/* Add to Cart Button */}
-                  <ShinyButton
-                    triggerGlow={shine}
-                    className="rounded-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
-                  >
-                    <div className="flex flex-col items-center justify-center">
-                        <div className="flex flex-row items-center gap-2">
-                            <ShoppingCart className="w-5 h-5" />
-                            <span className="text-sm font-semibold">Add To Cart</span>
-                        </div>
-                        {hasDiscount && (
-                          <span className="text-sm text-white/80">
-                            Save{" "}
-                            {discountCal === 0 ? (
-                              <span className="text-green-300 font-bold">
-                                {discount}
-                              </span>
-                            ) : (
-                              <span className="text-green-300 font-bold">
-                                {formatPrice(discountCal)}
-                              </span>
-                            )}
-                            {" now!!"}
-                          </span>
-                        )}
-                    </div>
-                  </ShinyButton>
-                  {/* Action Buttons */}
+              {/* Quantity & Add to Cart Section */}
+              <div className="flex flex-row justify-start items-center gap-6 w-full">
+                {/* Quantity Controls */}
+                <div className="flex items-center gap-0">
                   <button
-                    onClick={handleWishlistClick}
-                    className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-colors ${
-                      isInWishlist
-                        ? "border-red-500 bg-red-50 text-red-500"
-                        : "border-gray-300 bg-gray-100 text-gray-600 hover:border-gray-400 hover:bg-gray-200"
-                    }`}
+                    onClick={() => {
+                      if (quantity > 1) {
+                        triggerFromOtherComponent();
+                        updateDiscountCalculationDOWN();
+                        setQuantity(quantity - 1);
+                      }
+                    }}
+                    className="p-3 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
                   >
-                    <Heart
-                      className={`w-5 h-5 ${isInWishlist ? "fill-current" : ""}`}
-                    />
+                    <Minus className="w-5 h-5 text-gray-700" />
                   </button>
-                  <button className="w-12 h-12 rounded-full border-2 border-gray-300 bg-gray-100 text-gray-600 hover:border-gray-400 hover:bg-gray-200 flex items-center justify-center transition-colors">
-                    <ArrowLeftRight className="w-5 h-5" />
+                  <span className="w-12 text-center text-base font-medium text-gray-800">
+                    {quantity}
+                  </span>
+                  <button
+                    onClick={() => {
+                      triggerFromOtherComponent();
+                      updateDiscountCalculationUP();
+                      setQuantity(quantity + 1);
+                    }}
+                    className="p-3 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors"
+                  >
+                    <Plus className="w-5 h-5 text-gray-700" />
                   </button>
                 </div>
+
+                {/* Add to Cart Button */}
+                <ShinyButton
+                  triggerGlow={shine}
+                  className="rounded-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
+                >
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="flex flex-row items-center gap-2">
+                      <ShoppingCart className="w-5 h-5" />
+                      <span className="text-sm font-semibold">Add To Cart</span>
+                    </div>
+                    {hasDiscount && (
+                      <span className="text-sm text-white/80">
+                        Save{" "}
+                        {discountCal === 0 ? (
+                          <span className="text-green-300 font-bold">
+                            {discount}
+                          </span>
+                        ) : (
+                          <span className="text-green-300 font-bold">
+                            {formatPrice(discountCal)}
+                          </span>
+                        )}
+                        {" now!!"}
+                      </span>
+                    )}
+                  </div>
+                </ShinyButton>
+                {/* Action Buttons */}
+                <button
+                  onClick={handleWishlistClick}
+                  className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-colors ${
+                    isInWishlist
+                      ? "border-red-500 bg-red-50 text-red-500"
+                      : "border-gray-300 bg-gray-100 text-gray-600 hover:border-gray-400 hover:bg-gray-200"
+                  }`}
+                >
+                  <Heart
+                    className={`w-5 h-5 ${isInWishlist ? "fill-current" : ""}`}
+                  />
+                </button>
+                <button className="w-12 h-12 rounded-full border-2 border-gray-300 bg-gray-100 text-gray-600 hover:border-gray-400 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                  <ArrowLeftRight className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
         </div>

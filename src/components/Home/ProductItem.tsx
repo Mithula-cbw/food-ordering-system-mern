@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Heart, Maximize2, CheckCircle } from "lucide-react";
+import { Heart, Maximize2 } from "lucide-react";
 import { Product } from "../../types";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { toast } from "sonner";
 import { useUser } from "../../contexts/UserContext";
-import { deleteData, postData } from "../../utils/Api";
+import { deleteData } from "../../utils/Api";
 import ProductZoom from "./ProductZoom";
 import { formatPrice } from "../../utils/helpers";
 import RenderStars from "../Commons/RenderStars";
+import { handleWishlistClick } from "../Commons/AddToWishlist";
 
 interface ProductCardProps {
   product: Product;
@@ -41,45 +42,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
   };
 
-  const handleWishlistClick = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (isInWishlist) {
-      removeItem(product._id);
-    } else {
-      const data = {
-        productTitle: product.name,
-        images: product.images[0],
-        rating: Number(product.rating),
-        price: product.price,
-        productId: product._id,
-        userId: user?.id,
-      };
-
-      try {
-        const response = await postData("/api/myList/add/", data);
-
-        if (response) {
-          toast.success(
-            <div className="flex items-center gap-3">
-              <CheckCircle className="text-green-600 w-5 h-5" />
-              <span className="text-black font-semibold">
-                Item added to wishlist!
-              </span>
-            </div>
-          );
-          refreshFavorites();
-        } else {
-          toast.error("Failed to add to wishlist.");
-        }
-      } catch (err) {
-        console.error("Wishlist error:", err);
-        toast.error("An error occurred.");
-      }
-    }
-  };
-
+ const onWishlistClick = (e: React.MouseEvent) =>
+  handleWishlistClick(e, {
+    product,
+    user,
+    isInWishlist,
+    removeItem,
+    refreshFavorites,
+  });
+  
   const isInStock = product.countInStock.toLowerCase() === "in stock";
   useEffect(() => {
     const found = favorites.some((fav) => fav.productId === product._id);
@@ -133,7 +104,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   <Maximize2 className="w-5 h-5 text-gray-700" />
                 </button>
                 <button
-                  onClick={handleWishlistClick}
+                  onClick={onWishlistClick}
                   className={`w-10 h-10 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 ${
                     isInWishlist
                       ? "bg-white hover:bg-red-50"

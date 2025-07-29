@@ -18,6 +18,7 @@ import { formatPrice, truncateText } from "../utils/helpers";
 import ProductSkeleton from "../components/Product/ProductSkeleton";
 import RenderStars from "../components/Commons/RenderStars";
 import ProductReviewSection from "../components/Product/ProductReviewSection";
+import RelatedProducts from "@/components/Product/RelatedProducts";
 
 const Product = () => {
   const { id } = useParams<{ id: string }>();
@@ -144,7 +145,7 @@ useEffect(() => {
   const catLink = `/categories/${product.category._id}`;
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 p-4 flex flex-col justify-center">
+    <div className="min-h-screen w-full bg-gray-50 p-4 flex flex-col justify-start items-start">
       <div className="bg-white w-full lg:w-[90%] mx-auto p-2 lg:p-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Images */}
@@ -344,6 +345,7 @@ useEffect(() => {
       </div>
 
       <ProductReviewSection product={product} />
+      <RelatedProducts categoryId={product.category._id} />
     </div>
   );
 };

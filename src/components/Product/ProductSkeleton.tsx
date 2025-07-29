@@ -36,9 +36,9 @@ const ProductSkeleton = () => {
             Product Details
           </h2>
           <div className="flex flex-wrap gap-3 mb-6">
-            <Skeleton className="h-12 w-32 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"></Skeleton>
-            <Skeleton className="h-12 w-32 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"></Skeleton>
-            <Skeleton className="h-12 w-32 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"></Skeleton>
+            <Skeleton className="h-12 w-32 px-6 py-3 rounded-full" />
+            <Skeleton className="h-12 w-32 px-6 py-3 rounded-full" />
+            <Skeleton className="h-12 w-32 px-6 py-3 rounded-full" />
           </div>
         </div>
       </div>

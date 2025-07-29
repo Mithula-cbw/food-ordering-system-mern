@@ -48,7 +48,7 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
   if (reviews.length === 0) {
     return (
       <div className="p-2">
-        <h3 className="text-xl font-semibold text-gray-800 mb-6">
+        <h3 className="text-xl font-semibold text-gray-800 mb-6 mt-4">
           Customer Reviews ({reviews.length})
         </h3>
         <div className="mt-8 p-6 bg-white rounded-lg border border-gray-100 shadow-sm text-center py-12">
@@ -92,7 +92,7 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({
 
   return (
     <div className="p-2">
-      <h3 className="text-xl font-semibold text-gray-800 mb-6">
+      <h3 className="text-xl font-semibold text-gray-800 mb-6 mt-4">
         Customer Reviews ({reviews.length})
       </h3>
       <div

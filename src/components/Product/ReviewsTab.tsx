@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Review } from "../../types";
 import ReviewCard from "./ReviewCard";
 
@@ -8,6 +8,8 @@ interface ReviewsTabProps {
 }
 
 const ReviewsTab: React.FC<ReviewsTabProps> = ({ reviews, loading }) => {
+  const [visibleCount, setVisibleCount] = useState(3); // initially show 3
+
   if (loading) {
     return (
       <div className="mt-8 p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
@@ -45,16 +47,31 @@ const ReviewsTab: React.FC<ReviewsTabProps> = ({ reviews, loading }) => {
     );
   }
 
+  const handleSeeMore = () => {
+    setVisibleCount((prev) => Math.min(prev + 3, reviews.length));
+  };
+
   return (
     <div className="mt-8 p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
       <h3 className="text-xl font-semibold text-gray-800 mb-6">
         Customer Reviews ({reviews.length})
       </h3>
-      <div className="space-y-6">
-        {reviews.map((review) => (
+      <div className="space-y-2 flex flex-col items-start justify-start p-4 rounded-lg">
+        {reviews.slice(0, visibleCount).map((review) => (
           <ReviewCard key={review._id} review={review} />
         ))}
       </div>
+
+      {visibleCount < reviews.length && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={handleSeeMore}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium transition-colors duration-200"
+          >
+            See More
+          </button>
+        </div>
+      )}
     </div>
   );
 };

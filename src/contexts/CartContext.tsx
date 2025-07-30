@@ -23,22 +23,25 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const { user, isLoggedIn } = useUser();
+  const [loading, setLoading] = useState(true);
   const cartItemCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
 
   // Load from localStorage if not logged in
   useEffect(() => {
+    setLoading(true);
     if (!isLoggedIn) {
       const storedCart = localStorage.getItem("cart");
       if (storedCart) {
         setCartItems(JSON.parse(storedCart));
       }
     }
+    setLoading(false);
   }, [isLoggedIn]);
 
   // Sync localStorage when not logged in
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn && !loading) {
       localStorage.setItem("cart", JSON.stringify(cartItems));
     }
   }, [cartItems, isLoggedIn]);

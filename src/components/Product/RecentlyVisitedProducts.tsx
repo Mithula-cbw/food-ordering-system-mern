@@ -10,7 +10,7 @@ const RecentlyVisitedProducts: React.FC = () => {
       <div className="w-full mx-auto">
         <HomeSwiper
           title="RECENTLY VIEWED PRODUCTS"
-          subtitle=""
+          subtitle="Items you’ve recently explored."
           showTabs={false}
           categories={[]}
           products={recentlyVisited}

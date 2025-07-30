@@ -22,9 +22,13 @@ const ShoppingCartComponent: React.FC = () => {
     removeFromCart(productId, size);
   };
 
-  const handleQuantityChange = (productId: string, newQuantity: number, size: string) => {
+  const handleQuantityChange = (
+    productId: string,
+    newQuantity: number,
+    size: string
+  ) => {
     if (newQuantity >= 1) {
-      updateQuantity(productId, newQuantity,size);
+      updateQuantity(productId, newQuantity, size);
     }
   };
 
@@ -87,12 +91,14 @@ const ShoppingCartComponent: React.FC = () => {
         </div>
 
         {/* Right Section: Cart Summary */}
-        <div className="w-full lg:w-[320px] shrink-0">
-          <CartSummary
-            subTotal={cartTotal}
-            onCheckout={handleProceedToCheckout}
-            isCartEmpty={isCartEmpty}
-          />
+        <div className="w-full lg:w-[300px] shrink-0">
+          <div className="sticky top-20">
+            <CartSummary
+              subTotal={cartTotal}
+              onCheckout={handleProceedToCheckout}
+              isCartEmpty={isCartEmpty}
+            />
+          </div>
         </div>
       </div>
     </div>

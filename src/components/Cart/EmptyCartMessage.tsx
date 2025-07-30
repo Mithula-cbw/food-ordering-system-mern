@@ -11,7 +11,7 @@ const EmptyCartMessage: React.FC<EmptyCartMessageProps> = ({
   onGoShopping,
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center py-16 px-6">
+    <div className="flex flex-col items-center justify-center py-4 px-6">
       <div className="relative mb-8">
         <div className="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center">
           <ShoppingCart className="w-16 h-16 text-blue-500" />

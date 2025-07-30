@@ -4,7 +4,7 @@ import { useGlobalContext } from "@/contexts/GlobalContext";
 import { SearchSug } from "../../../types";
 
 interface RecentSearchListProps {
-  setQuery: (query: string) => void;
+  setQuery: (query: SearchSug) => void;
   styleTitle?: string;
 }
 
@@ -15,7 +15,7 @@ const RecentSearchList: React.FC<RecentSearchListProps> = ({
   const { recentSearches, clearRecentSearches } = useGlobalContext();
 
   const handleClick = (item: SearchSug) => {
-    setQuery(item.name);
+    setQuery(item);
   };
 
   if (recentSearches.length === 0) return null;

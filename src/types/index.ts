@@ -91,6 +91,21 @@ export interface Category {
   id: string;
 }
 
+
+export interface CartItem {
+  id?: string;
+  productTitle: string;
+  images: string;
+  rating: number;
+  price: number;
+  quantity: number;
+  subTotal: number;
+  productId: string;
+  userId: string;
+  size: string;
+}
+
+
 export interface SearchSug {
   name: string;
   id : string;

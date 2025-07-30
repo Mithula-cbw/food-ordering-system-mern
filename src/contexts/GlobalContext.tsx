@@ -11,33 +11,42 @@ interface GlobalContextType {
   recentlyVisited: Product[];
   addRecentlyVisited: (product: Product) => void;
   recentsLoading: boolean;
+
+  recentSearches: string[];
+  addRecentSearch: (search: string) => void;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [recentlyVisited, setRecentlyVisited] = useState<Product[]>([]);
-  const [recentsLoading, setRecentsLoading] = useState<boolean>(true); // start as loading
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [recentsLoading, setRecentsLoading] = useState<boolean>(true);
 
-  // Load from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem("recentlyVisited");
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        setRecentlyVisited(parsed);
-      } catch (err) {
-        console.error("Failed to parse recentlyVisited from localStorage:", err);
+    const storedVisited = localStorage.getItem("recentlyVisited");
+    const storedSearches = localStorage.getItem("recentSearches");
+
+    try {
+      if (storedVisited) {
+        setRecentlyVisited(JSON.parse(storedVisited));
       }
+      if (storedSearches) {
+        setRecentSearches(JSON.parse(storedSearches));
+      }
+    } catch (err) {
+      console.error("Failed to parse localStorage:", err);
     }
+
     setRecentsLoading(false);
   }, []);
 
-  // Save to localStorage on update
   useEffect(() => {
-    if (recentsLoading) return;
-    localStorage.setItem("recentlyVisited", JSON.stringify(recentlyVisited));
-  }, [recentlyVisited, recentsLoading]);
+    if (!recentsLoading) {
+      localStorage.setItem("recentlyVisited", JSON.stringify(recentlyVisited));
+      localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+    }
+  }, [recentlyVisited, recentSearches, recentsLoading]);
 
   const addRecentlyVisited = (product: Product) => {
     setRecentlyVisited((prev) => {
@@ -48,9 +57,25 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const addRecentSearch = (search: string) => {
+    setRecentSearches((prev) => {
+      const filtered = prev.filter(
+        (s) => s.toLowerCase() !== search.toLowerCase()
+      );
+      const updated = [search, ...filtered];
+      return updated.slice(0, 10);
+    });
+  };
+
   return (
     <GlobalContext.Provider
-      value={{ recentlyVisited, addRecentlyVisited, recentsLoading }}
+      value={{
+        recentlyVisited,
+        addRecentlyVisited,
+        recentsLoading,
+        recentSearches,
+        addRecentSearch,
+      }}
     >
       {children}
     </GlobalContext.Provider>

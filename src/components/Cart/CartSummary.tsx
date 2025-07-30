@@ -1,5 +1,6 @@
 import React from "react";
 import { Package } from "lucide-react";
+import { formatPrice } from "@/utils/helpers";
 
 interface CartSummaryProps {
   subTotal: number;
@@ -25,12 +26,12 @@ const CartSummary: React.FC<CartSummaryProps> = ({
       <div className="space-y-4 mb-6">
         <div className="flex justify-between">
           <span className="text-gray-600">SubTotal</span>
-          <span className="text-green-600 font-semibold">${subTotal.toFixed(2)}</span>
+          <span className="text-green-600 font-semibold">{formatPrice(subTotal)}</span>
         </div>
 
         <div className="flex justify-between">
           <span className="text-gray-600">Shipping</span>
-          <span className="font-semibold">${shippingCost.toFixed(2)}</span>
+          <span className="font-semibold">{formatPrice(shippingCost)}</span>
         </div>
 
         <div className="flex justify-between text-sm">
@@ -42,7 +43,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({
 
         <div className="flex justify-between text-lg font-bold">
           <span>Total</span>
-          <span className="text-red-600">${total.toFixed(2)}</span>
+          <span className="text-red-600">{formatPrice(total)}</span>
         </div>
       </div>
 

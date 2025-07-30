@@ -31,7 +31,7 @@ const ShoppingCartComponent: React.FC = () => {
   const isCartEmpty = cartItems.length === 0;
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10 min-h-screen bg-gray-50">
+    <div className="max-w-7xl mx-auto px-6 py-10 min-h-screen">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Left Section: Cart Table */}
         <div className="flex-1 bg-white rounded-lg shadow-sm">

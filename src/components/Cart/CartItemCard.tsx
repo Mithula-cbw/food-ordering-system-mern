@@ -1,3 +1,4 @@
+import { formatPrice } from "@/utils/helpers";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -44,7 +45,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
         </div>
       </div>
 
-      <div className="col-span-2 text-center font-semibold">${price.toFixed(2)}</div>
+      <div className="col-span-2 text-center font-semibold">{formatPrice(price)}</div>
 
       <div className="col-span-2 text-center">
         <div className="flex items-center justify-center gap-2">
@@ -65,7 +66,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
         </div>
       </div>
 
-      <div className="col-span-2 text-center text-green-700 font-semibold">${subTotal.toFixed(2)}</div>
+      <div className="col-span-2 text-center text-green-700 font-semibold">{formatPrice(subTotal)}</div>
 
       <div className="col-span-2 text-center">
         <button

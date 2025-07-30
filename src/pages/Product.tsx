@@ -18,7 +18,8 @@ import { formatPrice, truncateText } from "../utils/helpers";
 import ProductSkeleton from "../components/Product/ProductSkeleton";
 import RenderStars from "../components/Commons/RenderStars";
 import ProductReviewSection from "../components/Product/ProductReviewSection";
-import RelatedProducts from "@/components/Product/RelatedProducts";
+import RelatedProducts from "../components/Product/RelatedProducts";
+import RecentlyVisitedProducts from "../components/Product/RecentlyVisitedProducts";
 
 const Product = () => {
   const { id } = useParams<{ id: string }>();
@@ -346,6 +347,7 @@ useEffect(() => {
 
       <ProductReviewSection product={product} />
       <RelatedProducts categoryId={product.category._id} />
+      <RecentlyVisitedProducts />
     </div>
   );
 };

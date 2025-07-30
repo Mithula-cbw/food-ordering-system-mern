@@ -10,6 +10,7 @@ import ProductZoom from "./ProductZoom";
 import { formatPrice, truncateText } from "../../utils/helpers";
 import RenderStars from "../Commons/RenderStars";
 import { handleWishlistClick } from "../Commons/AddToWishlist";
+import { useGlobalContext } from '../../contexts/GlobalContext';
 
 interface ProductCardProps {
   product: Product;
@@ -25,6 +26,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [isInWishlist, setIsInWishlist] = useState(false);
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
+  const { addRecentlyVisited } = useGlobalContext();
 
   const removeItem = async (id: string) => {
     try {
@@ -54,7 +56,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <>
-      <Link to={`/product/${product._id}`} className="block group">
+      <Link to={`/product/${product._id}`} className="block group"
+        onClick={() => {
+          addRecentlyVisited(product);
+        }}>
         <div
           className={`bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 ${className}`}
           onMouseEnter={() => setIsHovered(true)}

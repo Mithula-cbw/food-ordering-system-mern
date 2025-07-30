@@ -10,6 +10,7 @@ import ProductZoom from "./ProductZoom";
 import { formatPrice, truncateText } from "../../utils/helpers";
 import RenderStars from "../Commons/RenderStars";
 import { handleWishlistClick } from "../Commons/AddToWishlist";
+import { useGlobalContext } from "../../contexts/GlobalContext";
 
 interface ProductCardRowProps {
   product: Product;
@@ -24,6 +25,7 @@ const ProductCardRow: React.FC<ProductCardRowProps> = ({
   const [isInWishlist, setIsInWishlist] = useState(false);
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
+  const { addRecentlyVisited } = useGlobalContext();
 
   const removeItem = async (id: string) => {
     try {
@@ -55,7 +57,11 @@ const ProductCardRow: React.FC<ProductCardRowProps> = ({
     <>
       <Link
         to={`/product/${product._id}`}
-        className={`block group ${className}`}
+        className={`block group ${className}`
+      }
+      onClick={() => {
+          addRecentlyVisited(product);
+        }}
       >
         <div className="flex flex-row bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 h-[120px] relative">
           {/* Image Section */}

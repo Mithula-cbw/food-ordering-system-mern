@@ -29,7 +29,7 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   loading = false,
   error = "",
 }) => {
-  console.log("Received products in HomeSwiper:", products);
+  // console.log("Received products in HomeSwiper:", products);
   const [activeTab, setActiveTab] = useState(0);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -111,7 +111,7 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   };
 
 const getFilteredProducts = () => {
-  console.log("Filtering products for active tab:", products);
+  // console.log("Filtering products for active tab:", products);
 
   if (!showTabs || categories.length === 0) return filterByVegan(products);
 

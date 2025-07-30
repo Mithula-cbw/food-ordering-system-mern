@@ -16,8 +16,8 @@ const SignUp = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("✉️ Email:", email);
-    console.log("🔐 Password:", password);
+    // console.log(" Email:", email);
+    // console.log(" Password:", password);
   }, [email, password]);
 
   const handleSignIn = (e: React.FormEvent) => {

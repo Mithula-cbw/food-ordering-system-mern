@@ -72,7 +72,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         throw new Error("Failed to submit review");
       }
       setLoading(false);
-      console.log("Review submitted:", result);
+      // console.log("Review submitted:", result);
 
       // Reset form
       setReviewData({ review: "", customerRating: 0 });

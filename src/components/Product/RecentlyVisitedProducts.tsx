@@ -3,7 +3,7 @@ import HomeSwiper from "../../components/Home/HomeSwiper";
 import { useGlobalContext } from "../../contexts/GlobalContext";
 
 const RecentlyVisitedProducts: React.FC = () => {
-  const { recentlyVisited } = useGlobalContext();
+  const { recentlyVisited, recentsLoading } = useGlobalContext();
 
   return (
     <div className="bg-gray-50 px-10 w-full">
@@ -20,6 +20,7 @@ const RecentlyVisitedProducts: React.FC = () => {
           headerClassName="bg-white rounded-lg p-4 shadow-sm"
           slidesPerView={5}
           spaceBetween={8}
+          loading={recentsLoading}
         />
       </div>
     </div>

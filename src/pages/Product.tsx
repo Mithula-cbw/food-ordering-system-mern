@@ -35,7 +35,7 @@ const Product = () => {
   const { user } = useUser();
 
 useEffect(() => {
-  console.log("Scrolling to top because product id changed:", id);
+  // console.log("Scrolling to top because product id changed:", id);
   window.scrollTo({ top: 0, behavior: "smooth" });
 }, [id]);
 

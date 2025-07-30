@@ -31,10 +31,10 @@ const ShoppingCartComponent: React.FC = () => {
   const isCartEmpty = cartItems.length === 0;
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10 min-h-screen">
-      <div className="flex flex-col lg:flex-row gap-8">
+    <div className="w-full mx-auto px-6 py-10 h-fit bg-app-main/15">
+      <div className="flex flex-col lg:flex-row gap-8 px-12 pb-12">
         {/* Left Section: Cart Table */}
-        <div className="flex-1 bg-white rounded-lg shadow-sm">
+        <div className="flex-1 bg-white rounded-lg px-2 pt-2 pb-12 shadow-2xl">
           <div className="p-6 border-b">
             <h1 className="text-2xl font-bold text-gray-900">Your Cart</h1>
             <p className="text-gray-600 mt-1">

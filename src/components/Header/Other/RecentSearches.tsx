@@ -1,6 +1,7 @@
 import React from "react";
 import { Clock } from "lucide-react";
 import { useGlobalContext } from "@/contexts/GlobalContext";
+import { SearchSug } from "../../../types";
 
 interface RecentSearchListProps {
   setQuery: (query: string) => void;
@@ -13,8 +14,8 @@ const RecentSearchList: React.FC<RecentSearchListProps> = ({
 }) => {
   const { recentSearches, clearRecentSearches } = useGlobalContext();
 
-  const handleClick = (item: string) => {
-    setQuery(item);
+  const handleClick = (item: SearchSug) => {
+    setQuery(item.name);
   };
 
   if (recentSearches.length === 0) return null;
@@ -41,7 +42,7 @@ const RecentSearchList: React.FC<RecentSearchListProps> = ({
             onClick={() => handleClick(item)}
           >
             <Clock className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-gray-600 hover:text-gray-800">{item}</span>
+            <span className="text-gray-600 hover:text-gray-800">{item.name}</span>
           </li>
         ))}
       </ul>

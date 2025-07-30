@@ -91,7 +91,7 @@ export interface Category {
   id: string;
 }
 
-export interface searchSug {
+export interface SearchSug {
   name: string;
   id : string;
 }

@@ -1,4 +1,4 @@
-import { Product } from "../types";
+import { Product, SearchSug } from "../types";
 import React, {
   createContext,
   useContext,
@@ -12,8 +12,8 @@ interface GlobalContextType {
   addRecentlyVisited: (product: Product) => void;
   recentsLoading: boolean;
 
-  recentSearches: string[];
-  addRecentSearch: (search: string) => void;
+  recentSearches: SearchSug[];
+  addRecentSearch: (search: SearchSug) => void;
   clearRecentSearches: () => void;
 }
 
@@ -21,7 +21,7 @@ const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [recentlyVisited, setRecentlyVisited] = useState<Product[]>([]);
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [recentSearches, setRecentSearches] = useState<SearchSug[]>([]);
   const [recentsLoading, setRecentsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -58,10 +58,10 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const addRecentSearch = (search: string) => {
+  const addRecentSearch = (search: SearchSug) => {
     setRecentSearches((prev) => {
       const filtered = prev.filter(
-        (s) => s.toLowerCase() !== search.toLowerCase()
+        (s) => s.name.toLowerCase() !== search.name.toLowerCase()
       );
       const updated = [search, ...filtered];
       return updated.slice(0, 10);

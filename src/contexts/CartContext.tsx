@@ -12,7 +12,7 @@ interface CartContextType {
   cartItems: CartItem[];
   addToCart: (product: Product, size: string, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  updateQuantity: (productId: string, quantity: number, size: string) => void;
   clearCart: () => void;
   cartTotal: number;
   cartItemCount: number;
@@ -24,8 +24,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const { user, isLoggedIn } = useUser();
   const [loading, setLoading] = useState(true);
-  const cartItemCount = cartItems.reduce((count, item) => count + item.quantity, 0);
-
+  const cartItemCount = cartItems.reduce(
+    (count, item) => count + item.quantity,
+    0
+  );
 
   // Load from localStorage if not logged in
   useEffect(() => {
@@ -46,15 +48,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [cartItems, isLoggedIn]);
 
-  const addToCart = (
-    product: Product,
-    size: string,
-    quantity: number = 1
-  ) => {
+  const addToCart = (product: Product, size: string, quantity: number = 1) => {
     setCartItems((prev) => {
       const existing = prev.find(
-        (item) =>
-          item.productId === product._id && item.size === size
+        (item) => item.productId === product._id && item.size === size
       );
 
       if (existing) {
@@ -86,15 +83,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeFromCart = (productId: string) => {
-    setCartItems((prev) =>
-      prev.filter((item) => item.productId !== productId)
-    );
+    setCartItems((prev) => prev.filter((item) => item.productId !== productId));
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (
+    productId: string,
+    quantity: number,
+    size: string
+  ) => {
     setCartItems((prev) =>
       prev.map((item) =>
-        item.productId === productId
+        item.productId === productId && item.size === size
           ? {
               ...item,
               quantity,
@@ -123,7 +122,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         updateQuantity,
         clearCart,
         cartTotal,
-        cartItemCount
+        cartItemCount,
       }}
     >
       {children}

@@ -10,8 +10,9 @@ interface CartItemCardProps {
   price: number;
   quantity: number;
   subTotal: number;
-  onQuantityChange: (productId: string, newQuantity: number) => void;
+  onQuantityChange: (productId: string, newQuantity: number, size: string) => void;
   onRemove: (productId: string) => void;
+  size: string;
 }
 
 const CartItemCard: React.FC<CartItemCardProps> = ({
@@ -24,6 +25,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
   subTotal,
   onQuantityChange,
   onRemove,
+  size
 }) => {
   return (
     <div className="grid grid-cols-12 gap-4 items-center py-4 border-b">
@@ -50,7 +52,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
       <div className="col-span-2 text-center">
         <div className="flex items-center justify-center gap-2">
           <button
-            onClick={() => onQuantityChange(productId, quantity - 1)}
+            onClick={() => onQuantityChange(productId, quantity - 1, size)}
             className="w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors"
             disabled={quantity <= 1}
           >
@@ -58,7 +60,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
           </button>
           <span className="w-12 text-center">{quantity}</span>
           <button
-            onClick={() => onQuantityChange(productId, quantity + 1)}
+            onClick={() => onQuantityChange(productId, quantity + 1, size)}
             className="w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors"
           >
             +

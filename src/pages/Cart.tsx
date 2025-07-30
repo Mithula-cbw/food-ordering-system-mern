@@ -22,9 +22,9 @@ const ShoppingCartComponent: React.FC = () => {
     removeFromCart(productId);
   };
 
-  const handleQuantityChange = (productId: string, newQuantity: number) => {
+  const handleQuantityChange = (productId: string, newQuantity: number, size: string) => {
     if (newQuantity >= 1) {
-      updateQuantity(productId, newQuantity);
+      updateQuantity(productId, newQuantity,size);
     }
   };
 
@@ -71,6 +71,7 @@ const ShoppingCartComponent: React.FC = () => {
                     subTotal={item.subTotal}
                     onQuantityChange={handleQuantityChange}
                     onRemove={handleRemoveItem}
+                    size={item.size}
                   />
                 ))}
               </div>

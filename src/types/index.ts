@@ -91,6 +91,11 @@ export interface Category {
   id: string;
 }
 
+export interface searchSug {
+  name: string;
+  id : string;
+}
+
 export interface CategoryContextType {
   categories: Category[];
   loading: boolean;

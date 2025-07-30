@@ -14,6 +14,7 @@ interface GlobalContextType {
 
   recentSearches: string[];
   addRecentSearch: (search: string) => void;
+  clearRecentSearches: () => void;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -67,6 +68,10 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const clearRecentSearches = () => {
+  setRecentSearches([]);
+};
+
   return (
     <GlobalContext.Provider
       value={{
@@ -75,6 +80,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         recentsLoading,
         recentSearches,
         addRecentSearch,
+        clearRecentSearches
       }}
     >
       {children}

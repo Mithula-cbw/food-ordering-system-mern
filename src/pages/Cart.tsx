@@ -1,115 +1,97 @@
-import React from 'react';
-import { ShoppingCart } from 'lucide-react';
-import CartSummary from '@/components/Cart/CartSummary';
+import React from "react";
+import CartSummary from "@/components/Cart/CartSummary";
+import EmptyCartMessage from "@/components/Cart/EmptyCartMessage";
+import CartItemCard from "@/components/Cart/CartItemCard";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
 
 const ShoppingCartComponent: React.FC = () => {
-  // Mock click handlers
+  const navigate = useNavigate();
+  const { cartItems, cartTotal, updateQuantity, removeFromCart } = useCart();
+
   const handleProceedToCheckout = () => {
-    console.log('Proceeding to checkout...');
-    alert('Proceeding to checkout!');
+    console.log("Proceeding to checkout...");
+    alert("Proceeding to checkout!");
   };
 
   const handleGoShopping = () => {
-    console.log('Going shopping...');
-    alert('Redirecting to shopping page!');
+    navigate("/");
   };
 
   const handleRemoveItem = (productId: string) => {
-    console.log(`Removing item with ID: ${productId}`);
-    alert(`Item ${productId} removed from cart!`);
+    removeFromCart(productId);
   };
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
-    console.log(`Changing quantity for ${productId} to ${newQuantity}`);
-    alert(`Quantity updated to ${newQuantity}`);
+    if (newQuantity >= 1) {
+      updateQuantity(productId, newQuantity);
+    }
   };
 
+  const isCartEmpty = cartItems.length === 0;
+
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-gray-50 min-h-screen">
-      <div className="bg-white rounded-lg shadow-sm">
-        {/* Header */}
-        <div className="p-6 border-b">
-          <h1 className="text-2xl font-bold text-gray-900">Your Cart</h1>
-          <p className="text-gray-600 mt-1">There are products in your cart</p>
-        </div>
-
-        {/* Cart Table Header */}
-        <div className="bg-gray-100 px-6 py-4">
-          <div className="grid grid-cols-12 gap-4 font-semibold text-gray-700">
-            <div className="col-span-4">Product</div>
-            <div className="col-span-2 text-center">Unit Price</div>
-            <div className="col-span-2 text-center">Quantity</div>
-            <div className="col-span-2 text-center">SubTotal</div>
-            <div className="col-span-2 text-center">Remove</div>
+    <div className="max-w-7xl mx-auto px-6 py-10 min-h-screen bg-gray-50">
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Left Section: Cart Table */}
+        <div className="flex-1 bg-white rounded-lg shadow-sm">
+          <div className="p-6 border-b">
+            <h1 className="text-2xl font-bold text-gray-900">Your Cart</h1>
+            <p className="text-gray-600 mt-1">
+              {isCartEmpty
+                ? "Your cart is currently empty."
+                : `You have ${cartItems.length} item(s) in your cart`}
+            </p>
           </div>
-        </div>
 
-        {/* Empty Cart Content */}
-        <div className="flex flex-col items-center justify-center py-16 px-6">
-          <div className="relative mb-8">
-            <div className="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center">
-              <ShoppingCart className="w-16 h-16 text-blue-500" />
-            </div>
-            <div className="absolute -top-2 -right-2 w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-xl border-4 border-white">
-              0
-            </div>
-          </div>
-          
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Your Cart is Empty</h2>
-          <p className="text-gray-600 mb-8">Looks like you haven't added anything yet.</p>
-          
-          <button 
-            onClick={handleGoShopping}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
-          >
-            Go Shopping
-          </button>
-        </div>
-      </div>
-
-      {/* Cart Totals Sidebar */}
-        <CartSummary subTotal={20} onCheckout={handleProceedToCheckout}/>
-
-      {/* Example of how items would look when added */}
-      <div className="mt-8 bg-white rounded-lg shadow-sm p-6" style={{ display: 'none' }}>
-        <h3 className="text-lg font-semibold mb-4">Example Cart Item (Hidden)</h3>
-        <div className="grid grid-cols-12 gap-4 items-center py-4 border-b">
-          <div className="col-span-4">
-            <div className="flex items-center gap-3">
-              <div className="w-16 h-16 bg-gray-200 rounded-lg"></div>
-              <div>
-                <h4 className="font-semibold">Sample Product</h4>
-                <p className="text-gray-600 text-sm">Product description</p>
+          {!isCartEmpty && (
+            <>
+              {/* Table Header */}
+              <div className="bg-gray-100 px-6 py-4">
+                <div className="grid grid-cols-12 gap-4 font-semibold text-gray-700">
+                  <div className="col-span-4">Product</div>
+                  <div className="col-span-2 text-center">Unit Price</div>
+                  <div className="col-span-2 text-center">Quantity</div>
+                  <div className="col-span-2 text-center">SubTotal</div>
+                  <div className="col-span-2 text-center">Remove</div>
+                </div>
               </div>
+
+              {/* Cart Items */}
+              <div className="px-6">
+                {cartItems.map((item) => (
+                  <CartItemCard
+                    key={`${item.productId}-${item.size}`}
+                    productId={item.productId}
+                    title={item.productTitle}
+                    description={`Size: ${item.size}`}
+                    imageUrl={item.images}
+                    price={item.price}
+                    quantity={item.quantity}
+                    subTotal={item.subTotal}
+                    onQuantityChange={handleQuantityChange}
+                    onRemove={handleRemoveItem}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* Empty Cart */}
+          {isCartEmpty && (
+            <div className="py-10">
+              <EmptyCartMessage itemCount={0} onGoShopping={handleGoShopping} />
             </div>
-          </div>
-          <div className="col-span-2 text-center font-semibold">$25.00</div>
-          <div className="col-span-2 text-center">
-            <div className="flex items-center justify-center gap-2">
-              <button 
-                onClick={() => handleQuantityChange('sample-1', 1)}
-                className="w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors"
-              >
-                -
-              </button>
-              <span className="w-12 text-center">2</span>
-              <button 
-                onClick={() => handleQuantityChange('sample-1', 3)}
-                className="w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors"
-              >
-                +
-              </button>
-            </div>
-          </div>
-          <div className="col-span-2 text-center font-semibold">$50.00</div>
-          <div className="col-span-2 text-center">
-            <button 
-              onClick={() => handleRemoveItem('sample-1')}
-              className="text-red-500 hover:text-red-700 transition-colors px-4 py-2 rounded-lg hover:bg-red-50"
-            >
-              Remove
-            </button>
-          </div>
+          )}
+        </div>
+
+        {/* Right Section: Cart Summary */}
+        <div className="w-full lg:w-[320px] shrink-0">
+          <CartSummary
+            subTotal={cartTotal}
+            onCheckout={handleProceedToCheckout}
+            isCartEmpty={isCartEmpty}
+          />
         </div>
       </div>
     </div>

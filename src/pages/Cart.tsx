@@ -18,8 +18,8 @@ const ShoppingCartComponent: React.FC = () => {
     navigate("/");
   };
 
-  const handleRemoveItem = (productId: string) => {
-    removeFromCart(productId);
+  const handleRemoveItem = (productId: string, size: string) => {
+    removeFromCart(productId, size);
   };
 
   const handleQuantityChange = (productId: string, newQuantity: number, size: string) => {

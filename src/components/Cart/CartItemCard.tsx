@@ -11,7 +11,7 @@ interface CartItemCardProps {
   quantity: number;
   subTotal: number;
   onQuantityChange: (productId: string, newQuantity: number, size: string) => void;
-  onRemove: (productId: string) => void;
+  onRemove: (productId: string, size: string) => void;
   size: string;
 }
 
@@ -72,7 +72,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({
 
       <div className="col-span-2 text-center">
         <button
-          onClick={() => onRemove(productId)}
+          onClick={() => onRemove(productId, size)}
           className="text-red-500 hover:text-red-700 transition-colors px-4 py-2 rounded-lg hover:bg-red-50"
         >
           Remove

@@ -11,7 +11,7 @@ import { useUser } from "./UserContext";
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (product: Product, size: string, quantity?: number) => void;
-  removeFromCart: (productId: string) => void;
+  removeFromCart: (productId: string, size: string) => void;
   updateQuantity: (productId: string, quantity: number, size: string) => void;
   clearCart: () => void;
   cartTotal: number;
@@ -82,9 +82,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const removeFromCart = (productId: string) => {
-    setCartItems((prev) => prev.filter((item) => item.productId !== productId));
-  };
+ const removeFromCart = (productId: string, size: string) => {
+  setCartItems((prev) =>
+    prev.filter((item) => !(item.productId === productId && item.size === size))
+  );
+};
+
 
   const updateQuantity = (
     productId: string,

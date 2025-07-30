@@ -106,7 +106,7 @@ const Header: React.FC<HeaderProps> = ({ showNavbar = true }) => {
         }`}
             >
               <div className="w-full h-auto px-10 pt-4 pb-3 flex flex-row justify-between items-center">
-                <AllCategoriesButton />
+                <AllCategoriesButton withHome={true}/>
                 <GoVeganSwitch variant="mini" />
                 <SearchBox />
                 <div className="flex flex-row items-center justify-between space-x-12">

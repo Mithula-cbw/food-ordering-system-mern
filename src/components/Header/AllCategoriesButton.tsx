@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, ChevronDown, ChevronRight } from "lucide-react";
+import { Menu, ChevronDown, ChevronRight, Home } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,7 @@ import {
   HoverCardTrigger,
 } from "../ui/hover-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CategoryModule from "@/contexts/CategoryContext";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import GlobalRefreshButton from "../Commons/GlobalRefreshButton";
@@ -29,8 +29,19 @@ interface FormattedCategory {
   subItems?: string[];
 }
 
-const AllCategoriesButton: React.FC = () => {
+interface AllCategoriesButtonProps {
+  withHome?: boolean;
+}
+
+const AllCategoriesButton: React.FC<AllCategoriesButtonProps> = ({
+  withHome = false,
+}) => {
   const { categories, loading, error } = useContext(CategoryContext);
+  const navigate = useNavigate();
+
+  const homeBtnClick = () => {
+    navigate("/");
+  };
 
   const formattedCategories: FormattedCategory[] = categories.map((cat) => ({
     label: cat.name,
@@ -43,11 +54,30 @@ const AllCategoriesButton: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="bg-header-catbtn text-white rounded-full px-6 py-3 font-semibold text-lg flex items-center gap-2 hover:bg-header-catbtnhover transition-colors">
-          <Menu className="w-6 h-6" />
-          <span>ALL CATEGORIES</span>
-          <ChevronDown className="w-6 h-6" />
-        </Button>
+        {withHome ? (
+          <div className="flex flex-row justify-center items-center gap-1">
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                homeBtnClick(); // your custom logic
+              }}
+              className="bg-header-catbtn text-white rounded-l-full px-4 py-3 font-semibold text-lg flex items-center gap-2 hover:bg-header-catbtnhover transition-colors"
+            >
+              <Home className="w-8 h-8 ml-2" />
+            </Button>
+            <Button className="bg-header-catbtn text-white rounded-r-full px-6 py-3 font-semibold text-lg flex items-center gap-2 hover:bg-header-catbtnhover transition-colors">
+              <span>ALL CATEGORIES</span>
+              <ChevronDown className="w-6 h-6" />
+            </Button>
+          </div>
+        ) : (
+          <Button className="bg-header-catbtn text-white rounded-full px-6 py-3 font-semibold text-lg flex items-center gap-2 hover:bg-header-catbtnhover transition-colors">
+            <Menu className="w-6 h-6" />
+            <span>ALL CATEGORIES</span>
+            <ChevronDown className="w-6 h-6" />
+          </Button>
+        )}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="ml-4 w-72 pl-4 pr-2 rounded-xl text-lg z-30 pt-10 pb-2">

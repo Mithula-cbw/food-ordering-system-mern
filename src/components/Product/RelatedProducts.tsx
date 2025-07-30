@@ -3,6 +3,7 @@ import HomeSwiper from "../../components/Home/HomeSwiper";
 import { Product } from "../../types";
 import { useProductContext } from "@/contexts/ProductContext";
 import CategoryModule from "@/contexts/CategoryContext";
+import { useNavigate } from "react-router-dom";
 
 interface RelatedProductsProps {
   categoryId: string;
@@ -15,8 +16,12 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ categoryId }) => {
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-    const { categories } = useContext(CategoryContext);
-  
+  const { categories } = useContext(CategoryContext);
+  const navigate = useNavigate();
+
+  const onViewAllClick = () => {
+    navigate(`/categories/${categoryId}`);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -40,7 +45,9 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ categoryId }) => {
           title="RELATED PRODUCTS"
           subtitle="Explore products related to this category"
           showTabs={false}
-          categories={categories} 
+          categories={categories}
+          showViewAllButton={true}
+          onViewAllClick={onViewAllClick}
           products={relatedProducts}
           autoplay={false}
           autoplayDelay={0}

@@ -1,5 +1,6 @@
 import React from 'react';
-import { ShoppingCart, Package } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
+import CartSummary from '@/components/Cart/CartSummary';
 
 const ShoppingCartComponent: React.FC = () => {
   // Mock click handlers
@@ -67,41 +68,7 @@ const ShoppingCartComponent: React.FC = () => {
       </div>
 
       {/* Cart Totals Sidebar */}
-      <div className="fixed right-6 top-24 w-80 bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-6">CART TOTALS</h3>
-        
-        <div className="space-y-4 mb-6">
-          <div className="flex justify-between">
-            <span className="text-gray-600">SubTotal</span>
-            <span className="text-green-600 font-semibold">$0.00</span>
-          </div>
-          
-          <div className="flex justify-between">
-            <span className="text-gray-600">Shipping</span>
-            <span className="font-semibold">$20</span>
-          </div>
-          
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Estimate For</span>
-            <span className="text-gray-500">Colombo</span>
-          </div>
-          
-          <hr className="my-4" />
-          
-          <div className="flex justify-between text-lg font-bold">
-            <span>Total</span>
-            <span className="text-red-600">$20.00</span>
-          </div>
-        </div>
-        
-        <button 
-          onClick={handleProceedToCheckout}
-          className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-4 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center gap-2"
-        >
-          <Package className="w-5 h-5" />
-          Proceed To Checkout
-        </button>
-      </div>
+        <CartSummary subTotal={20} onCheckout={handleProceedToCheckout}/>
 
       {/* Example of how items would look when added */}
       <div className="mt-8 bg-white rounded-lg shadow-sm p-6" style={{ display: 'none' }}>

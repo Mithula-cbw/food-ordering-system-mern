@@ -104,14 +104,27 @@ const Product = () => {
       return;
     }
     addToCart(product, selectedSize, quantity);
-    toast.success(
-      <div className="flex items-center gap-3">
-        <CheckCircle className="text-green-600 w-5 h-5" />
-        <span className="text-black font-semibold">
-          {quantity} {product.name} added to cart!
-        </span>
-      </div>
-    )
+    if (isInStock) {
+      toast.success(
+        <div className="flex items-center gap-3">
+          <CheckCircle className="text-green-600 w-5 h-5" />
+          <span className="text-black font-semibold">
+            {quantity} {product.name} added to cart!
+          </span>
+        </div>
+      );
+    } else
+      toast.success(
+        <div className="flex items-center gap-3">
+          <CheckCircle className="text-orange-600 w-5 h-5" />
+          <div className="flex flex-col justify-center items-start">
+            <span className="text-black font-semibold">
+              {quantity} {product.name} added to cart!
+            </span>
+            <span className="text-red-500 font-semibold">Out of Stock</span>
+          </div>
+        </div>
+      );
   };
 
   const handleWishlistClick = async (e: React.MouseEvent) => {

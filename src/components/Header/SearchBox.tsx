@@ -1,11 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import SearchSuggestions from "./SearchSuggestions";
+import { SearchSug } from "../../types";
+import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "@/contexts/GlobalContext";
 
 const SearchBar: React.FC = () => {
   const [searchStr, setSearchStr] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const {addRecentSearch} = useGlobalContext()
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -15,6 +20,14 @@ const SearchBar: React.FC = () => {
         : "";
     setSearchStr(capitalized);
   };
+
+  const handleSuggetionSelect = (search : SearchSug) =>{
+    console.log(search);
+    setSearchStr(search.name);
+    addRecentSearch(search);
+    setIsFocused(false);
+    navigate(`/product/${search.id}`);
+  }
 
   // Close suggestion panel on outside click
   useEffect(() => {
@@ -47,7 +60,7 @@ const SearchBar: React.FC = () => {
       </div>
 
       {/* Show the suggestion component on focus */}
-      {isFocused && <SearchSuggestions query={searchStr} setQuery={setSearchStr}/>}
+      {isFocused && <SearchSuggestions query={searchStr} handleSuggestionSelect={handleSuggetionSelect} />}
     </div>
   );
 };

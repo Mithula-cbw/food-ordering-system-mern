@@ -1,15 +1,16 @@
 import React from "react";
-import RecentSearchList from "./Other/RecentSearches";
-import PopularSearchList from "./Other/PopularSearchList";
+// import RecentSearchList from "./Other/RecentSearches";
+// import PopularSearchList from "./Other/PopularSearchList";
 import SearchSuggestionList from "./Other/SearchSuggestionList";
+import { SearchSug } from "../../types";
 
 interface SearchSuggestionsProps {
   query: string;
-  setQuery: (query: string) => void;
+  handleSuggestionSelect: (search: SearchSug) => void;
 }
 
 
-const popularSearches = ["iPhone 15", "Smart Watch", "Air Fryer"];
+// const popularSearches = ["iPhone 15", "Smart Watch", "Air Fryer"];
 
 
 const tabTitleStyles =
@@ -17,7 +18,7 @@ const tabTitleStyles =
 
 const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
   query,
-  setQuery,
+  handleSuggestionSelect,
 }) => {
   const trimmedQuery = query.trim();
 
@@ -25,20 +26,20 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
     <div className="absolute z-40 w-full mt-1 mb-4 bg-white border border-gray-200 rounded-xl shadow-lg py-4 px-6 space-y-4">
       {trimmedQuery === "" ? (
         <>
-          <RecentSearchList
-            setQuery={setQuery}
+          {/* <RecentSearchList
+            setQuery={handleSuggetionSelect}
             styleTitle={tabTitleStyles}
           />
           <PopularSearchList
             searches={popularSearches}
-            onSelect={setQuery}
+            onSelect={handleSuggetionSelect}
             styleTitle={tabTitleStyles}
-          />
+          /> */}
         </>
       ) : (
         <SearchSuggestionList
           trimmedQuery={trimmedQuery}
-          onSelect={setQuery}
+          onSelect={handleSuggestionSelect}
           styleTitle={tabTitleStyles}
         />
       )}

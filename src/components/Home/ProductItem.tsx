@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Heart, Maximize2 } from "lucide-react";
 import { Product } from "../../types";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { toast } from "sonner";
 import { useUser } from "../../contexts/UserContext";
@@ -27,6 +27,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const { addRecentlyVisited } = useGlobalContext();
+  const navigate = useNavigate();
 
   const removeItem = async (id: string) => {
     try {
@@ -38,6 +39,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
       toast.error("Failed to remove item. Please try again!");
     }
   };
+
+  const [isFading, setIsFading] = useState(false);
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    addRecentlyVisited(product);
+    setIsFading(true); // trigger fade-out
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    setTimeout(() => {
+      navigate(`/product/${product._id}`);
+    }, 400); 
+  };
+
 
  const onWishlistClick = (e: React.MouseEvent) =>
   handleWishlistClick(e, {
@@ -56,10 +73,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <>
-      <Link to={`/product/${product._id}`} className="block group"
-        onClick={() => {
-          addRecentlyVisited(product);
-        }}>
+      <div  className={`block group cursor-pointer transition-opacity duration-300 ${isFading ? "opacity-0" : "opacity-100"}`}
+        onClick={handleClick}>
         <div
           className={`bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 ${className}`}
           onMouseEnter={() => setIsHovered(true)}
@@ -181,7 +196,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </>
   );
 };

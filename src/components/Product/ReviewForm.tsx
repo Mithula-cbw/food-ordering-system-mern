@@ -4,6 +4,8 @@ import { Button } from "../ui/button";
 import { useUser } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { postData } from "../../utils/Api";
+import { toast } from "sonner";
+import { CheckCircle } from "lucide-react";
 
 interface ReviewFormProps {
   productID: string;
@@ -68,11 +70,19 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         formPayload
       );
 
-      if (!result) {
+      if (!result) {        
+        toast.error("Failed to submit review. Please try again!");
         throw new Error("Failed to submit review");
       }
       setLoading(false);
-      // console.log("Review submitted:", result);
+      toast.success(
+        <div className="flex items-center gap-3">
+          <CheckCircle className="text-green-600 w-5 h-5" />
+          <span className="text-black font-semibold">
+            Review submitted successfully!
+          </span>
+        </div>
+      );
 
       // Reset form
       setReviewData({ review: "", customerRating: 0 });
@@ -80,6 +90,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       // Refresh reviews list if provided
       if (onReviewSubmitted) onReviewSubmitted();
     } catch (error) {
+      setLoading(false);
+      toast.error("Error submitting review. Please try again!");
       console.error("Submit error:", error);
     }
   };

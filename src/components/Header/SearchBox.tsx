@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiX } from "react-icons/fi"; // FiX added here
 import SearchSuggestions from "./SearchSuggestions";
 import { SearchSug } from "../../types";
 import { useNavigate } from "react-router-dom";
@@ -9,30 +9,34 @@ const SearchBar: React.FC = () => {
   const [searchStr, setSearchStr] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const {addRecentSearch} = useGlobalContext()
+  const { addRecentSearch } = useGlobalContext();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const capitalized =
-      value.length > 0
-        ? value.charAt(0).toUpperCase() + value.slice(1)
-        : "";
+      value.length > 0 ? value.charAt(0).toUpperCase() + value.slice(1) : "";
     setSearchStr(capitalized);
   };
 
-  const handleSuggetionSelect = (search : SearchSug) =>{
-    console.log(search);
+  const handleClearBtn = () => {
+    setSearchStr("");
+    setIsFocused(true);
+  }
+
+  const handleSuggetionSelect = (search: SearchSug) => {
     setSearchStr(search.name);
     addRecentSearch(search);
     setIsFocused(false);
     navigate(`/product/${search.id}`);
-  }
+  };
 
-  // Close suggestion panel on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setIsFocused(false);
       }
     };
@@ -51,6 +55,19 @@ const SearchBar: React.FC = () => {
           onFocus={() => setIsFocused(true)}
           className="flex-grow bg-gray-100 outline-none text-gray-700 placeholder-gray-500 text-lg"
         />
+
+        {/* Clear button */}
+        {searchStr && (
+          <button
+            type="button"
+            onClick={handleClearBtn}
+            className="ml-2 p-1 rounded-full hover:bg-red-100 transition-colors"
+            aria-label="Clear"
+          >
+            <FiX className="text-xl text-gray-600" />
+          </button>
+        )}
+
         <button
           type="button"
           className="ml-2 p-2 rounded-full hover:bg-blue-100 transition-colors"
@@ -59,8 +76,12 @@ const SearchBar: React.FC = () => {
         </button>
       </div>
 
-      {/* Show the suggestion component on focus */}
-      {isFocused && <SearchSuggestions query={searchStr} handleSuggestionSelect={handleSuggetionSelect} />}
+      {isFocused && (
+        <SearchSuggestions
+          query={searchStr}
+          handleSuggestionSelect={handleSuggetionSelect}
+        />
+      )}
     </div>
   );
 };

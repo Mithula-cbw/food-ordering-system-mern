@@ -10,6 +10,7 @@ import SignUp from './pages/SignUp';
 import WishList from './pages/WishList';
 import CategoryView from './layouts/CategoryView';
 import Product from './pages/Product';
+import Cart from './pages/Cart';
 
 
 export const AppRoutes = () => {
@@ -22,7 +23,7 @@ export const AppRoutes = () => {
       <Route path="/blog" element={<MainLayout ><Blog /></MainLayout>}/>
       <Route path="/contact" element={<MainLayout ><div>Contact</div></MainLayout>}/>
       <Route path="/favorites" element={<MainLayout ><WishList /></MainLayout>}/>
-      <Route path="/cart" element={<MainLayout ><div>cart</div></MainLayout>}/>
+      <Route path="/cart" element={<MainLayout ><Cart /></MainLayout>}/>
       <Route path="/sign-in" element={<AuthLayout ><SignIn /></AuthLayout>}/>
       <Route path="/sign-up" element={<AuthLayout ><SignUp /></AuthLayout>}/>
     </Routes>

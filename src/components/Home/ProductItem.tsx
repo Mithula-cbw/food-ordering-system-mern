@@ -46,13 +46,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
     e.preventDefault();
 
     addRecentlyVisited(product);
-    setIsFading(true); // trigger fade-out
-
+    setIsFading(true); // trigger fade-out    
+    setIsOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     setTimeout(() => {
       navigate(`/product/${product._id}`);
-    }, 400); 
+    }, 200); 
   };
 
 

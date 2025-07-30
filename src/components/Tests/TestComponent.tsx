@@ -278,11 +278,11 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   headerClassName = "",
   swiperClassName = ""
 }) => {
-  console.log("Received products in HomeSwiper:", products);
+  // console.log("Received products in HomeSwiper:", products);
   const [activeTab, setActiveTab] = useState(0);
 
   const getFilteredProducts = () => {
-    console.log('Filtering products for active tab:', products);
+    // console.log('Filtering products for active tab:', products);
     if (!showTabs || categories.length === 0) return products;
     
     const activeCategory = categories[activeTab];
@@ -294,7 +294,7 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   };
 
   const filteredProducts = getFilteredProducts();
-  console.log('Filtered products:', filteredProducts);
+  // console.log('Filtered products:', filteredProducts);
 
   const renderProducts = () => {
     if (filteredProducts.length === 0) return <NoProductsFound />;
@@ -389,7 +389,7 @@ const HomeSwiperDemo: React.FC = () => {
     { id: 8, name: 'Fish Burger', price: 9.99, discount: 8, category: { name: 'Burger' } }
   ];
 
-  console.log('Products being passed to HomeSwiper:', specialOfferProducts);
+  // console.log('Products being passed to HomeSwiper:', specialOfferProducts);
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">

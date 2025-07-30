@@ -1,24 +1,24 @@
 import React from "react";
 import { Clock } from "lucide-react";
+import { useGlobalContext } from "@/contexts/GlobalContext";
+import { SearchSug } from "../../../types";
 
 interface RecentSearchListProps {
-  setQuery: (query: string) => void;
+  setQuery: (query: SearchSug) => void;
   styleTitle?: string;
 }
-
-const recentSearches = ["Shoes", "Camera", "Wireless Mouse", "laptop", "burger bun 6#"];
 
 const RecentSearchList: React.FC<RecentSearchListProps> = ({
   setQuery,
   styleTitle = "",
 }) => {
-  const handleClick = (item: string) => {
+  const { recentSearches, clearRecentSearches } = useGlobalContext();
+
+  const handleClick = (item: SearchSug) => {
     setQuery(item);
   };
 
-  const clearHistory = () => {
-    alert("Clear history clicked! (Dummy function)");
-  };
+  if (recentSearches.length === 0) return null;
 
   return (
     <div>
@@ -27,7 +27,7 @@ const RecentSearchList: React.FC<RecentSearchListProps> = ({
           Recent Searches
         </div>
         <button
-          onClick={clearHistory}
+          onClick={clearRecentSearches}
           className="text-xs text-blue-500 hover:underline cursor-pointer"
         >
           Clear History
@@ -42,7 +42,7 @@ const RecentSearchList: React.FC<RecentSearchListProps> = ({
             onClick={() => handleClick(item)}
           >
             <Clock className="w-4 h-4 mr-2 text-gray-400" />
-            <span className="text-gray-600 hover:text-gray-800">{item}</span>
+            <span className="text-gray-600 hover:text-gray-800">{item.name}</span>
           </li>
         ))}
       </ul>

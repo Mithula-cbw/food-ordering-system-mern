@@ -19,7 +19,7 @@ export const postData = async <T, U = unknown>(
   formData: U
 ): Promise<T | null> => {
   try {
-    console.log("Sending this data:", formData);
+    // console.log("Sending this data:", formData);
     const { data }: AxiosResponse<T> = await axios.post(`${BASE_URL}${url}`, formData);
     return data;
   } catch (error) {

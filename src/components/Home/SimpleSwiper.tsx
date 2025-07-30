@@ -36,7 +36,7 @@ const SimpleSwiper: React.FC<SimpleSwiperProps> = ({
   };
 
   const translatePercentage = (currentSlide * 100) / slidesPerView;
-  console.log("loop >",totalSlides,slidesPerView)
+  // console.log("loop >",totalSlides,slidesPerView)
   return (
     <div className="relative overflow-hidden">
       <div className="flex items-center">

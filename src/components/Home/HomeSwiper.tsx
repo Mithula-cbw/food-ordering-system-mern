@@ -8,7 +8,6 @@ import SimpleSwiper from "./SimpleSwiper";
 import { Skeleton } from "../ui/skeleton";
 import { useUser } from "../../contexts/UserContext"; // or wherever your user context is
 
-
 const HomeSwiper: React.FC<HomeSwiperProps> = ({
   title,
   subtitle,
@@ -29,7 +28,7 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   loading = false,
   error = "",
 }) => {
-  console.log("Received products in HomeSwiper:", products);
+  // console.log("Received products in HomeSwiper:", products);
   const [activeTab, setActiveTab] = useState(0);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -110,30 +109,31 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
     }
   };
 
-const getFilteredProducts = () => {
-  console.log("Filtering products for active tab:", products);
+  const getFilteredProducts = () => {
+    // console.log("Filtering products for active tab:", products);
 
-  if (!showTabs || categories.length === 0) return filterByVegan(products);
+    if (!showTabs || categories.length === 0) return filterByVegan(products);
 
-  const activeCategory = categories[activeTab];
-  if (activeCategory.name.toLowerCase() === "all") return filterByVegan(products);
+    const activeCategory = categories[activeTab];
+    if (activeCategory.name.toLowerCase() === "all")
+      return filterByVegan(products);
 
-  const categoryFiltered = products.filter(
-    (item) =>
-      item.category?.name?.toLowerCase() ===
-      activeCategory.name?.toLowerCase()
-  );
+    const categoryFiltered = products.filter(
+      (item) =>
+        item.category?.name?.toLowerCase() ===
+        activeCategory.name?.toLowerCase()
+    );
 
-  return filterByVegan(categoryFiltered);
-};
+    return filterByVegan(categoryFiltered);
+  };
 
-// helper to filter by isVegan if toggle is on
-const filterByVegan = (items: Product[]) => {
-  if (!isVeg) return items;
-  return items.filter((item) => item.type == "Vegetarian"); // assumes product has isVegan field
-};
+  // helper to filter by isVegan if toggle is on
+  const filterByVegan = (items: Product[]) => {
+    if (!isVeg) return items;
+    return items.filter((item) => item.type == "Vegetarian"); // assumes product has isVegan field
+  };
 
-const filteredProducts = getFilteredProducts();
+  const filteredProducts = getFilteredProducts();
 
   const renderProducts = () => {
     if (loading || error) {
@@ -276,9 +276,12 @@ const filteredProducts = getFilteredProducts();
             : showViewAllButton && (
                 <button
                   onClick={onViewAllClick}
-                  className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  className="group inline-flex items-center gap-2 px-5 py-2.5 text-gray-600 text-lg font-medium rounded-full shadow-md focus:outline-none focus:ring-2 transition-all"
                 >
-                  View All →
+                  View All
+                  <span className="transform transition-transform group-hover:translate-x-1">
+                    →
+                  </span>
                 </button>
               )}
         </div>

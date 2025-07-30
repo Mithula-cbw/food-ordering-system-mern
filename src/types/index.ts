@@ -52,6 +52,14 @@ export interface HomeSwiperProps {
   error?: string | null; 
 }
 
+export interface Review {
+  _id: string;
+  productId: string;
+  customerName: string;
+  customerRating: number;
+  review: string;
+}
+
 export interface ProductsContextType {
   products: Product[];
   loading: boolean;
@@ -81,6 +89,26 @@ export interface Category {
   description: string;
   __v: number;
   id: string;
+}
+
+
+export interface CartItem {
+  id?: string;
+  productTitle: string;
+  images: string;
+  rating: number;
+  price: number;
+  quantity: number;
+  subTotal: number;
+  productId: string;
+  userId: string;
+  size: string;
+}
+
+
+export interface SearchSug {
+  name: string;
+  id : string;
 }
 
 export interface CategoryContextType {

@@ -5,7 +5,6 @@ import {
   ArrowLeftRight,
   Minus,
   Plus,
-  Star,
   X,
   CheckCircle,
 } from "lucide-react";
@@ -16,6 +15,8 @@ import { useFavorites } from "../../contexts/FavoritesContext";
 import { useUser } from "../../contexts/UserContext";
 import ShinyButton from "../Commons/ShinyButton";
 import { Link } from "react-router-dom";
+import { formatPrice } from "../../utils/helpers";
+import RenderStars from "../Commons/RenderStars";
 
 type ProductZoomProps = {
   isInWishlist?: boolean;
@@ -39,19 +40,6 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
 
   const modalRoot = document.getElementById("ProductZoom-root");
   if (!modalRoot) return null;
-
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`w-4 h-4 ${
-          i < Math.floor(rating)
-            ? "fill-yellow-400 text-yellow-400"
-            : "text-gray-300"
-        }`}
-      />
-    ));
-  };
 
   const removeItem = async (id: string) => {
     try {
@@ -106,13 +94,6 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
   const triggerFromOtherComponent = () => {
     setShine(true);
     setTimeout(() => setShine(false), 1200); // prevent permanent true
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(price);
   };
 
   const discountPercentage = product.oldPrice
@@ -217,7 +198,7 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
                 </Link>
                 {product.rating > 0 && (
                   <div className="flex items-center space-x-1">
-                    {renderStars(product.rating)}
+                    <RenderStars rating={product.rating}  />
                     <span className="text-sm text-gray-600 ml-2 user-select-none">
                       ({product.rating})
                     </span>
@@ -318,7 +299,7 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
 
               {/* Action Buttons */}
               <div className="flex space-x-3">
-                <ShinyButton triggerGlow={shine} className="flex-1">
+                <ShinyButton triggerGlow={shine} className="flex-1 rounded-md">
                   <div className="w-full flex flex-col items-center justify-center gap-1">
                     <span className="text-base font-semibold tracking-wide">
                       Add To Cart

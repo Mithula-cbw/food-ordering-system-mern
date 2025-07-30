@@ -8,6 +8,9 @@ import { CategoryProvider } from "./contexts/CategoryContext";
 import { FavoritesProvider } from "./contexts/FavoritesContext";
 import { UserProvider } from "./contexts/UserContext";
 import { ProductProvider } from "./contexts/ProductContext";
+import ScrollToTop from "./utils/ScrollToTop";
+import { GlobalProvider } from "./contexts/GlobalContext";
+import { CartProvider } from "./contexts/CartContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -15,10 +18,15 @@ createRoot(document.getElementById("root")!).render(
       <UserProvider>
         <ProductProvider>
           <CategoryProvider>
-            <FavoritesProvider>
-              <AppRoutes />
-              <Toaster />
-            </FavoritesProvider>
+            <CartProvider>
+              <FavoritesProvider>
+                <GlobalProvider>
+                  <ScrollToTop />
+                  <AppRoutes />
+                  <Toaster />
+                </GlobalProvider>
+              </FavoritesProvider>
+            </CartProvider>
           </CategoryProvider>
         </ProductProvider>
       </UserProvider>

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Star, Heart, Maximize2, CheckCircle } from "lucide-react";
+import { Heart, Maximize2 } from "lucide-react";
 import { Product } from "../../types";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { toast } from "sonner";
 import { useUser } from "../../contexts/UserContext";
-import { deleteData, postData } from "../../utils/Api";
+import { deleteData } from "../../utils/Api";
 import ProductZoom from "./ProductZoom";
+import { formatPrice, truncateText } from "../../utils/helpers";
+import RenderStars from "../Commons/RenderStars";
+import { handleWishlistClick } from "../Commons/AddToWishlist";
+import { useGlobalContext } from "../../contexts/GlobalContext";
 
 interface ProductCardRowProps {
   product: Product;
@@ -21,35 +25,7 @@ const ProductCardRow: React.FC<ProductCardRowProps> = ({
   const [isInWishlist, setIsInWishlist] = useState(false);
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
-
-  const renderStars = (rating: number) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-
-    for (let i = 1; i <= 5; i++) {
-      if (i <= fullStars) {
-        stars.push(
-          <Star key={i} className="w-5 h-5 text-app-main fill-app-main" />
-        );
-      } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(
-          <div key={i} className="relative w-5 h-5">
-            <Star className="w-5 h-5 text-gray-300 absolute" />
-            <Star className="w-5 h-5 text-orange-400 fill-orange-400 absolute clip-half" />
-          </div>
-        );
-      } else {
-        stars.push(<Star key={i} className="w-5 h-5 text-gray-300" />);
-      }
-    }
-    return stars;
-  };
-
-  const truncateDescription = (text: string, maxLength: number = 80) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + "...";
-  };
+  const { addRecentlyVisited } = useGlobalContext();
 
   const removeItem = async (id: string) => {
     try {
@@ -62,44 +38,14 @@ const ProductCardRow: React.FC<ProductCardRowProps> = ({
     }
   };
 
-  const handleWishlistClick = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (isInWishlist) {
-      removeItem(product._id);
-    } else {
-      const data = {
-        productTitle: product.name,
-        images: product.images[0],
-        rating: Number(product.rating),
-        price: product.price,
-        productId: product._id,
-        userId: user?.id,
-      };
-
-      try {
-        const response = await postData("/api/myList/add/", data);
-
-        if (response) {
-          toast.success(
-            <div className="flex items-center gap-3">
-              <CheckCircle className="text-green-600 w-5 h-5" />
-              <span className="text-black font-semibold">
-                Item added to wishlist!
-              </span>
-            </div>
-          );
-          refreshFavorites();
-        } else {
-          toast.error("Failed to add to wishlist.");
-        }
-      } catch (err) {
-        console.error("Wishlist error:", err);
-        toast.error("An error occurred.");
-      }
-    }
-  };
+  const onWishlistClick = (e: React.MouseEvent) =>
+  handleWishlistClick(e, {
+    product,
+    user,
+    isInWishlist,
+    removeItem,
+    refreshFavorites,
+  });
 
   const isInStock = product.countInStock.toLowerCase() === "in stock";
   useEffect(() => {
@@ -111,7 +57,11 @@ const ProductCardRow: React.FC<ProductCardRowProps> = ({
     <>
       <Link
         to={`/product/${product._id}`}
-        className={`block group ${className}`}
+        className={`block group ${className}`
+      }
+      onClick={() => {
+          addRecentlyVisited(product);
+        }}
       >
         <div className="flex flex-row bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 h-[120px] relative">
           {/* Image Section */}
@@ -168,13 +118,13 @@ const ProductCardRow: React.FC<ProductCardRowProps> = ({
                 </h3>
                 {/* Description */}
                 <p className="text-gray-800 text-sm mb-1 leading-relaxed line-clamp-3 font-medium">
-                  {truncateDescription(product.description)}
+                  {truncateText(product.description, 120)}
                 </p>
               </div>
               {/* Rating and Stock */}
               <div className="flex items-center justify-start space-x-6 mb-2">
                 <div className="flex items-center gap-1">
-                  {renderStars(product.rating)}
+                  <RenderStars rating={product.rating}  />
                 </div>
                 <span
                 className={`text-sm font-semibold ${
@@ -203,7 +153,7 @@ const ProductCardRow: React.FC<ProductCardRowProps> = ({
                     <Maximize2 className="w-5 h-5 text-gray-700" />
                   </button>
                   <button
-                    onClick={handleWishlistClick}
+                    onClick={onWishlistClick}
                     className={`w-9 h-9 backdrop-blur-sm rounded-full flex items-center justify-center shadow transition-transform duration-200 hover:scale-110 ${
                       isInWishlist
                         ? "bg-white hover:bg-red-50"
@@ -226,11 +176,11 @@ const ProductCardRow: React.FC<ProductCardRowProps> = ({
                   <div className="flex items-center gap-2">
                     {product.oldPrice && (
                       <span className="text-gray-400 text-lg line-through">
-                        ${product.oldPrice}
+                        {formatPrice(product.oldPrice)}
                       </span>
                     )}
                     <span className="text-green-700 text-xl font-bold">
-                      ${product.price}
+                      {formatPrice(product.price)}
                     </span>
                   </div>
                 </div>

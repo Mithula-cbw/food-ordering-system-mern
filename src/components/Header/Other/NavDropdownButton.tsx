@@ -1,41 +1,22 @@
 import React from "react";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
+import { Link } from "react-router-dom";
 import NavButton from "./NavButton";
 
 interface NavDropdownButtonProps {
   name: string;
   icon?: React.ReactNode;
   link?: string;
-  content: React.ReactNode;
 }
 
 const NavDropdownButton: React.FC<NavDropdownButtonProps> = ({
   name,
   icon,
   link = "#",
-  content,
 }) => {
   return (
-    <NavigationMenu className="flex-1">
-      <NavigationMenuList className="flex w-full flex-row justify-between items-center gap-6">
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>
-            <NavButton name={name} icon={icon} link={link} />
-          </NavigationMenuTrigger>
-          <NavigationMenuContent className="hidden lg:block ">
-            <div className="p-4 w-64 min-h-40">{content}</div>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-      <NavigationMenuViewport className="hidden lg:block bg-white shadow-lg p-6 rounded-2xl mt-2" />
-    </NavigationMenu>
+    <Link to={link} className="flex items-center">
+      <NavButton name={name} icon={icon} link={link} />
+    </Link>
   );
 };
 

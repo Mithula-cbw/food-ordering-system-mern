@@ -2,22 +2,19 @@ import React from "react";
 import RecentSearchList from "./Other/RecentSearches";
 import PopularSearchList from "./Other/PopularSearchList";
 import SearchSuggestionList from "./Other/SearchSuggestionList";
+import { SearchSug } from "../../types";
 
 interface SearchSuggestionsProps {
   query: string;
-  setQuery: (query: string) => void;
+  handleSuggestionSelect: (search: SearchSug) => void;
 }
-
-
-const popularSearches = ["iPhone 15", "Smart Watch", "Air Fryer"];
-
 
 const tabTitleStyles =
   "text-sm font-semibold text-gray-400 mb-1 block border-b pb-2 mb-2 border-gray-400";
 
 const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
   query,
-  setQuery,
+  handleSuggestionSelect,
 }) => {
   const trimmedQuery = query.trim();
 
@@ -26,19 +23,18 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
       {trimmedQuery === "" ? (
         <>
           <RecentSearchList
-            setQuery={setQuery}
+            setQuery={handleSuggestionSelect}
             styleTitle={tabTitleStyles}
           />
           <PopularSearchList
-            searches={popularSearches}
-            onSelect={setQuery}
+            onSelect={handleSuggestionSelect}
             styleTitle={tabTitleStyles}
           />
         </>
       ) : (
         <SearchSuggestionList
           trimmedQuery={trimmedQuery}
-          onSelect={setQuery}
+          onSelect={handleSuggestionSelect}
           styleTitle={tabTitleStyles}
         />
       )}

@@ -60,7 +60,7 @@ const ProductReviewSection: React.FC<ProductReviewSectionProps> = ({
 
   return (
     <div className="w-full mx-auto mt-12 mb-12 px-6 bg-gray-50 h-fit">
-      <div className="bg-white rounded-lg shadow-lg p-8 bg-app-bannerbtnhover/15">
+      <div className="rounded-lg shadow-lg p-8 bg-app-bannerbtnhover/15">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Product Details
           <span className="text-green-500/80 font-semibold ml-2">

@@ -9,6 +9,7 @@ import { FavoritesProvider } from "./contexts/FavoritesContext";
 import { UserProvider } from "./contexts/UserContext";
 import { ProductProvider } from "./contexts/ProductContext";
 import ScrollToTop from "./utils/ScrollToTop";
+import { GlobalProvider } from "./contexts/GlobalContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -17,9 +18,11 @@ createRoot(document.getElementById("root")!).render(
         <ProductProvider>
           <CategoryProvider>
             <FavoritesProvider>
-              <ScrollToTop />
-              <AppRoutes />
-              <Toaster />
+              <GlobalProvider>
+                <ScrollToTop />
+                <AppRoutes />
+                <Toaster />
+              </GlobalProvider>
             </FavoritesProvider>
           </CategoryProvider>
         </ProductProvider>

@@ -11,6 +11,7 @@ import AuthActionButton from "../components/Auth/AuthActionButton";
 import { Link } from "react-router-dom";
 import AuthDivider from "../components/Auth/AuthDivider";
 import { User } from "../types";
+import { useCart } from "@/contexts/CartContext";
 
 const SignIn = () => {
   const [email, setEmail] = useState<string>("");
@@ -19,6 +20,7 @@ const SignIn = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const {syncCartOnLogin} = useCart()
 
   //set user in use context
   const { setUser } = useUser();
@@ -68,8 +70,9 @@ const SignIn = () => {
         setTimeout(() => {
           window.scrollTo({ top: 0, behavior: "smooth" });
         }, 500);
-        
 
+        await syncCartOnLogin(user);
+        
         setTimeout(() => {
           navigate("/");
         }, 1200);

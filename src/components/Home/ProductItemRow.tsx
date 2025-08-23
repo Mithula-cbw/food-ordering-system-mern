@@ -23,7 +23,7 @@ const ProductCardRow: React.FC<ProductCardRowProps> = ({
 }) => {
   const { favorites, refreshFavorites } = useFavorites();
   const [isInWishlist, setIsInWishlist] = useState(false);
-  const { user } = useUser();
+  const { user,isLoggedIn } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const { addRecentlyVisited } = useGlobalContext();
 
@@ -42,6 +42,7 @@ const ProductCardRow: React.FC<ProductCardRowProps> = ({
   handleWishlistClick(e, {
     product,
     user,
+    isLoggedIn,
     isInWishlist,
     removeItem,
     refreshFavorites,

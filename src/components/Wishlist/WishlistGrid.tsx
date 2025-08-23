@@ -41,7 +41,7 @@ const WishlistGrid: React.FC<WishlistGridProps> = ({ loading }) => {
 
   return (
     <div className="md:w-2/3 lg:w-3/4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {loading ? (
           <div className="text-gray-500 col-span-full flex items-center justify-center py-12">
             <div className="text-center">

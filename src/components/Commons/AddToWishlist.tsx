@@ -6,6 +6,7 @@ import { Product, User } from "../../types";
 interface WishlistData {
   product: Product
   user: User | null;
+  isLoggedIn : boolean;
   isInWishlist: boolean;
   removeItem: (id: string) => void;
   refreshFavorites: () => void;
@@ -13,10 +14,16 @@ interface WishlistData {
 
 export const handleWishlistClick = async (
   e: React.MouseEvent,
-  { product, user, isInWishlist, removeItem, refreshFavorites }: WishlistData
+  { product, user, isLoggedIn, isInWishlist, removeItem, refreshFavorites }: WishlistData
 ) => {
   e.preventDefault();
   e.stopPropagation();
+
+  if (!isLoggedIn || !user?.id) {
+  toast.error("You must be logged in to add items to wishlist.");
+  return;
+}
+
 
   if (isInWishlist) {
     removeItem(product._id);

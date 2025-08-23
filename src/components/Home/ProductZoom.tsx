@@ -17,6 +17,7 @@ import ShinyButton from "../Commons/ShinyButton";
 import { Link } from "react-router-dom";
 import { formatPrice } from "../../utils/helpers";
 import RenderStars from "../Commons/RenderStars";
+import { useCart } from "../../contexts/CartContext";
 
 type ProductZoomProps = {
   isInWishlist?: boolean;
@@ -36,7 +37,8 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
   const [selectedSize, setSelectedSize] = useState(product.size[0] || "");
   const isInStock = product.countInStock.toLowerCase() === "in stock";
   const { refreshFavorites } = useFavorites();
-  const { user } = useUser();
+  const { user, isLoggedIn } = useUser();
+  const { addToCart } = useCart();
 
   const modalRoot = document.getElementById("ProductZoom-root");
   if (!modalRoot) return null;
@@ -56,6 +58,11 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
     e.preventDefault();
     e.stopPropagation();
 
+    if (!isLoggedIn || !user?.id) {
+      toast.error("You must be logged in to add items to wishlist.");
+      return;
+    }
+
     if (isInWishlist) {
       removeItem(product._id);
     } else {
@@ -65,7 +72,7 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
         rating: Number(product.rating),
         price: product.price,
         productId: product._id,
-        userId: user?.id,
+        userId: user.id,
       };
 
       try {
@@ -91,6 +98,45 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
     }
   };
 
+  const handleAddToCart = () => {
+    if (!product) {
+      console.error("Product is null.");
+      return;
+    }
+
+    if (!selectedSize) {
+      alert("Please select a size.");
+      return;
+    }
+
+    if (quantity < 1) {
+      alert("Quantity must be at least 1.");
+      return;
+    }
+    addToCart(product, selectedSize, quantity);
+    if (isInStock) {
+      toast.success(
+        <div className="flex items-center gap-3">
+          <CheckCircle className="text-green-600 w-5 h-5" />
+          <span className="text-black font-semibold">
+            {quantity} {product.name} added to cart!
+          </span>
+        </div>
+      );
+    } else
+      toast.success(
+        <div className="flex items-center gap-3">
+          <CheckCircle className="text-orange-600 w-5 h-5" />
+          <div className="flex flex-col justify-center items-start">
+            <span className="text-black font-semibold">
+              {quantity} {product.name} added to cart!
+            </span>
+            <span className="text-red-500 font-semibold">Out of Stock</span>
+          </div>
+        </div>
+      );
+  };
+
   const triggerFromOtherComponent = () => {
     setShine(true);
     setTimeout(() => setShine(false), 1200); // prevent permanent true
@@ -108,16 +154,16 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
   const updateDiscountCalculationUP = () => {
     if (product.oldPrice && product.price) {
       const discountAmount = product.oldPrice - product.price;
-      setDiscountCal((discountAmount * (quantity +1)));
+      setDiscountCal(discountAmount * (quantity + 1));
     }
-  }
+  };
 
-    const updateDiscountCalculationDOWN = () => {
+  const updateDiscountCalculationDOWN = () => {
     if (product.oldPrice && product.price) {
       const discountAmount = product.oldPrice - product.price;
-      setDiscountCal((discountAmount * (quantity - 1)));
+      setDiscountCal(discountAmount * (quantity - 1));
     }
-  }
+  };
   const catLink = `/categories/${product.category._id}`;
 
   return ReactDOM.createPortal(
@@ -188,7 +234,8 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
             <div className="space-y-6">
               {/* Category and Rating */}
               <div className="flex items-center justify-start gap-5">
-                <Link to={catLink}
+                <Link
+                  to={catLink}
                   className="px-3 py-1 rounded-full text-sm font-semibold text-gray-700"
                   style={{
                     backgroundColor: product.category.color || "#6B7280",
@@ -198,7 +245,7 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
                 </Link>
                 {product.rating > 0 && (
                   <div className="flex items-center space-x-1">
-                    <RenderStars rating={product.rating}  />
+                    <RenderStars rating={product.rating} />
                     <span className="text-sm text-gray-600 ml-2 user-select-none">
                       ({product.rating})
                     </span>
@@ -277,7 +324,7 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
                         e.preventDefault();
                         e.stopPropagation();
                         triggerFromOtherComponent();
-                        updateDiscountCalculationUP()
+                        updateDiscountCalculationUP();
                         setQuantity(quantity + 1);
                       }}
                       className="p-3 bg-gray-100 cursor-pointer hover:bg-blue-50 transition-colors rounded-full"
@@ -299,28 +346,36 @@ const ProductZoom: React.FC<ProductZoomProps> = ({
 
               {/* Action Buttons */}
               <div className="flex space-x-3">
-                <ShinyButton triggerGlow={shine} className="flex-1 rounded-md">
+                <ShinyButton
+                  triggerGlow={shine}
+                  className="flex-1 rounded-md"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleAddToCart();
+                  }}
+                >
                   <div className="w-full flex flex-col items-center justify-center gap-1">
                     <span className="text-base font-semibold tracking-wide">
                       Add To Cart
                     </span>
                     {hasDiscount && (
-                    <span className="text-sm text-white/80 font-normal">
-                      Save{" "}
-                      {discountCal == 0 && (
-                        <span className="text-green-400 font-bold">
-                          {" "}
-                          {discount}
-                        </span>
-                      )}
-                      {discountCal > 0 && (
-                        <span className="text-green-400 font-bold">
-                          {" "}
-                          {formatPrice(discountCal)}
-                        </span>
-                      )}
-                      {" now!!"}
-                    </span>
+                      <span className="text-sm text-white/80 font-normal">
+                        Save{" "}
+                        {discountCal == 0 && (
+                          <span className="text-green-400 font-bold">
+                            {" "}
+                            {discount}
+                          </span>
+                        )}
+                        {discountCal > 0 && (
+                          <span className="text-green-400 font-bold">
+                            {" "}
+                            {formatPrice(discountCal)}
+                          </span>
+                        )}
+                        {" now!!"}
+                      </span>
                     )}
                   </div>
                 </ShinyButton>

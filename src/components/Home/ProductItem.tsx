@@ -24,7 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const { favorites, refreshFavorites } = useFavorites();
   const [isInWishlist, setIsInWishlist] = useState(false);
-  const { user } = useUser();
+  const { user, isLoggedIn } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const { addRecentlyVisited } = useGlobalContext();
   const navigate = useNavigate();
@@ -60,6 +60,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   handleWishlistClick(e, {
     product,
     user,
+    isLoggedIn,
     isInWishlist,
     removeItem,
     refreshFavorites,

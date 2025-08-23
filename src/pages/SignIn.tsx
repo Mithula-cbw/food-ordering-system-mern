@@ -102,7 +102,7 @@ const SignIn = () => {
   };
 
   return (
-    <Auth title="Sign In" classname={"w-[90%] md:w-[60%] lg:w-[30%] "}>
+    <Auth title="Sign In" classname={"w-[90%] md:w-[60%] lg:w-[32%] "}>
       <div className="space-y-4 ">
         {/* Google Sign In */}
         <GoogleSignInButton

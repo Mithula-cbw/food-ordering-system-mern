@@ -11,7 +11,7 @@ import {
 import { toast } from "sonner";
 import { useFavorites } from "../contexts/FavoritesContext";
 import { useUser } from "../contexts/UserContext";
-import { deleteData, fetchDataFromApi, postData } from "@/utils/Api";
+import { deleteData, fetchDataFromApi, postData } from "@/api/Api";
 import ShinyButton from "../components/Commons/ShinyButton";
 import { Product as ProductType } from "../types";
 import { formatPrice, truncateText } from "../utils/helpers";

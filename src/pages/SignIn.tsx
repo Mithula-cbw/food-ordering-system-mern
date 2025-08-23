@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { postData } from "../utils/Api";
+import { postData } from "../api/Api";
 import { useUser } from "../contexts/UserContext";
 import { useEffect, useState, useRef } from "react";
 import Auth from "../components/Auth/Auth";

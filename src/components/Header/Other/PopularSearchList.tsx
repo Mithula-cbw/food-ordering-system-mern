@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Product, SearchSug } from "../../../types";
-import { fetchDataFromApi } from "../../../utils/Api";
+import { fetchDataFromApi } from "../../../api/Api";
 
 interface PopularSearchListProps {
   onSelect?: (query: SearchSug) => void;

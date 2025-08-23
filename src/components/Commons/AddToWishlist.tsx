@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { postData } from "../../utils/Api";
+import { postData } from "../../api/Api";
 import { CheckCircle } from "lucide-react";
 import { Product, User } from "../../types";
 

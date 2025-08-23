@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { Heart, Trash } from "lucide-react";
 import { Button } from "../ui/button";
-import { deleteData } from "@/utils/Api";
+import { deleteData } from "@/api/Api";
 import { toast } from "sonner";
 import RenderStars from "../Commons/RenderStars";
 // import { useUser } from "../../contexts/UserContext";

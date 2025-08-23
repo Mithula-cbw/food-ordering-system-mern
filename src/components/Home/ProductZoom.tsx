@@ -9,7 +9,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { Product } from "../../types";
-import { deleteData, postData } from "@/utils/Api";
+import { deleteData, postData } from "@/api/Api";
 import { toast } from "sonner";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { useUser } from "../../contexts/UserContext";

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { toast } from "sonner";
 import { useUser } from "../../contexts/UserContext";
-import { deleteData } from "../../utils/Api";
+import { deleteData } from "../../api/Api";
 import ProductZoom from "./ProductZoom";
 import { formatPrice, truncateText } from "../../utils/helpers";
 import RenderStars from "../Commons/RenderStars";

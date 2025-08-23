@@ -3,7 +3,7 @@ import { Rating } from "@mui/material";
 import { Button } from "../ui/button";
 import { useUser } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { postData } from "../../utils/Api";
+import { postData } from "../../api/Api";
 import { toast } from "sonner";
 import { CheckCircle } from "lucide-react";
 

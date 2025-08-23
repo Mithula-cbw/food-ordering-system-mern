@@ -92,7 +92,7 @@ const ShoppingCartComponent: React.FC = () => {
 
         {/* Right Section: Cart Summary */}
         <div className="w-full lg:w-[300px] shrink-0">
-          <div className="sticky top-20">
+          <div className="sticky top-30">
             <CartSummary
               subTotal={cartTotal}
               onCheckout={handleProceedToCheckout}

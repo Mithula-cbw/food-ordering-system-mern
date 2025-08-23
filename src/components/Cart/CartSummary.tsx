@@ -20,7 +20,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({
   const total = subTotal + shippingCost;
 
   return (
-    <div className="fixed right-12 bottom-8 w-80 bg-white rounded-lg shadow-2xl p-6">
+    <div className="fixed right-12 bottom-12 w-80 bg-white rounded-lg shadow-2xl p-6">
       <h3 className="text-xl font-bold text-gray-900 mb-6">CART TOTALS</h3>
 
       <div className="space-y-4 mb-6">

@@ -4,6 +4,8 @@ import EmptyCartMessage from "@/components/Cart/EmptyCartMessage";
 import CartItemCard from "@/components/Cart/CartItemCard";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
 
 const ShoppingCartComponent: React.FC = () => {
   const navigate = useNavigate();
@@ -20,6 +22,12 @@ const ShoppingCartComponent: React.FC = () => {
 
   const handleRemoveItem = (productId: string, size: string) => {
     removeFromCart(productId, size);
+    toast.success(
+      <div className="flex items-center gap-3">
+        <Trash2 className="text-red-600 w-5 h-5" />
+        <span className="text-black font-semibold">Item removed from cart</span>
+      </div>
+    );
   };
 
   const handleQuantityChange = (

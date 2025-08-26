@@ -52,6 +52,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("cart");
     // Optional: remove token, clear other app states, redirect
   };
 

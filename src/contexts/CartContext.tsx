@@ -7,7 +7,12 @@ import React, {
   useEffect,
 } from "react";
 import { useUser } from "./UserContext";
-import { fetchCartFromDB, updateCartInDB } from "../api/cart";
+import {
+  addItemToCart,
+  fetchCartFromDB,
+  removeItemFromCart,
+  updateCartInDB,
+} from "../api/cart";
 
 interface CartContextType {
   cartItems: CartItem[];
@@ -95,7 +100,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // --- Cart functions ---
-  const addToCart = (product: Product, size: string, quantity: number = 1) => {
+  const addToCart = async (
+    product: Product,
+    size: string,
+    quantity: number = 1
+  ) => {
+    let newItem: CartItem | null = null;
+
     setCartItems((prev) => {
       const existing = prev.find(
         (item) => item.productId === product._id && item.size === size
@@ -113,7 +124,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             : item
         );
       } else {
-        const newItem: CartItem = {
+        newItem = {
           productTitle: product.name,
           images: product.images[0] || "",
           rating: product.rating,
@@ -127,23 +138,52 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         updated = [...prev, newItem];
       }
 
-      if (isLoggedIn && user?.id) {
-        updateCartInDB(user.id, updated);
-      }
       return updated;
     });
+
+    if (isLoggedIn && user?.id) {
+      if (newItem) {
+        const savedItem = await addItemToCart(newItem);
+        if (savedItem) console.log("✅ Item added:", savedItem);
+      } else {
+        await updateCartInDB(user.id, cartItems);
+      }
+    }
   };
 
-  const removeFromCart = (productId: string, size: string) => {
+  const removeFromCart = async (productId: string, size: string) => {
     setCartItems((prev) => {
       const updated = prev.filter(
         (item) => !(item.productId === productId && item.size === size)
       );
-      if (isLoggedIn && user?.id) {
-        updateCartInDB(user.id, updated);
-      }
       return updated;
     });
+
+    if (isLoggedIn && user?.id) {
+      try {
+        // 🔍 Find the item in current cart to get its DB id
+        const itemToRemove = cartItems.find(
+          (item) => item.productId === productId && item.size === size
+        );
+
+        if (itemToRemove?.id) {
+          const success = await removeItemFromCart(itemToRemove.id);
+          if (success) {
+            console.log("Item removed successfully from DB");
+          }
+        } else {
+          // fallback → overwrite the whole cart in DB
+          await updateCartInDB(
+            user.id,
+            cartItems.filter(
+              (item) => !(item.productId === productId && item.size === size)
+            )
+          );
+        }
+      } catch (err) {
+        console.error("Error removing cart item:", err);
+      }
+    }
   };
 
   const updateQuantity = (

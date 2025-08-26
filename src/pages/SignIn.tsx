@@ -11,7 +11,7 @@ import AuthActionButton from "../components/Auth/AuthActionButton";
 import { Link } from "react-router-dom";
 import AuthDivider from "../components/Auth/AuthDivider";
 import { User } from "../types";
-import { useCart } from "@/contexts/CartContext";
+import { useCart } from "../contexts/CartContext";
 
 const SignIn = () => {
   const [email, setEmail] = useState<string>("");

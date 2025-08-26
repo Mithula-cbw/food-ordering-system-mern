@@ -28,6 +28,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
       className="w-100"
       name="password"
       value={password}
+      autoComplete="new-password"
       onChange={(e) => setPassword(e.target.value)}
       InputProps={{
         endAdornment: (

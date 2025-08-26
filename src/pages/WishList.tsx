@@ -1,12 +1,13 @@
 import React from "react";
 import { useFavorites } from "../contexts/FavoritesContext";
 import { useUser } from "../contexts/UserContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import WishlistGrid from "../components/Wishlist/WishlistGrid";
 
 export default function WishList() {
   const { loading } = useFavorites();
   const { user } = useUser();
+  const location = useLocation();
 
   // If user is not logged in, show login prompt
   if (!user) {
@@ -22,7 +23,7 @@ export default function WishList() {
               Create an account or sign in to start building your personalized
               wishlist of delicious meals.
             </p>
-            <Link to="/sign-in">
+            <Link to="/sign-in" state={{ from: location.pathname }}>
               <button
                 className="bg-app-bannerbtn hover:bg-app-bannerbtnhover text-black font-semibold py-3 px-6 rounded-lg transition-colors shadow-lg"
                 aria-label="Sign In or Sign Up"

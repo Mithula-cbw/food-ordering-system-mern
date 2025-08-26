@@ -37,18 +37,17 @@ export const removeItemFromCart = async (id: string): Promise<boolean> => {
 };
 
 
-export const updateCartInDB = async (
-  userId: string,
-  cartItems: CartItem[]
-): Promise<boolean> => {
+// Update a single cart item
+export const updateCartItemInDB = async (
+  id: string,
+  item: CartItem
+): Promise<CartItem | null> => {
   try {
-    const response = await axios.post(`${API_BASE}/update`, {
-      userId,
-      cart: cartItems,
-    });
-    return response.status === 200;
+    const response = await axios.put(`${API_BASE}/${id}`, item);
+    return response.data || null;
   } catch (err) {
-    console.error("Error updating cart in DB:", err);
-    return false;
+    console.error("Error updating cart item in DB:", err);
+    return null;
   }
 };
+

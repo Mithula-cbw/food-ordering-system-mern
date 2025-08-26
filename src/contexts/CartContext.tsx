@@ -11,7 +11,7 @@ import {
   addItemToCart,
   fetchCartFromDB,
   removeItemFromCart,
-  updateCartInDB,
+  updateCartItemInDB, 
 } from "../api/cart";
 
 interface CartContextType {
@@ -38,15 +38,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   );
 
   // --- Helpers ---
-  const saveToLocal = (items: CartItem[]) => {
+  const saveToLocal = (items: CartItem[]) =>
     localStorage.setItem("cart", JSON.stringify(items));
-  };
 
   const getFromLocal = (): CartItem[] => {
     const storedCart = localStorage.getItem("cart");
     return storedCart ? JSON.parse(storedCart) : [];
   };
 
+  // Merge carts by productId+size
   const mergeCarts = (local: CartItem[], server: CartItem[]): CartItem[] => {
     const map = new Map<string, CartItem>();
     [...local, ...server].forEach((item) => {
@@ -84,19 +84,31 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const localCart = getFromLocal();
     const serverCart = await fetchCartFromDB(userId);
 
-    let finalCart: CartItem[] = [];
+    const merged = mergeCarts(localCart, serverCart);
 
-    if (localCart.length && serverCart.length) {
-      finalCart = mergeCarts(localCart, serverCart);
-    } else if (localCart.length) {
-      finalCart = localCart;
-    } else {
-      finalCart = serverCart;
+    // Push merged items into DB (add or update)
+    for (const item of merged) {
+      const existing = serverCart.find(
+        (dbItem) =>
+          dbItem.productId === item.productId && dbItem.size === item.size
+      );
+
+      if (existing) {
+        // update quantity
+        await updateCartItemInDB(existing.id!, {
+          ...existing,
+          quantity: item.quantity,
+          subTotal: item.quantity * existing.price,
+        });
+      } else {
+        await addItemToCart({ ...item, userId });
+      }
     }
 
+    
+    const finalCart = await fetchCartFromDB(userId);
     setCartItems(finalCart);
     saveToLocal(finalCart);
-    await updateCartInDB(userId, finalCart);
   };
 
   // --- Cart functions ---
@@ -144,74 +156,76 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (isLoggedIn && user?.id) {
       if (newItem) {
         const savedItem = await addItemToCart(newItem);
-        if (savedItem) console.log("✅ Item added:", savedItem);
+        if (savedItem) {
+          // replace with real DB item (with _id)
+          setCartItems((prev) =>
+            prev.map((i) =>
+              i.productId === savedItem.productId && i.size === savedItem.size
+                ? savedItem
+                : i
+            )
+          );
+        }
       } else {
-        await updateCartInDB(user.id, cartItems);
+        // find updated item and push change
+        const existing = cartItems.find(
+          (i) => i.productId === product._id && i.size === size
+        );
+        if (existing?.id) {
+          await updateCartItemInDB(existing.id, existing);
+        }
       }
     }
   };
 
   const removeFromCart = async (productId: string, size: string) => {
-    setCartItems((prev) => {
-      const updated = prev.filter(
-        (item) => !(item.productId === productId && item.size === size)
-      );
-      return updated;
-    });
+    const itemToRemove = cartItems.find(
+      (item) => item.productId === productId && item.size === size
+    );
 
-    if (isLoggedIn && user?.id) {
-      try {
-        // 🔍 Find the item in current cart to get its DB id
-        const itemToRemove = cartItems.find(
-          (item) => item.productId === productId && item.size === size
-        );
+    setCartItems((prev) =>
+      prev.filter((item) => !(item.productId === productId && item.size === size))
+    );
 
-        if (itemToRemove?.id) {
-          const success = await removeItemFromCart(itemToRemove.id);
-          if (success) {
-            console.log("Item removed successfully from DB");
-          }
-        } else {
-          // fallback → overwrite the whole cart in DB
-          await updateCartInDB(
-            user.id,
-            cartItems.filter(
-              (item) => !(item.productId === productId && item.size === size)
-            )
-          );
-        }
-      } catch (err) {
-        console.error("Error removing cart item:", err);
-      }
+    if (isLoggedIn && itemToRemove?.id) {
+      await removeItemFromCart(itemToRemove._id);
     }
   };
 
-  const updateQuantity = (
+  const updateQuantity = async (
     productId: string,
     quantity: number,
     size: string
   ) => {
-    setCartItems((prev) => {
-      const updated = prev.map((item) =>
+    setCartItems((prev) =>
+      prev.map((item) =>
         item.productId === productId && item.size === size
-          ? {
-              ...item,
-              quantity,
-              subTotal: item.price * quantity,
-            }
+          ? { ...item, quantity, subTotal: item.price * quantity }
           : item
+      )
+    );
+
+    if (isLoggedIn) {
+      const itemToUpdate = cartItems.find(
+        (i) => i.productId === productId && i.size === size
       );
-      if (isLoggedIn && user?.id) {
-        updateCartInDB(user.id, updated);
+      if (itemToUpdate?._id) {
+        await updateCartItemInDB(itemToUpdate._id, {
+          ...itemToUpdate,
+          quantity,
+          subTotal: itemToUpdate.price * quantity,
+        });
       }
-      return updated;
-    });
+    }
   };
 
-  const clearCart = () => {
+  const clearCart = async () => {
     setCartItems([]);
     if (isLoggedIn && user?.id) {
-      updateCartInDB(user.id, []);
+      // optional: backend clear route
+      for (const item of cartItems) {
+        if (item.id) await removeItemFromCart(item.id);
+      }
     } else {
       localStorage.removeItem("cart");
     }

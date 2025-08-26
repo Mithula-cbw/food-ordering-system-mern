@@ -8,7 +8,10 @@ interface NameFieldProps {
 
 const NameField: React.FC<NameFieldProps> = ({ value, setName }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    const input = e.target.value;
+    const formatted =
+      input.charAt(0).toUpperCase() + input.slice(1);
+    setName(formatted);
   };
 
   return (

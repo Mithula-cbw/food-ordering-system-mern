@@ -6,11 +6,13 @@ import EmailField from "../components/Auth/EmailField";
 import AuthActionButton from "../components/Auth/AuthActionButton";
 import { Link } from "react-router-dom";
 import NameField from "../components/Auth/NameField";
+import PhoneNumberField from "../components/Auth/PhoneNumberField";
 
 const SignUp = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -44,16 +46,21 @@ const SignUp = () => {
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-y-6 md:gap-x-4">
             <NameField value={name} setName={setName} />
-            <EmailField value={email} setEmail={setEmail} />
+            <PhoneNumberField value={phoneNumber} setPhone={setPhoneNumber} />
           </div>
 
-          <PasswordInput
-            title="Password"
-            password={password}
-            setPassword={setPassword}
-            isPasswordVisible={isPasswordVisible}
-            handleToggleVisibility={() => setIsPasswordVisible((prev) => !prev)}
-          />
+          <div className="flex flex-col md:flex-row justify-between md:items-center gap-y-6 md:gap-x-4">
+            <EmailField value={email} setEmail={setEmail} />
+            <PasswordInput
+              title="Password"
+              password={password}
+              setPassword={setPassword}
+              isPasswordVisible={isPasswordVisible}
+              handleToggleVisibility={() =>
+                setIsPasswordVisible((prev) => !prev)
+              }
+            />
+          </div>
 
           {/* Error Message */}
           {error && (

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { postData } from "../api/Api";
 import { useUser } from "../contexts/UserContext";
 import { useEffect, useState, useRef } from "react";
@@ -20,13 +20,15 @@ const SignIn = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const {syncCartOnLogin} = useCart()
+  const {syncCartOnLogin} = useCart();
+  const location = useLocation();
 
   //set user in use context
   const { setUser } = useUser();
 
   //navigate
   const navigate = useNavigate();
+  const from = (location.state as { from?: string })?.from || "/";
 
   // Refs for scroll targets
   const emailFormRef = useRef<HTMLDivElement>(null);
@@ -74,7 +76,7 @@ const SignIn = () => {
         await syncCartOnLogin(user);
         
         setTimeout(() => {
-          navigate("/");
+          navigate(from, { replace: true });
         }, 1200);
       } else {
         setError("Invalid credentials or server error.");

@@ -53,7 +53,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("cart");
-    // Optional: remove token, clear other app states, redirect
   };
 
   return (

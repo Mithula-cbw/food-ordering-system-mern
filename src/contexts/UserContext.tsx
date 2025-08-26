@@ -52,7 +52,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    // Optional: remove token, clear other app states, redirect
+    localStorage.removeItem("cart");
   };
 
   return (

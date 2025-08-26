@@ -101,7 +101,7 @@ export interface CartItem {
   quantity: number;
   subTotal: number;
   productId: string;
-  userId: string;
+  userId?: string;
   size: string;
 }
 

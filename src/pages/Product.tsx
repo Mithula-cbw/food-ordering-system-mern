@@ -11,7 +11,7 @@ import {
 import { toast } from "sonner";
 import { useFavorites } from "../contexts/FavoritesContext";
 import { useUser } from "../contexts/UserContext";
-import { deleteData, fetchDataFromApi, postData } from "@/utils/Api";
+import { deleteData, fetchDataFromApi, postData } from "@/api/Api";
 import ShinyButton from "../components/Commons/ShinyButton";
 import { Product as ProductType } from "../types";
 import { formatPrice, truncateText } from "../utils/helpers";
@@ -20,6 +20,7 @@ import RenderStars from "../components/Commons/RenderStars";
 import ProductReviewSection from "../components/Product/ProductReviewSection";
 import RelatedProducts from "../components/Product/RelatedProducts";
 import RecentlyVisitedProducts from "../components/Product/RecentlyVisitedProducts";
+import { useCart } from "../contexts/CartContext";
 
 const Product = () => {
   const { id } = useParams<{ id: string }>();
@@ -33,12 +34,12 @@ const Product = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const { favorites, refreshFavorites } = useFavorites();
   const { user } = useUser();
+  const { addToCart } = useCart();
 
-useEffect(() => {
-  // console.log("Scrolling to top because product id changed:", id);
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}, [id]);
-
+  useEffect(() => {
+    // console.log("Scrolling to top because product id changed:", id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [id]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -85,6 +86,45 @@ useEffect(() => {
       const discountAmount = product.oldPrice - product.price;
       setDiscountCal(discountAmount * (quantity - 1));
     }
+  };
+
+  const handleAddToCart = () => {
+    if (!product) {
+      console.error("Product is null.");
+      return;
+    }
+
+    if (!selectedSize) {
+      alert("Please select a size.");
+      return;
+    }
+
+    if (quantity < 1) {
+      alert("Quantity must be at least 1.");
+      return;
+    }
+    addToCart(product, selectedSize, quantity);
+    if (isInStock) {
+      toast.success(
+        <div className="flex items-center gap-3">
+          <CheckCircle className="text-green-600 w-5 h-5" />
+          <span className="text-black font-semibold">
+            {quantity} {product.name} added to cart!
+          </span>
+        </div>
+      );
+    } else
+      toast.success(
+        <div className="flex items-center gap-3">
+          <CheckCircle className="text-orange-600 w-5 h-5" />
+          <div className="flex flex-col justify-center items-start">
+            <span className="text-black font-semibold">
+              {quantity} {product.name} added to cart!
+            </span>
+            <span className="text-red-500 font-semibold">Out of Stock</span>
+          </div>
+        </div>
+      );
   };
 
   const handleWishlistClick = async (e: React.MouseEvent) => {
@@ -298,6 +338,7 @@ useEffect(() => {
                 </div>
                 {/* Add to Cart Button */}
                 <ShinyButton
+                  onClick={handleAddToCart}
                   triggerGlow={shine}
                   className="rounded-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
                 >

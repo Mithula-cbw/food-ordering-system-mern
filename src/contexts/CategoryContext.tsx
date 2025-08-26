@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useCallback,
 } from "react";
-import { fetchDataFromApi } from "../utils/Api";
+import { fetchDataFromApi } from "../api/Api";
 import { registerRefetcher } from "../utils/GlobalRefetchManager";
 import { Category, CategoryContextType } from "../types";
 

@@ -1,7 +1,8 @@
-import React from "react";
+import { useUser } from "../../contexts/UserContext";
+import React, { useEffect } from "react";
 
 type Props = {
-  selectedTypes: string[]; // e.g. ["Vegetarian", "Non-Vegetarian"]
+  selectedTypes: string[];
   toggleType: (type: string) => void;
   resetTypes: () => void;
 };
@@ -12,20 +13,28 @@ const MealTypeFilter: React.FC<Props> = ({
   resetTypes,
 }) => {
   const mealTypes = ["Vegetarian", "Non-Vegetarian"];
+  const { isVeg } = useUser();
 
-  const isAllSelected = selectedTypes.length === 0 || selectedTypes.length === mealTypes.length;
+  const isAllSelected =
+    selectedTypes.length === 0 || selectedTypes.length === mealTypes.length;
 
   const handleAllClick = () => {
-    // If all or none selected, clear selection to mean "All"
-    // Otherwise, select all
     if (isAllSelected) {
       resetTypes();
     } else {
-      mealTypes.forEach(type => {
+      mealTypes.forEach((type) => {
         if (!selectedTypes.includes(type)) toggleType(type);
       });
     }
   };
+
+  useEffect(() => {
+    if (isVeg && !selectedTypes.includes("Vegetarian")) {
+      toggleType("Vegetarian");
+    } else if (!isVeg && selectedTypes.includes("Vegetarian")) {
+      toggleType("Vegetarian");
+    }
+  }, [isVeg, selectedTypes, toggleType]);
 
   return (
     <div className="mt-8">

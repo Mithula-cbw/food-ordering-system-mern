@@ -3,7 +3,7 @@ import { Product, Review } from "../../types";
 import DescriptionTab from "./DescriptionTab";
 import IngredientsAllergensTab from "./IngredientsAllergensTab";
 import ReviewsTab from "./ReviewsTab";
-import { fetchDataFromApi } from "../../utils/Api";
+import { fetchDataFromApi } from "../../api/Api";
 
 interface ProductReviewSectionProps {
   product: Product;

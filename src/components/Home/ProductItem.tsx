@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useFavorites } from "../../contexts/FavoritesContext";
 import { toast } from "sonner";
 import { useUser } from "../../contexts/UserContext";
-import { deleteData } from "../../utils/Api";
+import { deleteData } from "../../api/Api";
 import ProductZoom from "./ProductZoom";
 import { formatPrice, truncateText } from "../../utils/helpers";
 import RenderStars from "../Commons/RenderStars";
@@ -24,7 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const { favorites, refreshFavorites } = useFavorites();
   const [isInWishlist, setIsInWishlist] = useState(false);
-  const { user } = useUser();
+  const { user, isLoggedIn } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const { addRecentlyVisited } = useGlobalContext();
   const navigate = useNavigate();
@@ -60,6 +60,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   handleWishlistClick(e, {
     product,
     user,
+    isLoggedIn,
     isInWishlist,
     removeItem,
     refreshFavorites,

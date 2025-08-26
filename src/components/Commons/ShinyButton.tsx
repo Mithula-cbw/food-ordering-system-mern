@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 interface ButtonWithGlowProps {
   triggerGlow: boolean;
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
   className?: string;
 }
 

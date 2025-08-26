@@ -6,7 +6,7 @@ import React, {
   useMemo,
   ReactNode,
 } from "react";
-import { fetchDataFromApi } from "../utils/Api";
+import { fetchDataFromApi } from "../api/Api";
 import { useUser } from "./UserContext";
 import { FavoriteItem, FavoritesContextType } from "../types";
 

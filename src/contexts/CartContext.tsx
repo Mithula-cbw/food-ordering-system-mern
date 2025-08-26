@@ -188,7 +188,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     );
 
     if (isLoggedIn && itemToRemove?.id) {
-      await removeItemFromCart(itemToRemove._id);
+      await removeItemFromCart(itemToRemove.id);
     }
   };
 
@@ -209,8 +209,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const itemToUpdate = cartItems.find(
         (i) => i.productId === productId && i.size === size
       );
-      if (itemToUpdate?._id) {
-        await updateCartItemInDB(itemToUpdate._id, {
+      if (itemToUpdate?.id) {
+        await updateCartItemInDB(itemToUpdate.id, {
           ...itemToUpdate,
           quantity,
           subTotal: itemToUpdate.price * quantity,

@@ -7,6 +7,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 interface PasswordInputProps {
   password: string;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
+  setPasswordWarning?: React.Dispatch<React.SetStateAction<string | null>>;
   title?: string;
   isPasswordVisible: boolean;
   handleToggleVisibility: () => void;
@@ -15,10 +16,24 @@ interface PasswordInputProps {
 const PasswordInput: React.FC<PasswordInputProps> = ({
   password,
   setPassword,
+  setPasswordWarning,
   title = "Password",
   isPasswordVisible,
   handleToggleVisibility,
 }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setPassword(val);
+
+    if (setPasswordWarning) {
+      if (val.length < 8) {
+        setPasswordWarning("Password should be at least 8 characters long.");
+      } else {
+        setPasswordWarning(null);
+      }
+    }
+  };
+
   return (
     <TextField
       label={title}
@@ -28,7 +43,8 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
       className="w-100"
       name="password"
       value={password}
-      onChange={(e) => setPassword(e.target.value)}
+      autoComplete="new-password"
+      onChange={handleChange}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">

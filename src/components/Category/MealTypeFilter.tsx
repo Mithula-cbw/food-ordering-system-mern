@@ -1,4 +1,4 @@
-import { useUser } from "../../contexts/UserContext";
+import { useGlobalContext } from "@/contexts/GlobalContext";
 import React, { useEffect } from "react";
 
 type Props = {
@@ -13,7 +13,7 @@ const MealTypeFilter: React.FC<Props> = ({
   resetTypes,
 }) => {
   const mealTypes = ["Vegetarian", "Non-Vegetarian"];
-  const { isVeg } = useUser();
+  const { isVeg } = useGlobalContext();
 
   const isAllSelected =
     selectedTypes.length === 0 || selectedTypes.length === mealTypes.length;

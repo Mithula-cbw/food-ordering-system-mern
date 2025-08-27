@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { postData } from "../api/Api";
 import { useUser } from "../contexts/UserContext";
 import { useEffect, useState, useRef } from "react";
@@ -11,7 +11,7 @@ import AuthActionButton from "../components/Auth/AuthActionButton";
 import { Link } from "react-router-dom";
 import AuthDivider from "../components/Auth/AuthDivider";
 import { User } from "../types";
-import { useCart } from "@/contexts/CartContext";
+import { useCart } from "../contexts/CartContext";
 
 const SignIn = () => {
   const [email, setEmail] = useState<string>("");
@@ -20,13 +20,15 @@ const SignIn = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const {syncCartOnLogin} = useCart()
+  const {syncCartOnLogin} = useCart();
+  const location = useLocation();
 
   //set user in use context
   const { setUser } = useUser();
 
   //navigate
   const navigate = useNavigate();
+  const from = (location.state as { from?: string })?.from || "/";
 
   // Refs for scroll targets
   const emailFormRef = useRef<HTMLDivElement>(null);
@@ -74,7 +76,7 @@ const SignIn = () => {
         await syncCartOnLogin(user);
         
         setTimeout(() => {
-          navigate("/");
+          navigate(from, { replace: true });
         }, 1200);
       } else {
         setError("Invalid credentials or server error.");

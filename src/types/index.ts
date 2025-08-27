@@ -133,11 +133,29 @@ export interface UserContextType {
   user: User | null;
   setUser: (user: User | null) => void;
   isLoggedIn: boolean;
-  isVeg: boolean;
-  setIsVeg: (value: boolean) => void;
   loading : boolean;
   logout: () => void;
 }
+
+
+export interface SignUpResponse {
+  user: {
+    _id: string;
+    id?: string;
+    name: string;
+    email: string;
+    phone: string;
+    password?: string;
+    __v?: number;
+  };
+  token: string;
+}
+
+export interface SignupError {
+  status: false;
+  msg: string;
+}
+
 
 //favorites context
 

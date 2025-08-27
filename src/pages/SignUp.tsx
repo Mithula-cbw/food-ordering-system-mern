@@ -1,64 +1,135 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Auth from "../components/Auth/Auth";
 import PasswordInput from "../components/Auth/PasswordField";
 import EmailField from "../components/Auth/EmailField";
 import AuthActionButton from "../components/Auth/AuthActionButton";
 import { Link } from "react-router-dom";
 import NameField from "../components/Auth/NameField";
+import PhoneNumberField from "../components/Auth/PhoneNumberField";
+import { useUser } from "../contexts/UserContext";
+import { postData } from "../api/Api";
+import { SignUpResponse, User } from "../types";
+import { useCart } from "../contexts/CartContext";
 
 const SignUp = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [passwordWarning, setPasswordWarning] = useState<string | null>(null);
+  const { syncCartOnLogin } = useCart();
 
-  useEffect(() => {
-    // console.log(" Email:", email);
-    // console.log(" Password:", password);
-  }, [email, password]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { setUser } = useUser();
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const from = (location.state as { from?: string })?.from || "/";
+
+  React.useEffect(() => {
+    setError(null);
+    setSuccessMsg(null);
+    setName("");
+    setEmail("");
+    setPassword("");
+    setPhoneNumber("");
+  }, []);
+
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    // fake sign-in logic
-    setTimeout(() => {
+    try {
+      const response = await postData<SignUpResponse>("/api/user/signup", {
+        name: name,
+        phone: phoneNumber,
+        email: email,
+        password: password,
+      });
+
       setLoading(false);
-      if (email === "admin@test.com" && password === "password") {
-        setError(null);
-        console.log("Sign in successful!");
-        // Add your success logic here (e.g., redirect, set auth state)
+
+      if (response) {
+        const user: User = {
+          id: response.user.id!,
+          name: response.user.name,
+          email: response.user.email,
+          phone: response.user.phone,
+          token: response.token,
+          isAdmin: false,
+          isVegan: false,
+        };
+
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+        setSuccessMsg("Account created successfully!");
+
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }, 500);
+
+        await syncCartOnLogin(user);
+
+        setTimeout(() => {
+          navigate(from, { replace: true });
+        }, 1200);
       } else {
-        setError("Invalid credentials");
+        setError("Signup failed. Please try again.");
       }
-    }, 1000);
+    } catch (err) {
+      setLoading(false);
+      setError("Something went wrong.");
+      console.error("Signup error:", err);
+    }
   };
 
   return (
     <Auth title="Sign Up" classname={"w-[90%] md:w-[60%] lg:w-[40%]"}>
-      <form onSubmit={handleSignIn}>
+      <form onSubmit={handleSignUp} autoComplete="off">
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-y-6 md:gap-x-4">
             <NameField value={name} setName={setName} />
-            <EmailField value={email} setEmail={setEmail} />
+            <PhoneNumberField value={phoneNumber} setPhone={setPhoneNumber} />
           </div>
 
-          <PasswordInput
-            title="Password"
-            password={password}
-            setPassword={setPassword}
-            isPasswordVisible={isPasswordVisible}
-            handleToggleVisibility={() => setIsPasswordVisible((prev) => !prev)}
-          />
+          <div className="flex flex-col md:flex-row justify-between md:items-center gap-y-6 md:gap-x-4">
+            <EmailField value={email} setEmail={setEmail} />
+            <PasswordInput
+              title="Password"
+              password={password}
+              setPassword={setPassword}
+              isPasswordVisible={isPasswordVisible}
+              setPasswordWarning={setPasswordWarning}
+              handleToggleVisibility={() =>
+                setIsPasswordVisible((prev) => !prev)
+              }
+            />
+          </div>
+
+          {/* Password Warning */}
+          {passwordWarning && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3">
+              <p className="text-yellow-600 text-sm">{passwordWarning}</p>
+            </div>
+          )}
 
           {/* Error Message */}
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-md p-3">
               <p className="text-red-600 text-sm">{error}</p>
+            </div>
+          )}
+
+          {/* succes login Message */}
+          {successMsg && (
+            <div className="bg-green-50 border border-green-200 rounded-md p-3">
+              <p className="text-green-600 text-sm">{successMsg}</p>
             </div>
           )}
 

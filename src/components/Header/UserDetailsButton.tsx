@@ -20,7 +20,7 @@ const UserDetailsButton: React.FC<UserDetailsButtonProps> = ({
   variant = "full",
 }) => {
   const { user, logout } = useUser();
-  console.log("user:",user?.name);
+  console.log("user:",user?.id);
 
   const handleLogout = () => {
     logout()

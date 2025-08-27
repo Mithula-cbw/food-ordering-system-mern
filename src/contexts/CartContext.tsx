@@ -11,7 +11,7 @@ import {
   addItemToCart,
   fetchCartFromDB,
   removeItemFromCart,
-  updateCartItemInDB, 
+  updateCartItemInDB,
 } from "../api/cart";
 
 interface CartContextType {
@@ -66,17 +66,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     setLoading(true);
     if (!isLoggedIn) {
-      setCartItems(getFromLocal());
+      const localCart = getFromLocal();
+      setCartItems(localCart);
     }
     setLoading(false);
   }, [isLoggedIn]);
 
-  // --- Persist to localStorage when guest ---
+  // --- Persist to localStorage always (guest or logged in) ---
   useEffect(() => {
-    if (!isLoggedIn && !loading) {
+    if (!loading) {
       saveToLocal(cartItems);
     }
-  }, [cartItems, isLoggedIn, loading]);
+  }, [cartItems, loading]);
 
   // --- Sync and auto-merge on login ---
   const syncCartOnLogin = async (currentUser: User) => {
@@ -86,7 +87,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     const merged = mergeCarts(localCart, serverCart);
 
-    // Push merged items into DB (add or update)
+    // Push merged items into DB
     for (const item of merged) {
       const existing = serverCart.find(
         (dbItem) =>
@@ -94,7 +95,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       );
 
       if (existing) {
-        // update quantity
         await updateCartItemInDB(existing.id!, {
           ...existing,
           quantity: item.quantity,
@@ -105,7 +105,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
     }
 
-    
     const finalCart = await fetchCartFromDB(userId);
     setCartItems(finalCart);
     saveToLocal(finalCart);
@@ -150,6 +149,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         updated = [...prev, newItem];
       }
 
+      saveToLocal(updated);
       return updated;
     });
 
@@ -157,38 +157,44 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       if (newItem) {
         const savedItem = await addItemToCart(newItem);
         if (savedItem) {
-          // replace with real DB item (with _id)
-          setCartItems((prev) =>
-            prev.map((i) =>
+          setCartItems((prev) => {
+            const updated = prev.map((i) =>
               i.productId === savedItem.productId && i.size === savedItem.size
                 ? savedItem
                 : i
-            )
-          );
+            );
+            saveToLocal(updated);
+            return updated;
+          });
         }
       } else {
-        // find updated item and push change
-        const existing = cartItems.find(
+        // safer: find from updated state, not stale cartItems
+        const updatedItem = getFromLocal().find(
           (i) => i.productId === product._id && i.size === size
         );
-        if (existing?.id) {
-          await updateCartItemInDB(existing.id, existing);
+        if (updatedItem?.id) {
+          await updateCartItemInDB(updatedItem.id, updatedItem);
         }
       }
     }
   };
 
   const removeFromCart = async (productId: string, size: string) => {
-    const itemToRemove = cartItems.find(
-      (item) => item.productId === productId && item.size === size
-    );
+    let removed: CartItem | undefined;
 
-    setCartItems((prev) =>
-      prev.filter((item) => !(item.productId === productId && item.size === size))
-    );
+    setCartItems((prev) => {
+      removed = prev.find(
+        (item) => item.productId === productId && item.size === size
+      );
+      const updated = prev.filter(
+        (item) => !(item.productId === productId && item.size === size)
+      );
+      saveToLocal(updated);
+      return updated;
+    });
 
-    if (isLoggedIn && itemToRemove?.id) {
-      await removeItemFromCart(itemToRemove.id);
+    if (isLoggedIn && removed?.id) {
+      await removeItemFromCart(removed.id);
     }
   };
 
@@ -197,41 +203,40 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     quantity: number,
     size: string
   ) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.productId === productId && item.size === size
-          ? { ...item, quantity, subTotal: item.price * quantity }
-          : item
-      )
-    );
+    let updatedItem: CartItem | undefined;
 
-    if (isLoggedIn) {
-      const itemToUpdate = cartItems.find(
-        (i) => i.productId === productId && i.size === size
-      );
-      if (itemToUpdate?.id) {
-        await updateCartItemInDB(itemToUpdate.id, {
-          ...itemToUpdate,
-          quantity,
-          subTotal: itemToUpdate.price * quantity,
-        });
-      }
+    setCartItems((prev) => {
+      const updated = prev.map((item) => {
+        if (item.productId === productId && item.size === size) {
+          updatedItem = { ...item, quantity, subTotal: item.price * quantity };
+          return updatedItem;
+        }
+        return item;
+      });
+      saveToLocal(updated);
+      return updated;
+    });
+
+    if (isLoggedIn && updatedItem?.id) {
+      await updateCartItemInDB(updatedItem.id, updatedItem);
     }
   };
 
   const clearCart = async () => {
     setCartItems([]);
+    saveToLocal([]);
+
     if (isLoggedIn && user?.id) {
-      // optional: backend clear route
       for (const item of cartItems) {
         if (item.id) await removeItemFromCart(item.id);
       }
-    } else {
-      localStorage.removeItem("cart");
     }
   };
 
-  const cartTotal = cartItems.reduce((total, item) => total + item.subTotal, 0);
+  const cartTotal = cartItems.reduce(
+    (total, item) => total + item.subTotal,
+    0
+  );
 
   return (
     <CartContext.Provider

@@ -22,6 +22,7 @@ const SignUp = () => {
   const [error, setError] = useState<string | null>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [passwordWarning, setPasswordWarning] = useState<string | null>(null);
   const { syncCartOnLogin } = useCart();
 
   const navigate = useNavigate();
@@ -104,11 +105,19 @@ const SignUp = () => {
               password={password}
               setPassword={setPassword}
               isPasswordVisible={isPasswordVisible}
+              setPasswordWarning={setPasswordWarning}
               handleToggleVisibility={() =>
                 setIsPasswordVisible((prev) => !prev)
               }
             />
           </div>
+
+          {/* Password Warning */}
+          {passwordWarning && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3">
+              <p className="text-yellow-600 text-sm">{passwordWarning}</p>
+            </div>
+          )}
 
           {/* Error Message */}
           {error && (

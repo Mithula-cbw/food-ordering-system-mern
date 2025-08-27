@@ -1,0 +1,255 @@
+/* For screens between 320px and 992px */
+@media only screen and (min-width: 320px) and (max-width: 992px) {
+  .res-hide {
+    display: none !important;
+  }
+  body {
+    overflow-x: hidden !important;
+  }
+  .main-header {
+    padding: 15px 0;
+    height: auto;
+  }
+
+  /* Adjusting header parts for smaller screens */
+  .main-header .part1,
+  .main-header .part3 {
+    padding: 0px !important;
+  }
+
+  .main-header .part1 {
+    max-width: 40% !important;
+    flex: 0 0 40% !important;
+  }
+
+  .main-header .logo img {
+    width: 35px !important;
+  }
+
+  .main-header .logo span {
+    font-size: 18px;
+  }
+
+  .logo img {
+    height: 40px !important;
+    width: 40px !important;
+  }
+
+  .logo span {
+    font-size: 16px !important;
+  }
+
+  .main-header .part3 {
+    max-width: 60% !important;
+    flex: 0 0 60% !important;
+  }
+
+  /* Sidebar adjustments for smaller screens */
+  .main .sidebarWrapper {
+    width: 60% !important;
+    height: 100vh !important;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    z-index: 10000;
+    opacity: 0;
+    transition: all 0.4s ease-in-out;
+  }
+
+  .main .sidebarWrapper .sidebar {
+    width: 100% !important;
+    position: relative;
+    top: 0;
+    max-height: inherit;
+    height: 100vh !important;
+  }
+  .sidebarWrapper.open {
+    left: 0px !important;
+    opacity: 1 !important;
+  }
+  .sidebarOverlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+    width: 100%;
+    height: 100% !important;
+    z-index: 1000;
+  }
+  .sidebarOverlay.show {
+    display: block !important;
+  }
+  .cardd.shadow .border-0.w-100 {
+    margin: 0px !important;
+  }
+  .cardd.shadow {
+    flex-direction: column !important;
+    margin-bottom: 10px !important;
+  }
+  .cardd {
+    margin-bottom: 10px !important;
+  }
+  .card.p-4.mt-0 {
+    margin-top: 0px !important;
+  }
+  .MuiBox-root {
+    padding-bottom: 17px !important;
+  }
+  .productInfo .col-md-4 {
+    max-width: 200px !important;
+    flex: 0 0 200px;
+    padding-left: 10px;
+  }
+  .productInfo .col-md-8 {
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    padding-left: 36px !important;
+    padding-left: 10px;
+  }
+  .hlo {
+    padding-left: 10px !important;
+    margin-left: 10px !important;
+  }
+  /* Content adjustments */
+  .main .content {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+  }
+
+  .right-content {
+    padding: 90px 15px !important;
+  }
+  .form .col {
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+  }
+  .loginSection {
+    height: auto !important;
+  }
+  .signUpSection col-md-8 {
+    display: none !important;
+    height: auto !important;
+  }
+
+  /* Dashboard boxes responsive scroll */
+  .dashboardBoxWrapperRow {
+    white-space: nowrap !important;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    display: block !important;
+  }
+
+  .dashboardBoxWrapperRow .dashboardBox {
+    display: inline-block !important;
+    width: 280px !important;
+  }
+  .topPart2 {
+    padding-left: 15px !important;
+  }
+  .tableFooter {
+    flex-direction: column;
+  }
+  .tableFooter nav {
+    margin-top: 25px;
+  }
+  /* .tableFooter nav ul {
+    white-space: nowrap !important;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    display: block !important;
+    margin-bottom: 20px !important;
+  } */
+}
+
+/* For screens smaller than 575px */
+@media only screen and (min-width: 320px) and (max-width: 575px) {
+  .main-header .row {
+    margin: auto !important;
+  }
+  .form .col {
+    max-width: 100% !important;
+
+    flex: 0 0 100% !important;
+  }
+  .main-header button.rounded-circle {
+    width: 35px !important;
+    min-width: 35px !important;
+    height: 35px !important;
+    margin-right: 8px !important;
+  }
+
+  .main-header .btn-blue {
+    font-size: 12px !important;
+    padding: 5px 10px !important;
+  }
+
+  .userImg {
+    width: 35px;
+    height: 35px;
+  }
+
+  .myAccWrapper button {
+    padding: 0 !important;
+    min-width: 35px !important;
+    width: 35px !important;
+  }
+}
+@media only screen and (max-width: 992px) {
+  /* Dashboard box wrapper adjustments */
+  .dashboardBoxWrapperRow {
+    display: block;
+  }
+
+  .dashboardBoxWrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 15px;
+  }
+  .dashboardBoxWrapper::-webkit-scrollbar {
+    display: none !important;
+  }
+  .dashboardBoxWrapper .dashboardBox {
+    flex: 0 0 100%;
+    width: 220px; /* Adjust width for smaller screens */
+    margin-right: 15px;
+    height: 160px !important;
+    margin-right: 10px !important;
+  }
+
+  /* Order Statistics box adjustments */
+  .graphBox {
+    width: 100% !important;
+    height: auto;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Keep shadow effect */
+  }
+
+  /* Hide button text on smaller screens for a compact look */
+  .toggleicon {
+    font-size: 20px;
+  }
+
+  /* Chart container */
+  .graphBox h3,
+  .graphBox p {
+    font-size: 14px;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .dashboardBoxWrapper .dashboardBox {
+    width: 180px; /* Smaller width for mobile */
+  }
+
+  /* Smaller font sizes for mobile */
+  .graphBox h3 {
+    font-size: 20px;
+  }
+
+  .graphBox p {
+    font-size: 12px;
+  }
+}

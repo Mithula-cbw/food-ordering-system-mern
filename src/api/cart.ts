@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CartItem } from "../types";
 
-const API_BASE = "http://localhost:4000/api/cart";
+const API_BASE = `${import.meta.env.VITE_BASE_URL}/api/cart`;
 
 // fetch items
 export const fetchCartFromDB = async (userId: string): Promise<CartItem[]> => {

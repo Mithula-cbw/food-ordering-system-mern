@@ -19,12 +19,13 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await fetch("http://localhost:4000/api/products");
+        const res = await fetch(`${baseUrl}/api/products`);
         if (!res.ok) throw new Error("Failed to fetch products");
 
         const data = await res.json();

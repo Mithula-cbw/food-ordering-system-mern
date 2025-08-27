@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-const BASE_URL = "http://localhost:4000";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Generic fetch function
 export const fetchDataFromApi = async <T>(url: string): Promise<T | null> => {

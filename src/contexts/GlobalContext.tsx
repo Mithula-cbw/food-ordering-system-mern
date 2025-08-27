@@ -15,6 +15,9 @@ interface GlobalContextType {
   recentSearches: SearchSug[];
   addRecentSearch: (search: SearchSug) => void;
   clearRecentSearches: () => void;
+
+  isVeg: boolean; 
+  setIsVeg: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
@@ -23,10 +26,12 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [recentlyVisited, setRecentlyVisited] = useState<Product[]>([]);
   const [recentSearches, setRecentSearches] = useState<SearchSug[]>([]);
   const [recentsLoading, setRecentsLoading] = useState<boolean>(true);
+  const [isVeg, setIsVeg] = useState<boolean>(false); 
 
   useEffect(() => {
     const storedVisited = localStorage.getItem("recentlyVisited");
     const storedSearches = localStorage.getItem("recentSearches");
+    const storedIsVeg = localStorage.getItem("isVeg");
 
     try {
       if (storedVisited) {
@@ -34,6 +39,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       }
       if (storedSearches) {
         setRecentSearches(JSON.parse(storedSearches));
+      }
+      if (storedIsVeg !== null) {
+        setIsVeg(storedIsVeg === "true");
       }
     } catch (err) {
       console.error("Failed to parse localStorage:", err);
@@ -46,8 +54,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     if (!recentsLoading) {
       localStorage.setItem("recentlyVisited", JSON.stringify(recentlyVisited));
       localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+      localStorage.setItem("isVeg", String(isVeg)); 
     }
-  }, [recentlyVisited, recentSearches, recentsLoading]);
+  }, [recentlyVisited, recentSearches, isVeg, recentsLoading]);
 
   const addRecentlyVisited = (product: Product) => {
     setRecentlyVisited((prev) => {
@@ -69,8 +78,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const clearRecentSearches = () => {
-  setRecentSearches([]);
-};
+    setRecentSearches([]);
+  };
 
   return (
     <GlobalContext.Provider
@@ -80,7 +89,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         recentsLoading,
         recentSearches,
         addRecentSearch,
-        clearRecentSearches
+        clearRecentSearches,
+        isVeg,      
+        setIsVeg,   
       }}
     >
       {children}

@@ -6,7 +6,6 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isVeg, setIsVeg] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const isLoggedIn = !!user;
@@ -15,7 +14,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     setLoading(true)
     const storedUser = localStorage.getItem("user");
-    const storedIsVeg = localStorage.getItem("isVeg");
 
     if (storedUser) {
       try {
@@ -28,35 +26,26 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
     setLoading(false);
-    if (storedIsVeg !== null) {
-      setIsVeg(storedIsVeg === "true");
-    }
   }, []);
 
   // Save user + isVeg to localStorage when updated
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("isVeg", String(user.isVegan)); // from user object
     } else {
       localStorage.removeItem("user");
-      localStorage.removeItem("isVeg");
     }
   }, [user]);
-
-  // Save isVeg independently if toggled manually
-  useEffect(() => {
-    localStorage.setItem("isVeg", String(isVeg));
-  }, [isVeg]);
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("cart");
+    localStorage.removeItem("recentSearches");
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, isLoggedIn, isVeg, setIsVeg, loading, logout }}>
+    <UserContext.Provider value={{ user, setUser, isLoggedIn, loading, logout }}>
       {children}
     </UserContext.Provider>
   );

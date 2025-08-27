@@ -7,14 +7,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "../../ui/dropdown-menu";
-import { useUser } from "../../../contexts/UserContext";
+import { useGlobalContext } from "@/contexts/GlobalContext";
 
 type GoVeganSwitchProps = {
   variant?: "full" | "mini";
 };
 
 const GoVeganSwitch: React.FC<GoVeganSwitchProps> = ({ variant = "full" }) => {
-  const { isVeg, setIsVeg } = useUser(); // <-- use global state
+  const { isVeg, setIsVeg } = useGlobalContext(); 
 
   const handleToggle = (checked: boolean) => {
     setIsVeg(checked);

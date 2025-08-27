@@ -133,8 +133,6 @@ export interface UserContextType {
   user: User | null;
   setUser: (user: User | null) => void;
   isLoggedIn: boolean;
-  isVeg: boolean;
-  setIsVeg: (value: boolean) => void;
   loading : boolean;
   logout: () => void;
 }

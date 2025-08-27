@@ -6,7 +6,7 @@ import ProductItem from "./ProductItem";
 import NoProductsFound from "./NoProductsFound";
 import SimpleSwiper from "./SimpleSwiper";
 import { Skeleton } from "../ui/skeleton";
-import { useUser } from "../../contexts/UserContext"; // or wherever your user context is
+import { useGlobalContext } from "../../contexts/GlobalContext";
 
 const HomeSwiper: React.FC<HomeSwiperProps> = ({
   title,
@@ -33,7 +33,7 @@ const HomeSwiper: React.FC<HomeSwiperProps> = ({
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const tabsScrollRef = useRef<HTMLDivElement>(null);
-  const { isVeg } = useUser();
+  const { isVeg } = useGlobalContext();
 
   // Unified scroll check function
   const checkScrollButtons = () => {
